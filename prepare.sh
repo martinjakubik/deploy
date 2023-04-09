@@ -1,11 +1,44 @@
 #!/bin/bash
 
-ROOT_SOURCE_DIR=~/code/gitwork/site.name/
-HTROOT_SOURCE_DIR=~/code/gitwork/site.name/abcdstaticsite/htdocs
-SOURCE_DIR=~/code/gitwork/site.name/content
-DESTINATION_DIR=user@ipv4:/home/martin/abcdstaticsiteupload
+# sets up usage
+USAGE="usage: $0 -i --inputDir inputDir --siteShortName siteShortName -d --debug"
 
-cp $ROOT_SOURCE_DIR/resources/abcd-logo.png $ROOT_SOURCE_DIR/logo.png
-cp $ROOT_SOURCE_DIR/resources/abcd-volume-on.png $ROOT_SOURCE_DIR/volume-on.png
-cp $ROOT_SOURCE_DIR/resources/abcd-volume-off.png $ROOT_SOURCE_DIR/volume-off.png
-cp $ROOT_SOURCE_DIR/resources/sound.mp3 $ROOT_SOURCE_DIR/sound.mp3
+# set up defaults
+DEBUG=0
+inputDir=~/inputDir
+siteId=abcd
+
+# parses and reads command line arguments
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    (-i) inputDir="$2"; shift;;
+    (--inputDir) inputDir="$2"; shift;;
+    (--siteShortName) siteShortName="$2"; shift;;
+    (-d) DEBUG=1;;
+    (--debug) DEBUG=1;;
+    (-*) echo >&2 ${USAGE}
+    exit 1;;
+  esac
+  shift
+done
+
+echo you entered values
+echo   "From inputDir : $inputDir"
+echo   "for site nick : $siteShortName"
+
+if [[ $DEBUG -eq 0 ]] ; then
+    cp ${inputDir}/resources/${siteShortName}-logo.png ${inputDir}/logo.png
+    cp ${inputDir}/resources/${siteShortName}-background.png ${inputDir}/background.png
+    cp ${inputDir}/resources/${siteShortName}-settings.png ${inputDir}/settings.png
+    cp ${inputDir}/resources/${siteShortName}-volume-on.png ${inputDir}/volume-on.png
+    cp ${inputDir}/resources/${siteShortName}-volume-off.png ${inputDir}/volume-off.png
+    cp ${inputDir}/resources/chirp.mp3 ${inputDir}/chirp.mp3
+else
+    echo cp ${inputDir}/resources/${siteShortName}-logo.png ${inputDir}/logo.png
+    echo cp ${inputDir}/resources/${siteShortName}-background.png ${inputDir}/background.png
+    echo cp ${inputDir}/resources/${siteShortName}-settings.png ${inputDir}/settings.png
+    echo cp ${inputDir}/resources/${siteShortName}-volume-on.png ${inputDir}/volume-on.png
+    echo cp ${inputDir}/resources/${siteShortName}-volume-off.png ${inputDir}/volume-off.png
+    echo cp ${inputDir}/resources/chirp.mp3 ${inputDir}/chirp.mp3
+fi

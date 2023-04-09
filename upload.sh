@@ -1,15 +1,60 @@
 #!/bin/bash
+# sets up usage
+USAGE="usage: $0 -i --inputDir inputDir -s siteId --siteShortName siteShortName -u --userId userId --ip ipAddress --debug"
 
-ROOT_SOURCE_DIR=~/code/gitwork/site.name/
-HTROOT_SOURCE_DIR=~/code/gitwork/site.name/abcstaticsite/htdocs
-SOURCE_DIR=~/code/gitwork/site.name/content
-DESTINATION_DIR=user1@ipv4:/home/user1/abcstaticsiteupload
+# set up defaults
+DEBUG=0
+inputDir=~/inputDir
+siteId=abcd
+siteShortName=abcdhome
+destinationDir=~/destinationDir
 
-./prepare.sh
+# parses and reads command line arguments
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    (-i) inputDir="$2"; shift;;
+    (--inputDir) inputDir="$2"; shift;;
+    (-s) siteId="$2"; shift;;
+    (--siteShortName) siteShortName="$2"; shift;;
+    (-u) userId="$2"; shift;;
+    (--userId) userId="$2"; shift;;
+    (--ip) ipAddress="$2"; shift;;
+    (-d) DEBUG=1;;
+    (--debug) DEBUG=1;;
+    (-*) echo >&2 ${USAGE}
+    exit 1;;
+  esac
+  shift
+done
 
-scp -r $SOURCE_DIR/project1 $DESTINATION_DIR/project1
-scp -r $SOURCE_DIR/project2 $DESTINATION_DIR
+DESTINATION_DIR=${userId}@${ipAddress}:/home/${userId}/${siteId}staticsiteupload
+HTROOT_SOURCE_DIR=${inputDir}/${siteId}staticsite/htdocs
 
-scp $HTROOT_SOURCE_DIR/index.html $HTROOT_SOURCE_DIR/screen.css $DESTINATION_DIR
+echo you entered values
+echo   "From inputDir : $inputDir"
+echo   "and htrootdir : $HTROOT_SOURCE_DIR"
+echo   "To            : $DESTINATION_DIR"
+echo   "site ID       : $siteId"
+echo   "site nick     : $siteShortName"
+echo   "user          : $userId"
+echo   "IP address    : $ipAddress"
 
-scp $ROOT_SOURCE_DIR/logo.png $ROOT_SOURCE_DIR/android-chrome-512x512.png $ROOT_SOURCE_DIR/android-chrome-192x192.png $ROOT_SOURCE_DIR/apple-touch-icon.png $ROOT_SOURCE_DIR/favicon-16x16.png $ROOT_SOURCE_DIR/favicon-32x32.png $ROOT_SOURCE_DIR/favicon.ico $DESTINATION_DIR
+
+if [[ $DEBUG -eq 0 ]] ; then
+    ./prepare.sh --inputDir ${inputDir} --siteShortName ${siteShortName}
+
+    scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+
+    scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
+
+    scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${inputDir}/android-chrome-512x512.png ${inputDir}/android-chrome-192x192.png ${inputDir}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${inputDir}/favicon-32x32.png ${inputDir}/favicon.ico ${DESTINATION_DIR}
+else
+    ./prepare.sh --inputDir ${inputDir} --siteShortName ${siteShortName} --debug
+
+    echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+
+    echo scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
+
+    echo scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${inputDir}/android-chrome-512x512.png ${inputDir}/android-chrome-192x192.png ${inputDir}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${inputDir}/favicon-32x32.png ${inputDir}/favicon.ico ${DESTINATION_DIR}
+fi
