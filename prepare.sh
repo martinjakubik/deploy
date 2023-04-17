@@ -23,22 +23,24 @@ do
   shift
 done
 
+HTROOT_SOURCE_DIR=${inputDir}/${siteId}staticsite/htdocs
+
 echo you entered values
 echo   "From inputDir : $inputDir"
 echo   "for site nick : $siteShortName"
 
 if [[ $DEBUG -eq 0 ]] ; then
-    cp ${inputDir}/resources/${siteShortName}-logo.png ${inputDir}/logo.png
-    cp ${inputDir}/resources/${siteShortName}-background.png ${inputDir}/background.png
-    cp ${inputDir}/resources/${siteShortName}-settings.png ${inputDir}/settings.png
-    cp ${inputDir}/resources/${siteShortName}-volume-on.png ${inputDir}/volume-on.png
-    cp ${inputDir}/resources/${siteShortName}-volume-off.png ${inputDir}/volume-off.png
-    cp ${inputDir}/resources/chirp.mp3 ${inputDir}/chirp.mp3
+    cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
+    cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
+    cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
+    cp ${inputDir}/resources/${siteShortName}-volume-on.png ${HTROOT_SOURCE_DIR}/volume-on.png
+    cp ${inputDir}/resources/${siteShortName}-volume-off.png ${HTROOT_SOURCE_DIR}/volume-off.png
+    cp ${inputDir}/resources/chirp.mp3 ${HTROOT_SOURCE_DIR}/chirp.mp3
 else
-    echo cp ${inputDir}/resources/${siteShortName}-logo.png ${inputDir}/logo.png
-    echo cp ${inputDir}/resources/${siteShortName}-background.png ${inputDir}/background.png
-    echo cp ${inputDir}/resources/${siteShortName}-settings.png ${inputDir}/settings.png
-    echo cp ${inputDir}/resources/${siteShortName}-volume-on.png ${inputDir}/volume-on.png
-    echo cp ${inputDir}/resources/${siteShortName}-volume-off.png ${inputDir}/volume-off.png
-    echo cp ${inputDir}/resources/chirp.mp3 ${inputDir}/chirp.mp3
+    echo cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
+    echo cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
+    echo cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
+    echo cp ${inputDir}/resources/${siteShortName}-volume-on.png ${HTROOT_SOURCE_DIR}/volume-on.png
+    echo cp ${inputDir}/resources/${siteShortName}-volume-off.png ${HTROOT_SOURCE_DIR}/volume-off.png
+    echo cp ${inputDir}/resources/chirp.mp3 ${HTROOT_SOURCE_DIR}/chirp.mp3
 fi
