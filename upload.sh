@@ -48,7 +48,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
 
-    scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${inputDir}/android-chrome-512x512.png ${inputDir}/android-chrome-192x192.png ${inputDir}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${inputDir}/favicon-32x32.png ${inputDir}/favicon.ico ${DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/android-chrome-512x512.png ${HTROOT_SOURCE_DIR}/android-chrome-192x192.png ${HTROOT_SOURCE_DIR}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${HTROOT_SOURCE_DIR}/favicon-32x32.png ${HTROOT_SOURCE_DIR}/favicon.ico ${DESTINATION_DIR}
 else
     ./prepare.sh --inputDir ${inputDir} --siteShortName ${siteShortName} --debug
 
@@ -56,5 +56,5 @@ else
 
     echo scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
 
-    echo scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${inputDir}/android-chrome-512x512.png ${inputDir}/android-chrome-192x192.png ${inputDir}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${inputDir}/favicon-32x32.png ${inputDir}/favicon.ico ${DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/android-chrome-512x512.png ${inputDir}/android-chrome-192x192.png ${HTROOT_SOURCE_DIR}/apple-touch-icon.png ${HTROOT_SOURCE_DIR}/favicon-16x16.png ${HTROOT_SOURCE_DIR}/favicon-32x32.png ${HTROOT_SOURCE_DIR}/favicon.ico ${DESTINATION_DIR}
 fi
