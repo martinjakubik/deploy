@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # sets up usage
-USAGE="usage: $0 -i --inputDir inputDir --siteShortName siteShortName -d --debug"
+USAGE="usage: $0 -i --inputDir inputDir -s siteId --siteShortName siteShortName -d --debug"
 
 # set up defaults
 DEBUG=0
@@ -14,6 +14,7 @@ do
   case "$1" in
     (-i) inputDir="$2"; shift;;
     (--inputDir) inputDir="$2"; shift;;
+    (-s) siteId="$2"; shift;;
     (--siteShortName) siteShortName="$2"; shift;;
     (-d) DEBUG=1;;
     (--debug) DEBUG=1;;
@@ -27,7 +28,8 @@ HTROOT_SOURCE_DIR=${inputDir}/${siteId}staticsite/htdocs
 
 echo you entered values
 echo   "From inputDir : $inputDir"
-echo   "for site nick : $siteShortName"
+echo   "site nick     : $siteShortName"
+echo   "site ID       : $siteId"
 
 if [[ $DEBUG -eq 0 ]] ; then
     cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png

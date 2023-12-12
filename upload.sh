@@ -42,7 +42,7 @@ echo   "IP address    : $ipAddress"
 
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./prepare.sh --inputDir ${HTROOT_SOURCE_DIR} --siteShortName ${siteShortName}
+    ./prepare.sh --inputDir ${HTROOT_SOURCE_DIR} -s ${siteId} --siteShortName ${siteShortName}
 
     scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
 
@@ -50,7 +50,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/android-chrome-512x512.png ${HTROOT_SOURCE_DIR}/android-chrome-192x192.png ${HTROOT_SOURCE_DIR}/apple-touch-icon.png ${inputDir}/favicon-16x16.png ${HTROOT_SOURCE_DIR}/favicon-32x32.png ${HTROOT_SOURCE_DIR}/favicon.ico ${DESTINATION_DIR}
 else
-    ./prepare.sh --inputDir ${inputDir} --siteShortName ${siteShortName} --debug
+    ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
 
     echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
 
