@@ -44,6 +44,9 @@ echo   "IP address    : $ipAddress"
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${HTROOT_SOURCE_DIR} -s ${siteId} --siteShortName ${siteShortName}
 
+    scp -r ${inputDir}/server $DESTINATION_DIR
+    scp ${inputDir}/package.json $DESTINATION_DIR
+
     scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
 
     scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
@@ -51,6 +54,9 @@ if [[ $DEBUG -eq 0 ]] ; then
     scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR}
 else
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
+
+    echo scp -r ${inputDir}/server $DESTINATION_DIR
+    echo scp ${inputDir}/package.json $DESTINATION_DIR
 
     echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
 
