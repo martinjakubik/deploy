@@ -42,7 +42,7 @@ echo   "IP address    : $ipAddress"
 
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./prepare.sh --inputDir ${HTROOT_SOURCE_DIR} -s ${siteId} --siteShortName ${siteShortName}
+    ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
     scp -r ${inputDir}/server $DESTINATION_DIR
     scp ${inputDir}/package.json $DESTINATION_DIR
