@@ -24,6 +24,14 @@ if [[ -d /home/martin/stitlestaticsiteupload/content/knights ]] ; then
   mv /home/martin/stitlestaticsiteupload/content/knights /var/www/www.supertitle.org/htdocs/content/
 fi
 
+# installs server
+mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
+mv /home/martin/stitlestaticsiteupload/package.json /var/www/www.supertitle.org/
+starting_directory=$PWD
+cd /var/www/www.supertitle.org/
+npm install
+cd $starting_directory
+
 # installs web root files in web root directory
 mv /home/martin/stitlestaticsiteupload/index.html /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/screen.css /var/www/www.supertitle.org/htdocs/
