@@ -25,7 +25,11 @@ if [[ -d /home/martin/stitlestaticsiteupload/content/knights ]] ; then
 fi
 
 # installs server
-mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
+if [[ -d /var/www/www.supertitle.org/server ]] ; then
+  rm -r /var/www/www.supertitle.org/server
+  mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
+fi
+
 mv /home/martin/stitlestaticsiteupload/package.json /var/www/www.supertitle.org/
 starting_directory=$PWD
 cd /var/www/www.supertitle.org/
