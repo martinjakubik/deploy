@@ -44,9 +44,11 @@ echo   "IP address    : $ipAddress"
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
+    find ${inputDir}/server -name .DS_Store -delete
     scp -r ${inputDir}/server $DESTINATION_DIR
     scp ${inputDir}/package.json $DESTINATION_DIR
 
+    find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
     scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
 
     scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
