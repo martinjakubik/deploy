@@ -29,6 +29,7 @@ if [[ -d /var/www/www.supertitle.org/server ]] ; then
   rm -r /var/www/www.supertitle.org/server
 fi
 mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
+chmod a+x /var/www/www.supertitle.org/server/index.js
 
 mv /home/martin/stitlestaticsiteupload/package.json /var/www/www.supertitle.org/
 starting_directory=$PWD
