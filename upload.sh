@@ -87,7 +87,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     if [[ ${incremental} -eq 0 ]] ; then
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
-      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
+      scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
