@@ -74,8 +74,12 @@ if [[ $DEBUG -eq 0 ]] ; then
     scp -r ${inputDir}/server $DESTINATION_DIR
     scp ${inputDir}/package.json $DESTINATION_DIR
 
-    find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
-    scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+    if [[ ${incremental} -eq 0 ]] ; then
+      find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
+      echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+    elif [[ ${incremental} -eq 1 ]] ; then
+      upload_listed_files
+    fi
 
     scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
 
