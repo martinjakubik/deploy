@@ -31,19 +31,28 @@ do
   shift
 done
 
-DESTINATION_DIR=${userId}@${ipAddress}:/home/${userId}/${siteId}staticsiteupload
+DESTINATION_DIR=/home/${userId}/${siteId}staticsiteupload
+USER_IP_DESTINATION_DIR=${userId}@${ipAddress}:${DESTINATION_DIR}
 HTROOT_SOURCE_DIR=${inputDir}/${siteId}staticsite/htdocs
 
 echo you entered values
 echo   "From inputDir : $inputDir"
 echo   "and htrootdir : $HTROOT_SOURCE_DIR"
-echo   "To            : $DESTINATION_DIR"
+echo   "To            : $USER_IP_DESTINATION_DIR"
 echo   "site ID       : $siteId"
 echo   "site nick     : $siteShortName"
 echo   "user          : $userId"
 echo   "IP address    : $ipAddress"
 
+ensure_directory_exists_for_file() {
+  filename_to_check=$1
+  echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/content/
+  remoteTargetDirectory=$DESTINATION_DIR/content/$(dirname $filename_to_check)
+  ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+}
+
 upload_listed_files() {
+  echo ---
   echo "uploading files listed in upload_files.txt"
   if [[ -e upload_files.txt ]] ; then
     file_array=()
@@ -54,9 +63,10 @@ upload_listed_files() {
       requested_filename=${HTROOT_SOURCE_DIR}/content/$filename
       if [[ -e $requested_filename ]] ; then
         if [[ $DEBUG -eq 0 ]] ; then
-          scp $requested_filename $DESTINATION_DIR
+          ensure_directory_exists_for_file $filename
+          scp $requested_filename $USER_IP_DESTINATION_DIR/content/$filename
         else
-          echo uploading $requested_filename
+          echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/content/$filename
         fi
       else
         echo the file: $requested_filename does not exist
@@ -65,38 +75,39 @@ upload_listed_files() {
   else
     echo the list of files upload_files.txt does not exist
   fi
+  echo ---
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
     find ${inputDir}/server -name .DS_Store -delete
-    scp -r ${inputDir}/server $DESTINATION_DIR
-    scp ${inputDir}/package.json $DESTINATION_DIR
+    scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
-      echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${USER_IP_DESTINATION_DIR}
 
-    scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
 else
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
 
-    echo scp -r ${inputDir}/server $DESTINATION_DIR
-    echo scp ${inputDir}/package.json $DESTINATION_DIR
+    echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
-      echo scp -r ${HTROOT_SOURCE_DIR}/content $DESTINATION_DIR
+      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${USER_IP_DESTINATION_DIR}
 
-    echo scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
 fi
