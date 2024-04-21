@@ -1,0 +1,7 @@
+z.txt
+w.txt
+x.txt
+IMG1.jpeg
+IMG_2.jpeg
+bug.gif
+index.html
