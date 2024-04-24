@@ -1,7 +1,7 @@
-z.txt
-w.txt
-x.txt
-IMG1.jpeg
-IMG_2.jpeg
-bug.gif
+0/z.txt
+0/w.txt
+0/x.txt
+0/IMG1.jpeg
+1/IMG_2.jpeg
+1/bug.gif
 index.html
