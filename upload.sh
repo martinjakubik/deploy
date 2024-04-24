@@ -44,11 +44,23 @@ echo   "site nick     : $siteShortName"
 echo   "user          : $userId"
 echo   "IP address    : $ipAddress"
 
+existing_directory_array=()
+
 ensure_directory_exists_for_file() {
   filename_to_check=$1
-  echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/content/
   remoteTargetDirectory=$DESTINATION_DIR/content/$(dirname $filename_to_check)
-  ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+  if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- ${remoteTargetDirectory} ; then
+    is_directory_found_on_remote=1
+  else
+    is_directory_found_on_remote=0
+  fi
+  if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
+    echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/content/
+    if [[ $DEBUG -eq 0 ]] ; then
+      ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+    fi
+    existing_directory_array+=($remoteTargetDirectory)
+  fi
 }
 
 upload_listed_files() {
@@ -62,8 +74,8 @@ upload_listed_files() {
     for filename in "${file_array[@]}" ; do
       requested_filename=${HTROOT_SOURCE_DIR}/content/$filename
       if [[ -e $requested_filename ]] ; then
+        ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
-          ensure_directory_exists_for_file $filename
           scp $requested_filename $USER_IP_DESTINATION_DIR/content/$filename
         else
           echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/content/$filename
@@ -95,6 +107,10 @@ if [[ $DEBUG -eq 0 ]] ; then
     scp ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${USER_IP_DESTINATION_DIR}
 
     scp ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
+
+    if [[ ${incremental} -eq 0 ]] ; then
+      ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
+    fi
 else
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
 
