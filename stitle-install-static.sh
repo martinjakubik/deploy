@@ -90,3 +90,5 @@ if [[ $incremental -eq 0 ]] ; then
 elif [[ $incremental -eq 1 ]] ; then
   incremental_install_content
 fi
+
+rm /home/martin/stitlestaticsiteupload/all_files_uploaded
