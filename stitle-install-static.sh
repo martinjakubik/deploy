@@ -37,6 +37,11 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/knights ]] ; then
 		mv /home/martin/stitlestaticsiteupload/content/knights/app/* /var/www/www.supertitle.org/htdocs/content/knights/app/
 	fi
+
+	# installs war in content/war directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/war ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/war/* /var/www/www.supertitle.org/htdocs/content/war/
+	fi
 }
 
 clean_install_content() {
@@ -63,6 +68,12 @@ clean_install_content() {
 		rm -r /var/www/www.supertitle.org/htdocs/content/knights
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/knights /var/www/www.supertitle.org/htdocs/content/
+
+	# installs war in content/war directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/war ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/war
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/war /var/www/www.supertitle.org/htdocs/content/
 }
 
 # installs server
