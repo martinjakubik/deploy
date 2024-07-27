@@ -29,8 +29,24 @@ incremental_install_content() {
 	fi
 
 	# installs blaufisch in content/blaufisch directory
-	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch ]] ; then
-		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/* /var/www/www.supertitle.org/htdocs/content/blaufisch/app/
+	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch/client/ ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/client/index.html /var/www/www.supertitle.org/htdocs/content/blaufisch/app/client/
+	fi
+
+	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch/client/css ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/client/css/* /var/www/www.supertitle.org/htdocs/content/blaufisch/app/client/css/
+	fi
+
+	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch/client/js ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/client/js/* /var/www/www.supertitle.org/htdocs/content/blaufisch/app/client/js/
+	fi
+
+	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch/client/media ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/client/media/* /var/www/www.supertitle.org/htdocs/content/blaufisch/app/client/media/
+	fi
+
+	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch/server/js ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/blaufisch/app/server/js/* /var/www/www.supertitle.org/htdocs/content/blaufisch/app/server/js/
 	fi
 
 	# installs knights in content/knights directory
