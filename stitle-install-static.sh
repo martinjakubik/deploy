@@ -58,38 +58,49 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/war ]] ; then
 		mv /home/martin/stitlestaticsiteupload/content/war/* /var/www/www.supertitle.org/htdocs/content/war/
 	fi
+
+	# installs books in content/books directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
+		mv /home/martin/stitlestaticsiteupload/content/books/* /var/www/www.supertitle.org/htdocs/content/books/
+	fi
 }
 
 clean_install_content() {
-	# cleans content/planets directory
+	# cleanly installs planets in content/planets directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/planets ]] ; then
 		rm -r /var/www/www.supertitle.org/htdocs/content/planets
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/planets /var/www/www.supertitle.org/htdocs/content/
 
-	# cleans content/fractals directory
+	# cleanly installs fractals in content/fractals directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/fractals ]] ; then
 		rm -r /var/www/www.supertitle.org/htdocs/content/fractals
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/fractals /var/www/www.supertitle.org/htdocs/content/
 
-	# cleans content/blaufisch directory
+	# cleanly installs blaufisch in content/blaufisch directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/blaufisch ]] ; then
 		rm -r /var/www/www.supertitle.org/htdocs/content/blaufisch
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/blaufisch /var/www/www.supertitle.org/htdocs/content/
 
-	# cleans content/knights directory
+	# cleanly installs knights in content/knights directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/knights ]] ; then
 		rm -r /var/www/www.supertitle.org/htdocs/content/knights
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/knights /var/www/www.supertitle.org/htdocs/content/
 
-	# cleans content/war directory
+	# cleanly installs war in content/war directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/war ]] ; then
 		rm -r /var/www/www.supertitle.org/htdocs/content/war
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/war /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs books in content/books directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/books
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/books /var/www/www.supertitle.org/htdocs/content/
 }
 
 # installs server
