@@ -61,7 +61,7 @@ incremental_install_content() {
 
 	# installs books in content/books directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
-		mv /home/martin/stitlestaticsiteupload/content/books/* /var/www/www.supertitle.org/htdocs/content/books/
+		mv /home/martin/stitlestaticsiteupload/content/books/app/* /var/www/www.supertitle.org/htdocs/content/books/app/
 	fi
 }
 
