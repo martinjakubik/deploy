@@ -124,6 +124,7 @@ cd $starting_directory
 # installs web root files in web root directory
 mv /home/martin/stitlestaticsiteupload/index.html /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/screen.css /var/www/www.supertitle.org/htdocs/
+mv /home/martin/stitlestaticsiteupload/app.js /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/title.png /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/logo.png /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/background.png /var/www/www.supertitle.org/htdocs/
