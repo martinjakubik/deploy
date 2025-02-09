@@ -32,6 +32,8 @@ echo   "site nick     : $siteShortName"
 echo   "site ID       : $siteId"
 
 if [[ $DEBUG -eq 0 ]] ; then
+    cp ${inputDir}/stitlestaticsite/htdocs/palette.mjs ${inputDir}/stitlestaticsite/htdocs/content/fractals/app/
+    cp ${inputDir}/resources/${siteShortName}-title.png ${HTROOT_SOURCE_DIR}/title.png
     cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
     cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
     cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
@@ -39,6 +41,8 @@ if [[ $DEBUG -eq 0 ]] ; then
     cp ${inputDir}/resources/${siteShortName}-volume-off.png ${HTROOT_SOURCE_DIR}/volume-off.png
     cp ${inputDir}/resources/chirp.mp3 ${HTROOT_SOURCE_DIR}/chirp.mp3
 else
+    echo cp ${inputDir}/stitlestaticsite/htdocs/palette.mjs ${inputDir}/stitlestaticsite/htdocs/content/fractals/app/
+    echo cp ${inputDir}/resources/${siteShortName}-title.png ${HTROOT_SOURCE_DIR}/title.png
     echo cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
     echo cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
     echo cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
