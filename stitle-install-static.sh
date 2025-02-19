@@ -61,11 +61,6 @@ incremental_install_content() {
 
 	# installs books in content/books directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
-		# for stitlebookdirectory in $(find /var/www/www.supertitle.org/htdocs/content/books/app -name '20*' -type d) ; do
-			# echo listing directories in books: $stitlebookdirectory
-			# # example: rm -r /var/www/www.supertitle.org/htdocs/content/books/app/2024
-			# rm -r $stitlebookdirectory
-		# done
 		mv /home/martin/stitlestaticsiteupload/content/books/app/* /var/www/www.supertitle.org/htdocs/content/books/app/
 	fi
 }
