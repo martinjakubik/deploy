@@ -95,6 +95,9 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     find ${inputDir}/server -name .DS_Store -delete
     scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    
+    find ${inputDir}/lib -name .DS_Store -delete
+    scp -r ${inputDir}/lib $USER_IP_DESTINATION_DIR
     scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
@@ -112,7 +115,11 @@ if [[ $DEBUG -eq 0 ]] ; then
 else
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
 
+    find ${inputDir}/server -name .DS_Store
     echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+
+    find ${inputDir}/lib -name .DS_Store
+    echo scp -r ${inputDir}/lib $USER_IP_DESTINATION_DIR
     echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
