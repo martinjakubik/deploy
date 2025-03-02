@@ -100,6 +100,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
 
     scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
+    scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
@@ -123,6 +124,7 @@ else
     echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
     
     echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
+    echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
       echo deleting .DS_Store files:

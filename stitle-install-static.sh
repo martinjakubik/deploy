@@ -110,7 +110,9 @@ fi
 mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
 chmod a+x /var/www/www.supertitle.org/server/index.js
 
+# installs package files
 mv /home/martin/stitlestaticsiteupload/package.json /var/www/www.supertitle.org/
+mv /home/martin/stitlestaticsiteupload/postinstall.js /var/www/www.supertitle.org/
 starting_directory=$PWD
 cd /var/www/www.supertitle.org/
 npm install
