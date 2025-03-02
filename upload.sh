@@ -107,7 +107,7 @@ if [[ $DEBUG -eq 0 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/up.png {HTROOT_SOURCE_DIR}/clockwise.png {HTROOT_SOURCE_DIR}/counterclockwise.png ${USER_IP_DESTINATION_DIR}
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
@@ -130,5 +130,5 @@ else
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/up.png {HTROOT_SOURCE_DIR}/clockwise.png {HTROOT_SOURCE_DIR}/counterclockwise.png ${USER_IP_DESTINATION_DIR}
 fi
