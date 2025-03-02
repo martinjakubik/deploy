@@ -131,6 +131,9 @@ mv /home/martin/stitlestaticsiteupload/title.png /var/www/www.supertitle.org/htd
 mv /home/martin/stitlestaticsiteupload/logo.png /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/background.png /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/settings.png /var/www/www.supertitle.org/htdocs/
+mv /home/martin/stitlestaticsiteupload/up.png /var/www/www.supertitle.org/htdocs/
+mv /home/martin/stitlestaticsiteupload/clockwise.png /var/www/www.supertitle.org/htdocs/
+mv /home/martin/stitlestaticsiteupload/counterclockwise.png /var/www/www.supertitle.org/htdocs/
 
 if [[ $incremental -eq 0 ]] ; then
 	clean_install_content
