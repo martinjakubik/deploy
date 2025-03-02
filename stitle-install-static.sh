@@ -116,6 +116,12 @@ cd /var/www/www.supertitle.org/
 npm install
 cd $starting_directory
 
+# installs libraries for home page
+if [[ -d /var/www/www.supertitle.org/htdocs/lib ]] ; then
+	rm -r /var/www/www.supertitle.org/htdocs/lib
+fi
+mv /home/martin/stitlestaticsiteupload/lib /var/www/www.supertitle.org/htdocs/
+
 # installs web root files in web root directory
 mv /home/martin/stitlestaticsiteupload/index.html /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/robots.txt /var/www/www.supertitle.org/htdocs/
