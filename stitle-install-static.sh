@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -c --incremental"
+USAGE="usage: $0 -c --incremental -d --debug"
 
 # set up defaults
 incremental=0
@@ -11,11 +11,56 @@ do
 	case "$1" in
 		(-c) incremental=1;;
 		(--incremental) incremental=1;;
+		(-d) DEBUG=1;;
+		(--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
 		exit 1;;
 	esac
 		shift
 done
+
+is_from_directory_valid() {
+	echo checking if directory valid
+	if [ -z "$1" ] ; then
+		echo "no from directory provided"
+		return 1
+	elif [ ! -d $1 ] ; then
+		echo "from directory does not exist"
+		return 1
+	else
+		return 0
+	fi
+}
+
+move_file_from_to() {
+	from_file=$1
+	to_file=$2
+	to_file_path=$(dirname $to_file)
+	if [[ ! -d $to_file_path ]] ; then
+		if [[ $DEBUG -eq 1 ]] ; then echo creating directory for $to_file ; fi
+		mkdir -p $to_file_path
+	fi
+	if [[ $DEBUG -eq 1 ]] ; then
+		echo moving $from_file to $to_file
+	else
+		echo really moving $from_file to $to_file
+		mv $from_file $to_file
+	fi
+}
+
+move_all_files_from_to() {
+	from_dir=${1%/}
+	to_dir=${2%/}
+	if [[ $(is_from_directory_valid $from_dir $DEBUG) ]] ; then
+	    if [[ $DEBUG -eq 1 ]] ; then echo --- ; echo moving files from ; echo $from_dir ; echo to ; echo $to_dir ; echo --- ; echo ; fi
+		for file_name in $(find $from_dir -type f) ; do
+			unique_path=${file_name#${from_dir}/}
+			from_file="${from_dir}/${unique_path}"
+			to_file="${to_dir}/${unique_path}"
+			move_file_from_to $from_file $to_file
+		done
+	fi
+}
 
 incremental_install_content() {
 	# installs planets in content/planets directory
@@ -61,7 +106,7 @@ incremental_install_content() {
 
 	# installs books in content/books directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
-		mv /home/martin/stitlestaticsiteupload/content/books/app/* /var/www/www.supertitle.org/htdocs/content/books/app/
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/books/app/ /var/www/www.supertitle.org/htdocs/content/books/app/
 	fi
 }
 
@@ -104,11 +149,15 @@ clean_install_content() {
 }
 
 # installs server
-if [[ -d /var/www/www.supertitle.org/server ]] ; then
-	rm -r /var/www/www.supertitle.org/server
+if [[ $DEBUG -eq 1 ]] ; then
+	echo installing server
+else
+	if [[ -d /var/www/www.supertitle.org/server ]] ; then
+		rm -r /var/www/www.supertitle.org/server
+	fi
+	mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
+	chmod a+x /var/www/www.supertitle.org/server/index.js
 fi
-mv /home/martin/stitlestaticsiteupload/server /var/www/www.supertitle.org/
-chmod a+x /var/www/www.supertitle.org/server/index.js
 
 # installs package files
 mv /home/martin/stitlestaticsiteupload/package.json /var/www/www.supertitle.org/
@@ -119,10 +168,14 @@ npm install
 cd $starting_directory
 
 # installs libraries for home page
-if [[ -d /var/www/www.supertitle.org/htdocs/lib ]] ; then
-	rm -r /var/www/www.supertitle.org/htdocs/lib
+if [[ $DEBUG -eq 1 ]] ; then
+	echo installing libraries
+else
+	if [[ -d /var/www/www.supertitle.org/htdocs/lib ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/lib
+	fi
+	mv /home/martin/stitlestaticsiteupload/lib /var/www/www.supertitle.org/htdocs/
 fi
-mv /home/martin/stitlestaticsiteupload/lib /var/www/www.supertitle.org/htdocs/
 
 # installs web root files in web root directory
 mv /home/martin/stitlestaticsiteupload/index.html /var/www/www.supertitle.org/htdocs/
