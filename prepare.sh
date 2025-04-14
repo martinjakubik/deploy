@@ -36,6 +36,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     cp ${inputDir}/resources/${siteShortName}-title.png ${HTROOT_SOURCE_DIR}/title.png
     cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
     cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
+    cp ${inputDir}/resources/${siteShortName}-background-tile.png ${HTROOT_SOURCE_DIR}/background-tile.png
     cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
     cp ${inputDir}/resources/${siteShortName}-volume-on.png ${HTROOT_SOURCE_DIR}/volume-on.png
     cp ${inputDir}/resources/${siteShortName}-volume-off.png ${HTROOT_SOURCE_DIR}/volume-off.png
@@ -48,6 +49,7 @@ else
     echo cp ${inputDir}/resources/${siteShortName}-title.png ${HTROOT_SOURCE_DIR}/title.png
     echo cp ${inputDir}/resources/${siteShortName}-logo.png ${HTROOT_SOURCE_DIR}/logo.png
     echo cp ${inputDir}/resources/${siteShortName}-background.png ${HTROOT_SOURCE_DIR}/background.png
+    echo cp ${inputDir}/resources/${siteShortName}-background-tile.png ${HTROOT_SOURCE_DIR}/background-tile.png
     echo cp ${inputDir}/resources/${siteShortName}-settings.png ${HTROOT_SOURCE_DIR}/settings.png
     echo cp ${inputDir}/resources/${siteShortName}-volume-on.png ${HTROOT_SOURCE_DIR}/volume-on.png
     echo cp ${inputDir}/resources/${siteShortName}-volume-off.png ${HTROOT_SOURCE_DIR}/volume-off.png
