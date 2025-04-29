@@ -179,6 +179,7 @@ fi
 
 # installs web root files in web root directory
 mv /home/martin/stitlestaticsiteupload/index.html /var/www/www.supertitle.org/htdocs/
+mv /home/martin/stitlestaticsiteupload/index.test.html /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/robots.txt /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/screen.css /var/www/www.supertitle.org/htdocs/
 mv /home/martin/stitlestaticsiteupload/app.js /var/www/www.supertitle.org/htdocs/
