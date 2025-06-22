@@ -106,8 +106,8 @@ incremental_install_content() {
 
 	# installs books in content/books directory
 	if [[ -d /home/martin/stitlestaticsiteupload/content/books ]] ; then
-		echo temporarily deactivated moving books
-		# move_all_files_from_to /home/martin/stitlestaticsiteupload/content/books/app/ /var/www/www.supertitle.org/htdocs/content/books/app/
+		# echo temporarily deactivated moving books
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/books/app/ /var/www/www.supertitle.org/htdocs/content/books/app/
 	fi
 
 	# installs kierki in content/kierki directory
