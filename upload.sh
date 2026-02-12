@@ -66,6 +66,8 @@ ensure_directory_exists_for_file() {
 upload_listed_files() {
   echo ---
   echo "uploading files listed in upload_files.txt"
+  upload_count=0
+  upload_count_in_set=0
   if [[ -e upload_files.txt ]] ; then
     file_array=()
     while IFS= read -r line; do
@@ -79,6 +81,14 @@ upload_listed_files() {
           scp $requested_filename $USER_IP_DESTINATION_DIR/content/$filename
         else
           echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/content/$filename
+        fi
+        upload_count=$(( upload_count+1 ))
+        upload_count_in_set=$(( upload_count_in_set+1 ))
+        echo $upload_count files uploaded $upload_count_in_set files uploaded in set
+        if [[ $upload_count_in_set -gt 7 ]] ; then
+          echo sleeping 30s
+          sleep 30s
+          upload_count_in_set=0
         fi
       else
         echo the file: $requested_filename does not exist
