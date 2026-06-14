@@ -114,6 +114,11 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/kierki ]] ; then
 		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/kierki/app/ /var/www/www.supertitle.org/htdocs/content/kierki/app/
 	fi
+
+	# installs littlemachine in content/littlemachine directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/littlemachine ]] ; then
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/littlemachine/app/ /var/www/www.supertitle.org/htdocs/content/littlemachine/app/
+	fi
 }
 
 clean_install_content() {
@@ -152,6 +157,18 @@ clean_install_content() {
 		rm -r /var/www/www.supertitle.org/htdocs/content/books
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/books /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs kierki in content/kierki directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/kierki ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/kierki
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/kierki /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs littlemachine in content/littlemachine directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/littlemachine ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/littlemachine
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/littlemachine /var/www/www.supertitle.org/htdocs/content/
 }
 
 # installs server
