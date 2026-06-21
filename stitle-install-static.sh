@@ -119,6 +119,11 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/littlemachine ]] ; then
 		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/littlemachine/app/ /var/www/www.supertitle.org/htdocs/content/littlemachine/app/
 	fi
+
+	# installs marekworldcuppool in content/marekworldcuppool directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool ]] ; then
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/marekworldcuppool/app/ /var/www/www.supertitle.org/htdocs/content/marekworldcuppool/app/
+	fi
 }
 
 clean_install_content() {
