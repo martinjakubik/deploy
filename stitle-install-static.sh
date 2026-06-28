@@ -124,6 +124,11 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool ]] ; then
 		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/marekworldcuppool/app/ /var/www/www.supertitle.org/htdocs/content/marekworldcuppool/app/
 	fi
+
+	# installs marekworldcuppool-32 in content/marekworldcuppool-32 directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32 ]] ; then
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32/app/ /var/www/www.supertitle.org/htdocs/content/marekworldcuppool-32/app/
+	fi
 }
 
 clean_install_content() {
@@ -174,6 +179,18 @@ clean_install_content() {
 		rm -r /var/www/www.supertitle.org/htdocs/content/littlemachine
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/littlemachine /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs marekworldcuppool in content/marekworldcuppool directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/marekworldcuppool
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/marekworldcuppool /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs marekworldcuppool-32 in content/marekworldcuppool-32 directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32 ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/marekworldcuppool-32
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32 /var/www/www.supertitle.org/htdocs/content/
 }
 
 # installs server
