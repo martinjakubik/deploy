@@ -129,6 +129,11 @@ incremental_install_content() {
 	if [[ -d /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32 ]] ; then
 		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32/app/ /var/www/www.supertitle.org/htdocs/content/marekworldcuppool-32/app/
 	fi
+
+	# installs cv in content/cv directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/cv ]] ; then
+		move_all_files_from_to /home/martin/stitlestaticsiteupload/content/cv/app/ /var/www/www.supertitle.org/htdocs/content/cv/app/
+	fi
 }
 
 clean_install_content() {
@@ -191,6 +196,12 @@ clean_install_content() {
 		rm -r /var/www/www.supertitle.org/htdocs/content/marekworldcuppool-32
 	fi
 	mv /home/martin/stitlestaticsiteupload/content/marekworldcuppool-32 /var/www/www.supertitle.org/htdocs/content/
+
+	# cleanly installs cv in content/cv directory
+	if [[ -d /home/martin/stitlestaticsiteupload/content/cv ]] ; then
+		rm -r /var/www/www.supertitle.org/htdocs/content/cv
+	fi
+	mv /home/martin/stitlestaticsiteupload/content/cv /var/www/www.supertitle.org/htdocs/content/
 }
 
 # installs server
