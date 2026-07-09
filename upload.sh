@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -i --inputDir inputDir -s siteId --siteShortName siteShortName -u --userId userId --ip ipAddress -c --incremental -d --debug"
+USAGE="usage: $0 -i --inputDir inputDir -s -siteId siteId --siteShortName siteShortName -u --userId userId --ip ipAddress -c --incremental -d --debug"
 
 # sets up defaults
 DEBUG=0
