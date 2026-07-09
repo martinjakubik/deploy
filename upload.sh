@@ -17,6 +17,7 @@ do
     (-i) inputDir="$2"; shift;;
     (--inputDir) inputDir="$2"; shift;;
     (-s) siteId="$2"; shift;;
+    (--siteId) siteId="$2"; shift;;
     (--siteShortName) siteShortName="$2"; shift;;
     (-u) userId="$2"; shift;;
     (--userId) userId="$2"; shift;;
@@ -105,7 +106,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     find ${inputDir}/server -name .DS_Store -delete
     scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
-    
+
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
     scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
 
@@ -132,7 +133,7 @@ else
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
     echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
-    
+
     echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
     echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
 
