@@ -34,6 +34,7 @@ mv /home/martin/fizastaticsiteupload/background.png /var/www/www.fizasport.com/h
 mv /home/martin/fizastaticsiteupload/settings.png /var/www/www.fizasport.com/htdocs/
 mv /home/martin/fizastaticsiteupload/fizasport-0-rules-110-rule-summary.png /var/www/www.fizasport.com/htdocs/
 mv /home/martin/fizastaticsiteupload/fizasport-0-home-010-home-playing.png /var/www/www.fizasport.com/htdocs/
+mv /home/martin/fizastaticsiteupload/fizasport-0-home-011-home-playing-winter.png /var/www/www.fizasport.com/htdocs/
 
 if [[ $incremental -eq 0 ]] ; then
 	clean_install_content
