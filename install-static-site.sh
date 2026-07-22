@@ -13,20 +13,30 @@ do
 		(--incremental) incremental=1;;
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
-        (-u) userId="$2"; shift;;
-        (--userId) userId="$2"; shift;;
 		(-*) echo >&2 ${USAGE}
 		exit 1;;
 	esac
 		shift
 done
 
+site_full_name=www.abcdhome.name
+isValidSiteFullName=true
+if [[ ! isValidSiteFullName ]] ; then
+	exit 1
+fi
+
+live_site_dir=${site_full_name}
+
 clean_install_site_base_content() {
-	mv ${static_site_upload_dir}/index.html /var/www/www.fizasport.com/htdocs/
-    mv ${static_site_upload_dir}/screen.css /var/www/www.fizasport.com/htdocs/
-    mv ${static_site_upload_dir}/logo.png /var/www/www.fizasport.com/htdocs/
-    mv ${static_site_upload_dir}/background.png /var/www/www.fizasport.com/htdocs/
-    mv ${static_site_upload_dir}/settings.png /var/www/www.fizasport.com/htdocs/
+	if [[ ! -d /var/www/${live_site_dir} ]] ; then
+		echo "${live_site_dir} does not exist; please create it."
+		return 1;
+	fi
+	mv ${static_site_upload_dir}/index.html /var/www/${live_site_dir}/htdocs/
+    mv ${static_site_upload_dir}/screen.css /var/www/${live_site_dir}/htdocs/
+    mv ${static_site_upload_dir}/logo.png /var/www/${live_site_dir}/htdocs/
+    mv ${static_site_upload_dir}/background.png /var/www/${live_site_dir}/htdocs/
+    mv ${static_site_upload_dir}/settings.png /var/www/${live_site_dir}/htdocs/
 }
 
 incremental_install_site_custom_content() {
