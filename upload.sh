@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -i --inputDir inputDir -s -siteId siteId --siteShortName siteShortName -u --userId userId --ip ipAddress -c --incremental -d --debug"
+USAGE="usage: $0 -i|--inputDir inputDir -s|--siteId siteId --siteShortName siteShortName -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
 
 # sets up defaults
 DEBUG=0
@@ -14,8 +14,8 @@ incremental=0
 while [ $# -gt 0 ]
 do
   case "$1" in
-    (-i) inputDir="$2"; shift;;
-    (--inputDir) inputDir="$2"; shift;;
+    (-i) inputDir="${2%\/}"; shift;;
+    (--inputDir) inputDir="${2%\/}"; shift;;
     (-s) siteId="$2"; shift;;
     (--siteId) siteId="$2"; shift;;
     (--siteShortName) siteShortName="$2"; shift;;
@@ -32,9 +32,10 @@ do
   shift
 done
 
-DESTINATION_DIR=/home/${userId}/${siteId}staticsiteupload
+STAGING_DIR=/var/x-www-staging
+DESTINATION_DIR=${STAGING_DIR}/${siteId}
 USER_IP_DESTINATION_DIR=${userId}@${ipAddress}:${DESTINATION_DIR}
-HTROOT_SOURCE_DIR=${inputDir}/${siteId}staticsite/htdocs
+HTROOT_SOURCE_DIR=${inputDir%/}/site
 
 echo you entered values
 echo   "From inputDir : $inputDir"
@@ -120,7 +121,7 @@ if [[ $DEBUG -eq 0 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/up.png ${HTROOT_SOURCE_DIR}/clockwise.png ${HTROOT_SOURCE_DIR}/counterclockwise.png ${USER_IP_DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
@@ -145,5 +146,5 @@ else
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${HTROOT_SOURCE_DIR}/up.png ${HTROOT_SOURCE_DIR}/clockwise.png ${HTROOT_SOURCE_DIR}/counterclockwise.png ${USER_IP_DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
 fi
