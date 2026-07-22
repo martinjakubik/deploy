@@ -111,7 +111,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-    if [[ -e ${inputDir}/lib ]] ; then
+    if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
       scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
     fi
 
@@ -135,10 +135,14 @@ else
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName} --debug
 
     find ${inputDir}/server -name .DS_Store
-    echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    if [[ -e ${inputDir}/server ]] ; then
+      echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
-    echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+    if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
+      echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+    fi
 
     echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
     echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
