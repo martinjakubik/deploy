@@ -1,0 +1,1 @@
+scp ${HTROOT_SOURCE_DIR}/up.png ${HTROOT_SOURCE_DIR}/clockwise.png ${HTROOT_SOURCE_DIR}/counterclockwise.png ${USER_IP_DESTINATION_DIR}
