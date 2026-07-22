@@ -67,14 +67,14 @@ ensure_directory_exists_for_file() {
 
 upload_listed_files() {
   echo ---
-  echo "uploading files listed in upload_files.txt"
+  echo "uploading files listed in ${inputDir}/upload_files.txt"
   upload_count=0
   upload_count_in_set=0
-  if [[ -e upload_files.txt ]] ; then
+  if [[ -e ${inputDir}/upload_files.txt ]] ; then
     file_array=()
     while IFS= read -r line; do
       file_array+=($line)
-    done < upload_files.txt
+    done < ${inputDir}/upload_files.txt
     for filename in "${file_array[@]}" ; do
       requested_filename=${HTROOT_SOURCE_DIR}/content/$filename
       if [[ -e $requested_filename ]] ; then
@@ -97,7 +97,7 @@ upload_listed_files() {
       fi
     done
   else
-    echo the list of files upload_files.txt does not exist
+    echo the list of files ${inputDir}/upload_files.txt does not exist
   fi
   echo ---
 }
@@ -106,17 +106,22 @@ if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
     find ${inputDir}/server -name .DS_Store -delete
-    scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    if [[ -e ${inputDir}/server ]] ; then
+      scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+    fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-    scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+    if [[ -e ${inputDir}/lib ]] ; then
+      scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+    fi
 
     scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
-    scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
 
     if [[ ${incremental} -eq 0 ]] ; then
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
-      scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
+      if [[ -e ${HTROOT_SOURCE_DIR}/content ]] ; then
+        scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
+      fi
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
