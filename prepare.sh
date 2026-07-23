@@ -32,7 +32,7 @@ echo ---------------------------------------------------------------------------
 echo script: $0
 echo you entered values
 echo   "From project root dir : ${project_root_directory}"
-echo   "site nick             : ${siteNickname}"
+echo   "site nickname         : ${siteNickname}"
 echo   "site ID               : ${siteId}"
 echo --------------------------------------------------------------------------------
 echo

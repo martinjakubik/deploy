@@ -44,7 +44,7 @@ echo   "From project root dir : ${project_root_directory}"
 echo   "and site source dir   : ${site_source_directory}"
 echo   "To                    : ${DESTINATION_DIR_WITH_USER_AND_IP}"
 echo   "site ID               : ${siteId}"
-echo   "site nick             : ${siteNickname}"
+echo   "site nickname         : ${siteNickname}"
 echo   "user                  : ${userId}"
 echo   "IP address            : ${ipAddress}"
 echo --------------------------------------------------------------------------------
