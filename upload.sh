@@ -109,6 +109,13 @@ upload_listed_files() {
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
+    ssh ${userId}@${ipAddress} "if [[ -e ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
+    check_destination_directory_exit_code=$?
+    if [[ $check_destination_directory_exit_code -eq 1 ]] ; then
+      echo "a file called ${DESTINATION_DIR} already exists; stopping." 
+      exit 1
+    fi
+
     find ${inputDir}/server -name .DS_Store -delete
     if [[ -e ${inputDir}/server ]] ; then
       scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
