@@ -54,14 +54,14 @@ existing_directory_array=()
 
 ensure_directory_exists_for_file() {
   filename_to_check=$1
-  remoteTargetDirectory=$DESTINATION_DIR/content/$(dirname $filename_to_check)
+  remoteTargetDirectory=$DESTINATION_DIR/$(dirname $filename_to_check)
   if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- ${remoteTargetDirectory} ; then
     is_directory_found_on_remote=1
   else
     is_directory_found_on_remote=0
   fi
   if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-    echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/content/
+    echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
@@ -80,13 +80,13 @@ upload_listed_files() {
       file_array+=($line)
     done < ${inputDir}/upload_files.txt
     for filename in "${file_array[@]}" ; do
-      requested_filename=${HTROOT_SOURCE_DIR}/content/$filename
+      requested_filename=${HTROOT_SOURCE_DIR}/$filename
       if [[ -e $requested_filename ]] ; then
         ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
-          scp $requested_filename $USER_IP_DESTINATION_DIR/content/$filename
+          scp $requested_filename $USER_IP_DESTINATION_DIR/$filename
         else
-          echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/content/$filename
+          echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/$filename
         fi
         upload_count=$(( upload_count+1 ))
         upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -109,31 +109,26 @@ upload_listed_files() {
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${inputDir} -s ${siteId} --siteShortName ${siteShortName}
 
-    ssh ${userId}@${ipAddress} "if [[ -e ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
+    ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
     check_destination_directory_exit_code=$?
     if [[ $check_destination_directory_exit_code -eq 1 ]] ; then
-      echo "a file called ${DESTINATION_DIR} already exists; stopping." 
+      echo "a plain file called ${DESTINATION_DIR} already exists; stopping." 
       exit 1
     fi
 
-    find ${inputDir}/server -name .DS_Store -delete
-    if [[ -e ${inputDir}/server ]] ; then
+    if [[ -d ${inputDir}/server ]] ; then
+      find ${inputDir}/server -name .DS_Store -delete
       scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
     fi
 
-    find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-    if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
+    if [[ -d ${HTROOT_SOURCE_DIR}/lib ]] ; then
+      find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
       scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR/
     fi
 
     scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
 
-    if [[ ${incremental} -eq 0 ]] ; then
-      find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
-      if [[ -e ${HTROOT_SOURCE_DIR}/content ]] ; then
-        scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR/
-      fi
-    elif [[ ${incremental} -eq 1 ]] ; then
+    if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
@@ -158,11 +153,7 @@ else
     echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
     echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR/
 
-    if [[ ${incremental} -eq 0 ]] ; then
-      echo deleting .DS_Store files:
-      find ${HTROOT_SOURCE_DIR}/content -name .DS_Store
-      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR/
-    elif [[ ${incremental} -eq 1 ]] ; then
+    if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
