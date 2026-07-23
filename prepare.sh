@@ -31,9 +31,9 @@ HTROOT_SOURCE_DIR=${inputDir%\/}/site
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
-echo   "From inputDir : $inputDir"
-echo   "site nick     : $siteShortName"
-echo   "site ID       : $siteId"
+echo   "From inputDir : ${inputDir}"
+echo   "site nick     : ${siteShortName}"
+echo   "site ID       : ${siteId}"
 echo --------------------------------------------------------------------------------
 echo
 

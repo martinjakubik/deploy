@@ -40,13 +40,13 @@ HTROOT_SOURCE_DIR=${inputDir%/}/site
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
-echo   "From inputDir : $inputDir"
-echo   "and htrootdir : $HTROOT_SOURCE_DIR"
-echo   "To            : $USER_IP_DESTINATION_DIR"
-echo   "site ID       : $siteId"
-echo   "site nick     : $siteShortName"
-echo   "user          : $userId"
-echo   "IP address    : $ipAddress"
+echo   "From inputDir : ${inputDir}"
+echo   "and htrootdir : ${HTROOT_SOURCE_DIR}"
+echo   "To            : ${USER_IP_DESTINATION_DIR}"
+echo   "site ID       : ${siteId}"
+echo   "site nick     : ${siteShortName}"
+echo   "user          : ${userId}"
+echo   "IP address    : ${ipAddress}"
 echo --------------------------------------------------------------------------------
 echo
 
@@ -61,7 +61,7 @@ ensure_directory_exists_for_file() {
     is_directory_found_on_remote=0
   fi
   if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-    echo creating directory $(dirname $filename_to_check) in $USER_IP_DESTINATION_DIR/
+    echo creating directory $(dirname $filename_to_check) in ${USER_IP_DESTINATION_DIR}/
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
@@ -84,9 +84,9 @@ upload_listed_files() {
       if [[ -e $requested_filename ]] ; then
         ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
-          scp $requested_filename $USER_IP_DESTINATION_DIR/$filename
+          scp $requested_filename ${USER_IP_DESTINATION_DIR}/$filename
         else
-          echo uploading $requested_filename to $USER_IP_DESTINATION_DIR/$filename
+          echo uploading $requested_filename to ${USER_IP_DESTINATION_DIR}/$filename
         fi
         upload_count=$(( upload_count+1 ))
         upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -118,15 +118,15 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     if [[ -d ${inputDir}/server ]] ; then
       find ${inputDir}/server -name .DS_Store -delete
-      scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+      scp -r ${inputDir}/server ${USER_IP_DESTINATION_DIR}/
     fi
 
     if [[ -d ${HTROOT_SOURCE_DIR}/lib ]] ; then
       find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-      scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR/
+      scp -r ${HTROOT_SOURCE_DIR}/lib ${USER_IP_DESTINATION_DIR}/
     fi
 
-    scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
+    scp ${inputDir}/package.json ${USER_IP_DESTINATION_DIR}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
@@ -142,16 +142,16 @@ else
 
     find ${inputDir}/server -name .DS_Store
     if [[ -e ${inputDir}/server ]] ; then
-      echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR/
+      echo scp -r ${inputDir}/server ${USER_IP_DESTINATION_DIR}/
     fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
     if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR/
+      echo scp -r ${HTROOT_SOURCE_DIR}/lib ${USER_IP_DESTINATION_DIR}/
     fi
 
-    echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
-    echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR/
+    echo scp ${inputDir}/package.json ${USER_IP_DESTINATION_DIR}/
+    echo scp ${inputDir}/postinstall.js ${USER_IP_DESTINATION_DIR}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
