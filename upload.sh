@@ -1,12 +1,12 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteShortName siteShortName -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
+USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteNickname siteNickname -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
 
 # sets up defaults
 DEBUG=0
 project_root_directory=~/project_root_directory
 siteId=abcd
-siteShortName=abcdhome
+siteNickname=abcdhome
 destinationDir=~/destinationDir
 incremental=0
 
@@ -18,7 +18,7 @@ do
     (--inputDir) project_root_directory="${2%\/}"; shift;;
     (-s) siteId="$2"; shift;;
     (--siteId) siteId="$2"; shift;;
-    (--siteShortName) siteShortName="$2"; shift;;
+    (--siteNickname) siteNickname="$2"; shift;;
     (-u) userId="$2"; shift;;
     (--userId) userId="$2"; shift;;
     (--ip) ipAddress="$2"; shift;;
@@ -35,16 +35,16 @@ done
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR=${STAGING_DIR}/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:${DESTINATION_DIR}
-HTROOT_SOURCE_DIR=${project_root_directory%/}/site
+site_source_directory=${project_root_directory%/}/site
 
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
 echo   "From project root dir : ${project_root_directory}"
-echo   "and htrootdir         : ${HTROOT_SOURCE_DIR}"
+echo   "and site source dir   : ${site_source_directory}"
 echo   "To                    : ${DESTINATION_DIR_WITH_USER_AND_IP}"
 echo   "site ID               : ${siteId}"
-echo   "site nick             : ${siteShortName}"
+echo   "site nick             : ${siteNickname}"
 echo   "user                  : ${userId}"
 echo   "IP address            : ${ipAddress}"
 echo --------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ upload_listed_files() {
       file_array+=($line)
     done < ${project_root_directory}/upload_files.txt
     for filename in "${file_array[@]}" ; do
-      requested_filename=${HTROOT_SOURCE_DIR}/$filename
+      requested_filename=${site_source_directory}/$filename
       if [[ -e $requested_filename ]] ; then
         ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
@@ -107,7 +107,7 @@ upload_listed_files() {
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteShortName ${siteShortName}
+    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname}
 
     ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
     check_destination_directory_exit_code=$?
@@ -121,9 +121,9 @@ if [[ $DEBUG -eq 0 ]] ; then
       scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    if [[ -d ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-      scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d ${site_source_directory}/lib ]] ; then
+      find ${site_source_directory}/lib -name .DS_Store -delete
+      scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
@@ -132,22 +132,22 @@ if [[ $DEBUG -eq 0 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
     fi
 else
-    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteShortName ${siteShortName} --debug
+    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname} --debug
 
     find ${project_root_directory}/server -name .DS_Store
     if [[ -e ${project_root_directory}/server ]] ; then
       echo scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
-    if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      echo scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    find ${site_source_directory}/lib -name .DS_Store
+    if [[ -e ${site_source_directory}/lib ]] ; then
+      echo scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     echo scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
@@ -157,5 +157,5 @@ else
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 fi
