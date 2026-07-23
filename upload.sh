@@ -64,6 +64,8 @@ ensure_directory_exists_for_file() {
     echo creating remote directory ${remoteTargetDirectory}
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+    elif [[ $DEBUG -eq 1 ]] ; then
+      echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
     existing_directory_array+=($remoteTargetDirectory)
   fi
@@ -120,6 +122,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     if [[ -d ${project_root_directory}/server ]] ; then
       find ${project_root_directory}/server -name .DS_Store -delete
+      ensure_directory_exists_for_file server/dummy.txt
       scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
@@ -142,13 +145,14 @@ if [[ $DEBUG -eq 0 ]] ; then
 else
     ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname} --debug
 
-    find ${project_root_directory}/server -name .DS_Store
-    if [[ -e ${project_root_directory}/server ]] ; then
+    if [[ -d ${project_root_directory}/server ]] ; then
+      find ${project_root_directory}/server -name .DS_Store
+      ensure_directory_exists_for_file server/dummy.txt
       echo scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    find ${site_source_directory}/lib -name .DS_Store
-    if [[ -e ${site_source_directory}/lib ]] ; then
+    if [[ -d ${site_source_directory}/lib ]] ; then
+      find ${site_source_directory}/lib -name .DS_Store
       echo scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
