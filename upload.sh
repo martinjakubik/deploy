@@ -123,21 +123,21 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
     if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+      scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR/
     fi
 
-    scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
+    scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
 
     if [[ ${incremental} -eq 0 ]] ; then
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store -delete
       if [[ -e ${HTROOT_SOURCE_DIR}/content ]] ; then
-        scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
+        scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR/
       fi
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
+    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}/
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
@@ -147,24 +147,24 @@ else
 
     find ${inputDir}/server -name .DS_Store
     if [[ -e ${inputDir}/server ]] ; then
-      echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR
+      echo scp -r ${inputDir}/server $USER_IP_DESTINATION_DIR/
     fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
     if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR
+      echo scp -r ${HTROOT_SOURCE_DIR}/lib $USER_IP_DESTINATION_DIR/
     fi
 
-    echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR
-    echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR
+    echo scp ${inputDir}/package.json $USER_IP_DESTINATION_DIR/
+    echo scp ${inputDir}/postinstall.js $USER_IP_DESTINATION_DIR/
 
     if [[ ${incremental} -eq 0 ]] ; then
       echo deleting .DS_Store files:
       find ${HTROOT_SOURCE_DIR}/content -name .DS_Store
-      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR
+      echo scp -r ${HTROOT_SOURCE_DIR}/content $USER_IP_DESTINATION_DIR/
     elif [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}
+    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}/
 fi
