@@ -34,7 +34,7 @@ done
 
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR=${STAGING_DIR}/${siteId}
-USER_IP_DESTINATION_DIR=${userId}@${ipAddress}:${DESTINATION_DIR}
+DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:${DESTINATION_DIR}
 HTROOT_SOURCE_DIR=${inputDir%/}/site
 
 echo --------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ echo script: $0
 echo you entered values
 echo   "From inputDir : ${inputDir}"
 echo   "and htrootdir : ${HTROOT_SOURCE_DIR}"
-echo   "To            : ${USER_IP_DESTINATION_DIR}"
+echo   "To            : ${DESTINATION_DIR_WITH_USER_AND_IP}"
 echo   "site ID       : ${siteId}"
 echo   "site nick     : ${siteShortName}"
 echo   "user          : ${userId}"
@@ -61,7 +61,7 @@ ensure_directory_exists_for_file() {
     is_directory_found_on_remote=0
   fi
   if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-    echo creating directory $(dirname $filename_to_check) in ${USER_IP_DESTINATION_DIR}/
+    echo creating directory $(dirname $filename_to_check) in ${DESTINATION_DIR_WITH_USER_AND_IP}/
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
@@ -84,9 +84,9 @@ upload_listed_files() {
       if [[ -e $requested_filename ]] ; then
         ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
-          scp $requested_filename ${USER_IP_DESTINATION_DIR}/$filename
+          scp $requested_filename ${DESTINATION_DIR_WITH_USER_AND_IP}/$filename
         else
-          echo uploading $requested_filename to ${USER_IP_DESTINATION_DIR}/$filename
+          echo uploading $requested_filename to ${DESTINATION_DIR_WITH_USER_AND_IP}/$filename
         fi
         upload_count=$(( upload_count+1 ))
         upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -118,21 +118,21 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     if [[ -d ${inputDir}/server ]] ; then
       find ${inputDir}/server -name .DS_Store -delete
-      scp -r ${inputDir}/server ${USER_IP_DESTINATION_DIR}/
+      scp -r ${inputDir}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     if [[ -d ${HTROOT_SOURCE_DIR}/lib ]] ; then
       find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store -delete
-      scp -r ${HTROOT_SOURCE_DIR}/lib ${USER_IP_DESTINATION_DIR}/
+      scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    scp ${inputDir}/package.json ${USER_IP_DESTINATION_DIR}/
+    scp ${inputDir}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}/
+    scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
@@ -142,20 +142,20 @@ else
 
     find ${inputDir}/server -name .DS_Store
     if [[ -e ${inputDir}/server ]] ; then
-      echo scp -r ${inputDir}/server ${USER_IP_DESTINATION_DIR}/
+      echo scp -r ${inputDir}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
     if [[ -e ${HTROOT_SOURCE_DIR}/lib ]] ; then
-      echo scp -r ${HTROOT_SOURCE_DIR}/lib ${USER_IP_DESTINATION_DIR}/
+      echo scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    echo scp ${inputDir}/package.json ${USER_IP_DESTINATION_DIR}/
-    echo scp ${inputDir}/postinstall.js ${USER_IP_DESTINATION_DIR}/
+    echo scp ${inputDir}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp ${inputDir}/postinstall.js ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
-    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${USER_IP_DESTINATION_DIR}/
+    echo scp ${HTROOT_SOURCE_DIR}/robots.txt ${HTROOT_SOURCE_DIR}/index.html ${HTROOT_SOURCE_DIR}/index.test.html ${HTROOT_SOURCE_DIR}/screen.css ${HTROOT_SOURCE_DIR}/app.js ${HTROOT_SOURCE_DIR}/title.png ${HTROOT_SOURCE_DIR}/logo.png ${HTROOT_SOURCE_DIR}/background.png ${HTROOT_SOURCE_DIR}/background-tile.png ${HTROOT_SOURCE_DIR}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 fi
