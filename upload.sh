@@ -1,10 +1,10 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -i|--inputDir site_root_directory -s|--siteId siteId --siteShortName siteShortName -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
+USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteShortName siteShortName -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
 
 # sets up defaults
 DEBUG=0
-site_root_directory=~/site_root_directory
+project_root_directory=~/project_root_directory
 siteId=abcd
 siteShortName=abcdhome
 destinationDir=~/destinationDir
@@ -14,8 +14,8 @@ incremental=0
 while [ $# -gt 0 ]
 do
   case "$1" in
-    (-i) site_root_directory="${2%\/}"; shift;;
-    (--inputDir) site_root_directory="${2%\/}"; shift;;
+    (-i) project_root_directory="${2%\/}"; shift;;
+    (--inputDir) project_root_directory="${2%\/}"; shift;;
     (-s) siteId="$2"; shift;;
     (--siteId) siteId="$2"; shift;;
     (--siteShortName) siteShortName="$2"; shift;;
@@ -35,18 +35,18 @@ done
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR=${STAGING_DIR}/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:${DESTINATION_DIR}
-HTROOT_SOURCE_DIR=${site_root_directory%/}/site
+HTROOT_SOURCE_DIR=${project_root_directory%/}/site
 
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
-echo   "From site dir : ${site_root_directory}"
-echo   "and htrootdir : ${HTROOT_SOURCE_DIR}"
-echo   "To            : ${DESTINATION_DIR_WITH_USER_AND_IP}"
-echo   "site ID       : ${siteId}"
-echo   "site nick     : ${siteShortName}"
-echo   "user          : ${userId}"
-echo   "IP address    : ${ipAddress}"
+echo   "From project root dir : ${project_root_directory}"
+echo   "and htrootdir         : ${HTROOT_SOURCE_DIR}"
+echo   "To                    : ${DESTINATION_DIR_WITH_USER_AND_IP}"
+echo   "site ID               : ${siteId}"
+echo   "site nick             : ${siteShortName}"
+echo   "user                  : ${userId}"
+echo   "IP address            : ${ipAddress}"
 echo --------------------------------------------------------------------------------
 echo
 
@@ -71,14 +71,14 @@ ensure_directory_exists_for_file() {
 
 upload_listed_files() {
   echo ---
-  echo "uploading files listed in ${site_root_directory}/upload_files.txt"
+  echo "uploading files listed in ${project_root_directory}/upload_files.txt"
   upload_count=0
   upload_count_in_set=0
-  if [[ -e ${site_root_directory}/upload_files.txt ]] ; then
+  if [[ -e ${project_root_directory}/upload_files.txt ]] ; then
     file_array=()
     while IFS= read -r line; do
       file_array+=($line)
-    done < ${site_root_directory}/upload_files.txt
+    done < ${project_root_directory}/upload_files.txt
     for filename in "${file_array[@]}" ; do
       requested_filename=${HTROOT_SOURCE_DIR}/$filename
       if [[ -e $requested_filename ]] ; then
@@ -101,13 +101,13 @@ upload_listed_files() {
       fi
     done
   else
-    echo the list of files ${site_root_directory}/upload_files.txt does not exist
+    echo the list of files ${project_root_directory}/upload_files.txt does not exist
   fi
   echo ---
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./prepare.sh --inputDir ${site_root_directory} -s ${siteId} --siteShortName ${siteShortName}
+    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteShortName ${siteShortName}
 
     ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
     check_destination_directory_exit_code=$?
@@ -116,9 +116,9 @@ if [[ $DEBUG -eq 0 ]] ; then
       exit 1
     fi
 
-    if [[ -d ${site_root_directory}/server ]] ; then
-      find ${site_root_directory}/server -name .DS_Store -delete
-      scp -r ${site_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d ${project_root_directory}/server ]] ; then
+      find ${project_root_directory}/server -name .DS_Store -delete
+      scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     if [[ -d ${HTROOT_SOURCE_DIR}/lib ]] ; then
@@ -126,7 +126,7 @@ if [[ $DEBUG -eq 0 ]] ; then
       scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    scp ${site_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
@@ -138,11 +138,11 @@ if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
     fi
 else
-    ./prepare.sh --inputDir ${site_root_directory} -s ${siteId} --siteShortName ${siteShortName} --debug
+    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteShortName ${siteShortName} --debug
 
-    find ${site_root_directory}/server -name .DS_Store
-    if [[ -e ${site_root_directory}/server ]] ; then
-      echo scp -r ${site_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    find ${project_root_directory}/server -name .DS_Store
+    if [[ -e ${project_root_directory}/server ]] ; then
+      echo scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     find ${HTROOT_SOURCE_DIR}/lib -name .DS_Store
@@ -150,8 +150,8 @@ else
       echo scp -r ${HTROOT_SOURCE_DIR}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
-    echo scp ${site_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
-    echo scp ${site_root_directory}/postinstall.js ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp ${project_root_directory}/postinstall.js ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
