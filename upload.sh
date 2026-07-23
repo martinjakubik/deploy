@@ -37,6 +37,8 @@ DESTINATION_DIR=${STAGING_DIR}/${siteId}
 USER_IP_DESTINATION_DIR=${userId}@${ipAddress}:${DESTINATION_DIR}
 HTROOT_SOURCE_DIR=${inputDir%/}/site
 
+echo --------------------------------------------------------------------------------
+echo script: $0
 echo you entered values
 echo   "From inputDir : $inputDir"
 echo   "and htrootdir : $HTROOT_SOURCE_DIR"
@@ -45,6 +47,8 @@ echo   "site ID       : $siteId"
 echo   "site nick     : $siteShortName"
 echo   "user          : $userId"
 echo   "IP address    : $ipAddress"
+echo --------------------------------------------------------------------------------
+echo
 
 existing_directory_array=()
 

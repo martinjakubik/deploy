@@ -28,10 +28,14 @@ done
 
 HTROOT_SOURCE_DIR=${inputDir%\/}/site
 
+echo --------------------------------------------------------------------------------
+echo script: $0
 echo you entered values
 echo   "From inputDir : $inputDir"
 echo   "site nick     : $siteShortName"
 echo   "site ID       : $siteId"
+echo --------------------------------------------------------------------------------
+echo
 
 if [[ $DEBUG -eq 0 ]] ; then
     cp ${inputDir}/resources/${siteShortName}-title.png ${HTROOT_SOURCE_DIR}/title.png
