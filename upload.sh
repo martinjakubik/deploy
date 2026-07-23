@@ -61,7 +61,7 @@ ensure_directory_exists_for_file() {
     is_directory_found_on_remote=0
   fi
   if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-    echo creating directory $(dirname $filename_to_check) in ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo creating remote directory ${remoteTargetDirectory}
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
@@ -76,9 +76,11 @@ upload_listed_files() {
   upload_count_in_set=0
   if [[ -e ${project_root_directory}/upload_files.txt ]] ; then
     file_array=()
+
     while IFS= read -r line; do
       file_array+=($line)
     done < ${project_root_directory}/upload_files.txt
+
     for filename in "${file_array[@]}" ; do
       requested_filename=${site_source_directory}/$filename
       if [[ -e $requested_filename ]] ; then
