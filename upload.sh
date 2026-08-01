@@ -113,55 +113,63 @@ upload_listed_files() {
 if [[ $DEBUG -eq 0 ]] ; then
     ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname}
 
+    # checks if a plain file already exists with the name of the destination directory
     ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
     check_destination_directory_exit_code=$?
     if [[ $check_destination_directory_exit_code -eq 1 ]] ; then
-      echo "a plain file called ${DESTINATION_DIR} already exists; stopping." 
+      echo "a plain file called ${DESTINATION_DIR} already exists; stopping."
       exit 1
     fi
 
+    # uploads content to the server directory
     if [[ -d ${project_root_directory}/server ]] ; then
       find ${project_root_directory}/server -name .DS_Store -delete
       ensure_directory_exists_for_file server/dummy.txt
       scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
+    # uploads content to the library directory
     if [[ -d ${site_source_directory}/lib ]] ; then
       find ${site_source_directory}/lib -name .DS_Store -delete
       scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
+    # uploads the project's npm package description
     scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
+    # uploads the canonical files
     scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 0 ]] ; then
-      ssh ${userId}@${ipAddress} "touch $DESTINATION_DIR/all_files_uploaded"
+      ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
     fi
 else
     ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname} --debug
 
+    # debugs upload of the server directory
     if [[ -d ${project_root_directory}/server ]] ; then
       find ${project_root_directory}/server -name .DS_Store
       ensure_directory_exists_for_file server/dummy.txt
       echo scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
+    # debugs upload of the library directory
     if [[ -d ${site_source_directory}/lib ]] ; then
       find ${site_source_directory}/lib -name .DS_Store
       echo scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
+    # debugs upload of the project's npm package description
     echo scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
-    echo scp ${project_root_directory}/postinstall.js ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
+    # debugs upload of the canonical files
     echo scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 fi
