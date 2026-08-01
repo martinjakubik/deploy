@@ -48,13 +48,13 @@ incremental_install_site_custom_content() {
 	echo ignoring incremental content install
 }
 
-clean_install_site_custom_content() {
+clean_install_site_custom_files() {
     echo ignoring clean install for custom site content
 }
 
 if [[ $incremental -eq 0 ]] ; then
     clean_install_site_canonical_files
-	clean_install_site_custom_content
+	clean_install_site_custom_files
 	rm ${siteStagingDirectory}/all_files_uploaded
 elif [[ $incremental -eq 1 ]] ; then
 	incremental_install_site_custom_content
