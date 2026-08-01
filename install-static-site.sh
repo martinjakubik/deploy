@@ -32,7 +32,7 @@ LIVE_DIR=/var/www
 sitePackageRootDirectory=${LIVE_DIR}/${siteName}
 siteHypertextDirectory=${sitePackageRootDirectory}/htdocs
 
-clean_install_site_base_content() {
+clean_install_site_canonical_files () {
 	if [[ ! -d /var/www/${sitePackageRootDirectory} ]] ; then
 		echo "${sitePackageRootDirectory} does not exist; please create it."
 		return 1;
@@ -53,7 +53,7 @@ clean_install_site_custom_content() {
 }
 
 if [[ $incremental -eq 0 ]] ; then
-    clean_install_site_base_content
+    clean_install_site_canonical_files
 	clean_install_site_custom_content
 	rm ${siteStagingDirectory}/all_files_uploaded
 elif [[ $incremental -eq 1 ]] ; then
