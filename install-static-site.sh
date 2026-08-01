@@ -33,15 +33,19 @@ sitePackageRootDirectory=${LIVE_DIR}/${siteName}
 siteHypertextDirectory=${sitePackageRootDirectory}/htdocs
 
 clean_install_site_canonical_files () {
-	if [[ ! -d /var/www/${sitePackageRootDirectory} ]] ; then
-		echo "${sitePackageRootDirectory} does not exist; please create it."
-		return 1;
+	if [[ ! -d ${sitePackageRootDirectory} ]] ; then
+		echo "${sitePackageRootDirectory} does not exist; creating it."
+		mkdir "${sitePackageRootDirectory}"
 	fi
-	mv ${siteStagingDirectory}/index.html /var/www/${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/screen.css /var/www/${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/logo.png /var/www/${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/background.png /var/www/${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/settings.png /var/www/${siteHypertextDirectory}/
+	if [[ ! -d ${siteHypertextDirectory} ]] ; then
+		echo "${siteHypertextDirectory} does not exist; creating it."
+		mkdir "${siteHypertextDirectory}"
+	fi
+	mv ${siteStagingDirectory}/index.html ${siteHypertextDirectory}/
+    mv ${siteStagingDirectory}/screen.css ${siteHypertextDirectory}/
+    mv ${siteStagingDirectory}/logo.png ${siteHypertextDirectory}/
+    mv ${siteStagingDirectory}/background.png ${siteHypertextDirectory}/
+    mv ${siteStagingDirectory}/settings.png ${siteHypertextDirectory}/
 }
 
 incremental_install_site_custom_content() {
