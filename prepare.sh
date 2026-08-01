@@ -26,31 +26,31 @@ do
   shift
 done
 
-site_source_directory=${project_root_directory%\/}/site
+site_distribution_directory=${project_root_directory%\/}/site
 
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
-echo   "From project root dir : ${project_root_directory}"
-echo   "site nickname         : ${siteNickname}"
-echo   "site ID               : ${siteId}"
+echo   "From project root dir       : ${project_root_directory}"
+echo   "site nickname               : ${siteNickname}"
+echo   "site ID                     : ${siteId}"
 echo --------------------------------------------------------------------------------
 echo
 
 if [[ $DEBUG -eq 0 ]] ; then
-    cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_source_directory}/title.png
-    cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_source_directory}/logo.png
-    cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_source_directory}/background.png
-    cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_source_directory}/background-tile.png
-    cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_source_directory}/settings.png
-    cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_source_directory}/volume-on.png
-    cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_source_directory}/volume-off.png
+    cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_distribution_directory}/title.png
+    cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_distribution_directory}/logo.png
+    cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_distribution_directory}/background.png
+    cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_distribution_directory}/background-tile.png
+    cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_distribution_directory}/settings.png
+    cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_distribution_directory}/volume-on.png
+    cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_distribution_directory}/volume-off.png
 else
-    echo cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_source_directory}/title.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_source_directory}/logo.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_source_directory}/background.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_source_directory}/background-tile.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_source_directory}/settings.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_source_directory}/volume-on.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_source_directory}/volume-off.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_distribution_directory}/title.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_distribution_directory}/logo.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_distribution_directory}/background.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_distribution_directory}/background-tile.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_distribution_directory}/settings.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_distribution_directory}/volume-on.png
+    echo cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_distribution_directory}/volume-off.png
 fi

@@ -24,8 +24,8 @@ do
 done
 
 echo you entered values
-echo   "From inputDir : $inputDir"
-echo   "To            : $destinationDir"
+echo   "From inputDir               : $inputDir"
+echo   "To                          : $destinationDir"
 
 if [[ ! -d $destinationDir ]] ; then
     mkdir -p $destinationDir

@@ -35,18 +35,18 @@ done
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR=${STAGING_DIR}/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:${DESTINATION_DIR}
-site_source_directory=${project_root_directory%/}/site
+site_distribution_dir=${project_root_directory%/}/site
 
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
-echo   "From project root dir : ${project_root_directory}"
-echo   "and site source dir   : ${site_source_directory}"
-echo   "To                    : ${DESTINATION_DIR_WITH_USER_AND_IP}"
-echo   "site ID               : ${siteId}"
-echo   "site nickname         : ${siteNickname}"
-echo   "user                  : ${userId}"
-echo   "IP address            : ${ipAddress}"
+echo   "From project root dir       : ${project_root_directory}"
+echo   "and site distribution dir   : ${site_distribution_dir}"
+echo   "To                          : ${DESTINATION_DIR_WITH_USER_AND_IP}"
+echo   "site ID                     : ${siteId}"
+echo   "site nickname               : ${siteNickname}"
+echo   "user                        : ${userId}"
+echo   "IP address                  : ${ipAddress}"
 echo --------------------------------------------------------------------------------
 echo
 
@@ -84,7 +84,7 @@ upload_listed_files() {
     done < ${project_root_directory}/upload_files.txt
 
     for filename in "${file_array[@]}" ; do
-      requested_filename=${site_source_directory}/$filename
+      requested_filename=${site_distribution_dir}/$filename
       if [[ -e $requested_filename ]] ; then
         ensure_directory_exists_for_file $filename
         if [[ $DEBUG -eq 0 ]] ; then
@@ -129,9 +129,9 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads content to the library directory
-    if [[ -d ${site_source_directory}/lib ]] ; then
-      find ${site_source_directory}/lib -name .DS_Store -delete
-      scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d ${site_distribution_dir}/lib ]] ; then
+      find ${site_distribution_dir}/lib -name .DS_Store -delete
+      scp -r ${site_distribution_dir}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     # uploads the project's npm package description
@@ -142,7 +142,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads the canonical files
-    scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp ${site_distribution_dir}/robots.txt ${site_distribution_dir}/index.html ${site_distribution_dir}/index.test.html ${site_distribution_dir}/screen.css ${site_distribution_dir}/app.js ${site_distribution_dir}/title.png ${site_distribution_dir}/logo.png ${site_distribution_dir}/background.png ${site_distribution_dir}/background-tile.png ${site_distribution_dir}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
@@ -158,9 +158,9 @@ else
     fi
 
     # debugs upload of the library directory
-    if [[ -d ${site_source_directory}/lib ]] ; then
-      find ${site_source_directory}/lib -name .DS_Store
-      echo scp -r ${site_source_directory}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d ${site_distribution_dir}/lib ]] ; then
+      find ${site_distribution_dir}/lib -name .DS_Store
+      echo scp -r ${site_distribution_dir}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
     fi
 
     # debugs upload of the project's npm package description
@@ -171,5 +171,5 @@ else
     fi
 
     # debugs upload of the canonical files
-    echo scp ${site_source_directory}/robots.txt ${site_source_directory}/index.html ${site_source_directory}/index.test.html ${site_source_directory}/screen.css ${site_source_directory}/app.js ${site_source_directory}/title.png ${site_source_directory}/logo.png ${site_source_directory}/background.png ${site_source_directory}/background-tile.png ${site_source_directory}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp ${site_distribution_dir}/robots.txt ${site_distribution_dir}/index.html ${site_distribution_dir}/index.test.html ${site_distribution_dir}/screen.css ${site_distribution_dir}/app.js ${site_distribution_dir}/title.png ${site_distribution_dir}/logo.png ${site_distribution_dir}/background.png ${site_distribution_dir}/background-tile.png ${site_distribution_dir}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 fi
