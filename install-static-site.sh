@@ -52,10 +52,18 @@ clean_install_site_custom_files() {
     echo ignoring clean install for custom site content
 }
 
+delete_files_uploaded_marker() {
+    if [[ -f ${siteStagingDirectory}/all_files_uploaded ]] ; then
+        rm ${siteStagingDirectory}/all_files_uploaded
+    fi
+}
+
 if [[ $incremental -eq 0 ]] ; then
     clean_install_site_canonical_files
 	clean_install_site_custom_files
-	rm ${siteStagingDirectory}/all_files_uploaded
+	delete_files_uploaded_marker
 elif [[ $incremental -eq 1 ]] ; then
+    clean_install_site_canonical_files
 	incremental_install_site_custom_content
+	delete_files_uploaded_marker
 fi
