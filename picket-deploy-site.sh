@@ -32,6 +32,12 @@ LIVE_DIR=/var/www
 sitePackageRootDirectory=${LIVE_DIR}/${siteName}
 siteHypertextDirectory=${sitePackageRootDirectory}/htdocs
 
+move_single_file_from_staging_to_live () {
+    single_file="$1"
+	cp ${siteStagingDirectory}/"${single_file}" ${siteHypertextDirectory}/
+	rm ${siteStagingDirectory}/"${single_file}"
+}
+
 clean_install_site_canonical_files () {
 	if [[ ! -d ${sitePackageRootDirectory} ]] ; then
 		echo "${sitePackageRootDirectory} does not exist; creating it."
@@ -42,16 +48,11 @@ clean_install_site_canonical_files () {
 		mkdir "${siteHypertextDirectory}"
 	fi
 	echo installing canonical files
-	cp ${siteStagingDirectory}/index.html ${siteHypertextDirectory}/
-	rm ${siteStagingDirectory}/index.html
-    cp ${siteStagingDirectory}/screen.css ${siteHypertextDirectory}/
-    rm ${siteStagingDirectory}/screen.css
-    cp ${siteStagingDirectory}/logo.png ${siteHypertextDirectory}/
-    rm ${siteStagingDirectory}/logo.png
-    cp ${siteStagingDirectory}/background.png ${siteHypertextDirectory}/
-    rm ${siteStagingDirectory}/background.png
-    cp ${siteStagingDirectory}/settings.png ${siteHypertextDirectory}/
-    rm ${siteStagingDirectory}/settings.png
+	move_single_file_from_staging_to_live index.html
+    move_single_file_from_staging_to_live screen.css
+    move_single_file_from_staging_to_live logo.png
+    move_single_file_from_staging_to_live background.png
+    move_single_file_from_staging_to_live settings.png
 }
 
 incremental_install_site_custom_content() {
