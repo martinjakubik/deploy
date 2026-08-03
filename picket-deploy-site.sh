@@ -41,12 +41,17 @@ clean_install_site_canonical_files () {
 		echo "${siteHypertextDirectory} does not exist; creating it."
 		mkdir "${siteHypertextDirectory}"
 	fi
+	echo installing canonical files
 	cp ${siteStagingDirectory}/index.html ${siteHypertextDirectory}/
 	rm ${siteStagingDirectory}/index.html
-    mv ${siteStagingDirectory}/screen.css ${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/logo.png ${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/background.png ${siteHypertextDirectory}/
-    mv ${siteStagingDirectory}/settings.png ${siteHypertextDirectory}/
+    cp ${siteStagingDirectory}/screen.css ${siteHypertextDirectory}/
+    rm ${siteStagingDirectory}/screen.css
+    cp ${siteStagingDirectory}/logo.png ${siteHypertextDirectory}/
+    rm ${siteStagingDirectory}/logo.png
+    cp ${siteStagingDirectory}/background.png ${siteHypertextDirectory}/
+    rm ${siteStagingDirectory}/background.png
+    cp ${siteStagingDirectory}/settings.png ${siteHypertextDirectory}/
+    rm ${siteStagingDirectory}/settings.png
 }
 
 incremental_install_site_custom_content() {
