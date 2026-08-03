@@ -29,10 +29,10 @@ case "${picket_command}" in
         picket-deploy-site --siteId "${siteId}"
     ;;
     (undeploy)
-        echo picket-undeploy-site --siteId "${siteId}"
+        picket-undeploy-site --siteId "${siteId}"
     ;;
     (delete)
-        echo picket-delete-site --siteId "${siteId}"
+        picket-delete-site --siteId "${siteId}"
     ;;
     (-*)
         echo >&2 ${USAGE}

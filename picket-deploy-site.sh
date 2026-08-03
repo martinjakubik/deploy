@@ -78,3 +78,5 @@ elif [[ $incremental -eq 1 ]] ; then
 	incremental_install_site_custom_content
 	delete_files_uploaded_marker
 fi
+
+exit 0
