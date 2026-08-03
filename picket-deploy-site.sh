@@ -41,7 +41,8 @@ clean_install_site_canonical_files () {
 		echo "${siteHypertextDirectory} does not exist; creating it."
 		mkdir "${siteHypertextDirectory}"
 	fi
-	mv ${siteStagingDirectory}/index.html ${siteHypertextDirectory}/
+	cp ${siteStagingDirectory}/index.html ${siteHypertextDirectory}/
+	rm ${siteStagingDirectory}/index.html
     mv ${siteStagingDirectory}/screen.css ${siteHypertextDirectory}/
     mv ${siteStagingDirectory}/logo.png ${siteHypertextDirectory}/
     mv ${siteStagingDirectory}/background.png ${siteHypertextDirectory}/
