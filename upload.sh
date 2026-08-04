@@ -72,16 +72,17 @@ ensure_directory_exists_for_file() {
 }
 
 upload_listed_files() {
+    file_listing_files_to_upload="$1"
     echo ---
-    echo "uploading files listed in ${project_root_directory}/upload_files.txt"
+    echo "uploading files listed in $file_listing_files_to_upload"
     upload_count=0
     upload_count_in_set=0
-    if [[ -e "${project_root_directory}"/upload_files.txt ]] ; then
+    if [[ -e "$file_listing_files_to_upload" ]] ; then
         file_array=()
 
         while IFS= read -r line; do
             file_array+=($line)
-        done < "${project_root_directory}"/upload_files.txt
+        done < "$file_listing_files_to_upload"
 
         for filename in "${file_array[@]}" ; do
             requested_filename="${site_distribution_dir}"/"$filename"
@@ -105,7 +106,7 @@ upload_listed_files() {
             fi
         done
     else
-        echo the list of files "${project_root_directory}"/upload_files.txt does not exist
+        echo "the list of files $file_listing_files_to_upload does not exist"
     fi
     echo ---
 }
@@ -138,15 +139,15 @@ if [[ $DEBUG -eq 0 ]] ; then
     scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_files
+        upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
     # uploads the site's metafiles
     scp site-canonical-files ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
-    upload_files_listed_in_file site_canonical_files
-    scp "${site_distribution_dir}"/robots.txt "${site_distribution_dir}"/index.html "${site_distribution_dir}"/index.test.html "${site_distribution_dir}"/screen.css "${site_distribution_dir}"/app.js "${site_distribution_dir}"/title.png "${site_distribution_dir}"/logo.png "${site_distribution_dir}"/background.png "${site_distribution_dir}"/background-tile.png "${site_distribution_dir}"/settings.png "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    upload_listed_files site_canonical_files
+    upload_listed_files ${siteId}-custom-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
@@ -171,7 +172,7 @@ else
     echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_files
+        upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
     # debugs upload of the canonical files
