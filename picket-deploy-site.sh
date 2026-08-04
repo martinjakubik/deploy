@@ -34,6 +34,9 @@ siteHypertextDirectory=${sitePackageRootDirectory}/htdocs
 
 move_single_file_from_staging_to_live () {
     single_file="$1"
+    if [[ ! -f ${siteStagingDirectory}/${single_file} ]] ; then
+        echo ${siteStagingDirectory}/${single_file} does not exist. Please create it.
+    fi
 	cp ${siteStagingDirectory}/"${single_file}" ${siteHypertextDirectory}/
 	rm ${siteStagingDirectory}/"${single_file}"
 }
