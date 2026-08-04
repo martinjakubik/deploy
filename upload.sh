@@ -147,7 +147,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     # uploads the canonical files
     upload_listed_files site_canonical_files
-    upload_listed_files ${siteId}-custom-files
+    upload_listed_files ${project_root_directory}/${siteId}-custom-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
@@ -175,6 +175,6 @@ else
         upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
-    # debugs upload of the canonical files
-    echo scp "${site_distribution_dir}"/robots.txt "${site_distribution_dir}"/index.html "${site_distribution_dir}"/index.test.html $"{site_distribution_dir}"/screen.css "${site_distribution_dir}"/app.js "${site_distribution_dir}"/title.png "${site_distribution_dir}"/logo.png "${site_distribution_dir}"/background.png "${site_distribution_dir}"/background-tile.png "${site_distribution_dir}"/settings.png "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    upload_listed_files site_canonical_files
+    upload_listed_files ${project_root_directory}/${siteId}-custom-files
 fi
