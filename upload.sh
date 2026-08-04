@@ -141,6 +141,9 @@ if [[ $DEBUG -eq 0 ]] ; then
       upload_listed_files
     fi
 
+    # uploads the site's metafiles
+    scp ${siteId}-apps ${siteId}-custom-files ${DESTINATION_DIR_WITH_USER_AND_IP}/
+
     # uploads the canonical files
     scp ${site_distribution_dir}/robots.txt ${site_distribution_dir}/index.html ${site_distribution_dir}/index.test.html ${site_distribution_dir}/screen.css ${site_distribution_dir}/app.js ${site_distribution_dir}/title.png ${site_distribution_dir}/logo.png ${site_distribution_dir}/background.png ${site_distribution_dir}/background-tile.png ${site_distribution_dir}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
 
