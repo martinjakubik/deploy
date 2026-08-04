@@ -19,9 +19,11 @@ end
 
 set --append string_ssh_command "'"
 
-ssh martin@192.46.222.142 'ls -la /usr/local/bin'
-
 echo ---
 echo debugging the upload command:
 echo $string_ssh_command
 echo ---
+
+# eval $string_ssh_command
+
+ssh martin@192.46.222.142 'ls -la /usr/local/bin'
