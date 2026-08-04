@@ -33,9 +33,9 @@ do
 done
 
 STAGING_DIR=/var/x-www-staging
-DESTINATION_DIR=${STAGING_DIR}/${siteId}
-DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:${DESTINATION_DIR}
-site_distribution_dir=${project_root_directory%/}/site
+DESTINATION_DIR="${STAGING_DIR}"/${siteId}
+DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:"${DESTINATION_DIR}"
+site_distribution_dir="${project_root_directory%/}"/site
 
 echo --------------------------------------------------------------------------------
 echo script: $0
@@ -53,21 +53,21 @@ echo
 existing_directory_array=()
 
 ensure_directory_exists_for_file() {
-  filename_to_check=$1
-  remoteTargetDirectory=$DESTINATION_DIR/$(dirname $filename_to_check)
-  if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- ${remoteTargetDirectory} ; then
+  filename_to_check="$1"
+  remoteTargetDirectory="$DESTINATION_DIR"/$(dirname "$filename_to_check")
+  if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${remoteTargetDirectory}" ; then
     is_directory_found_on_remote=1
   else
     is_directory_found_on_remote=0
   fi
   if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-    echo creating remote directory ${remoteTargetDirectory}
+    echo creating remote directory "${remoteTargetDirectory}"
     if [[ $DEBUG -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     elif [[ $DEBUG -eq 1 ]] ; then
       echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
     fi
-    existing_directory_array+=($remoteTargetDirectory)
+    existing_directory_array+=("$remoteTargetDirectory")
   fi
 }
 
@@ -76,21 +76,21 @@ upload_listed_files() {
   echo "uploading files listed in ${project_root_directory}/upload_files.txt"
   upload_count=0
   upload_count_in_set=0
-  if [[ -e ${project_root_directory}/upload_files.txt ]] ; then
+  if [[ -e "${project_root_directory}"/upload_files.txt ]] ; then
     file_array=()
 
     while IFS= read -r line; do
       file_array+=($line)
-    done < ${project_root_directory}/upload_files.txt
+    done < "${project_root_directory}"/upload_files.txt
 
     for filename in "${file_array[@]}" ; do
-      requested_filename=${site_distribution_dir}/$filename
-      if [[ -e $requested_filename ]] ; then
-        ensure_directory_exists_for_file $filename
+      requested_filename="${site_distribution_dir}"/"$filename"
+      if [[ -e "$requested_filename" ]] ; then
+        ensure_directory_exists_for_file "$filename"
         if [[ $DEBUG -eq 0 ]] ; then
-          scp $requested_filename ${DESTINATION_DIR_WITH_USER_AND_IP}/$filename
+          scp "$requested_filename" "${DESTINATION_DIR_WITH_USER_AND_IP}"/"$filename"
         else
-          echo uploading $requested_filename to ${DESTINATION_DIR_WITH_USER_AND_IP}/$filename
+          echo uploading "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP}"/"$filename"
         fi
         upload_count=$(( upload_count+1 ))
         upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -101,17 +101,17 @@ upload_listed_files() {
           upload_count_in_set=0
         fi
       else
-        echo the file: $requested_filename does not exist
+        echo the file: "$requested_filename" does not exist
       fi
     done
   else
-    echo the list of files ${project_root_directory}/upload_files.txt does not exist
+    echo the list of files "${project_root_directory}"/upload_files.txt does not exist
   fi
   echo ---
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname}
+    ./prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname}
 
     # checks if a plain file already exists with the name of the destination directory
     ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
@@ -122,57 +122,57 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads content to the server directory
-    if [[ -d ${project_root_directory}/server ]] ; then
-      find ${project_root_directory}/server -name .DS_Store -delete
+    if [[ -d "${project_root_directory}"/server ]] ; then
+      find "${project_root_directory}"/server -name .DS_Store -delete
       ensure_directory_exists_for_file server/dummy.txt
-      scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
+      scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP}"/
     fi
 
     # uploads content to the library directory
-    if [[ -d ${site_distribution_dir}/lib ]] ; then
-      find ${site_distribution_dir}/lib -name .DS_Store -delete
-      scp -r ${site_distribution_dir}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d "${site_distribution_dir}"/lib ]] ; then
+      find "${site_distribution_dir}"/lib -name .DS_Store -delete
+      scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP}"/
     fi
 
     # uploads the project's npm package description
-    scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
     # uploads the site's metafiles
-    scp ${siteId}-apps ${siteId}-custom-files ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp ${siteId}-apps ${siteId}-custom-files "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
-    scp ${site_distribution_dir}/robots.txt ${site_distribution_dir}/index.html ${site_distribution_dir}/index.test.html ${site_distribution_dir}/screen.css ${site_distribution_dir}/app.js ${site_distribution_dir}/title.png ${site_distribution_dir}/logo.png ${site_distribution_dir}/background.png ${site_distribution_dir}/background-tile.png ${site_distribution_dir}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    scp "${site_distribution_dir}"/robots.txt "${site_distribution_dir}"/index.html "${site_distribution_dir}"/index.test.html "${site_distribution_dir}"/screen.css "${site_distribution_dir}"/app.js "${site_distribution_dir}"/title.png "${site_distribution_dir}"/logo.png "${site_distribution_dir}"/background.png "${site_distribution_dir}"/background-tile.png "${site_distribution_dir}"/settings.png "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     if [[ ${incremental} -eq 0 ]] ; then
       ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
     fi
 else
-    ./prepare.sh --inputDir ${project_root_directory} -s ${siteId} --siteNickname ${siteNickname} --debug
+    ./prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} --debug
 
     # debugs upload of the server directory
-    if [[ -d ${project_root_directory}/server ]] ; then
-      find ${project_root_directory}/server -name .DS_Store
+    if [[ -d "${project_root_directory}"/server ]] ; then
+      find "${project_root_directory}"/server -name .DS_Store
       ensure_directory_exists_for_file server/dummy.txt
-      echo scp -r ${project_root_directory}/server ${DESTINATION_DIR_WITH_USER_AND_IP}/
+      echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP}"/
     fi
 
     # debugs upload of the library directory
-    if [[ -d ${site_distribution_dir}/lib ]] ; then
-      find ${site_distribution_dir}/lib -name .DS_Store
-      echo scp -r ${site_distribution_dir}/lib ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    if [[ -d "${site_distribution_dir}"/lib ]] ; then
+      find "${site_distribution_dir}"/lib -name .DS_Store
+      echo scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP}"/
     fi
 
     # debugs upload of the project's npm package description
-    echo scp ${project_root_directory}/package.json ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
       upload_listed_files
     fi
 
     # debugs upload of the canonical files
-    echo scp ${site_distribution_dir}/robots.txt ${site_distribution_dir}/index.html ${site_distribution_dir}/index.test.html ${site_distribution_dir}/screen.css ${site_distribution_dir}/app.js ${site_distribution_dir}/title.png ${site_distribution_dir}/logo.png ${site_distribution_dir}/background.png ${site_distribution_dir}/background-tile.png ${site_distribution_dir}/settings.png ${DESTINATION_DIR_WITH_USER_AND_IP}/
+    echo scp "${site_distribution_dir}"/robots.txt "${site_distribution_dir}"/index.html "${site_distribution_dir}"/index.test.html $"{site_distribution_dir}"/screen.css "${site_distribution_dir}"/app.js "${site_distribution_dir}"/title.png "${site_distribution_dir}"/logo.png "${site_distribution_dir}"/background.png "${site_distribution_dir}"/background-tile.png "${site_distribution_dir}"/settings.png "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 fi
