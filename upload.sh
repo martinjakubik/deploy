@@ -36,6 +36,14 @@ STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR="${STAGING_DIR}"/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:"${DESTINATION_DIR}"
 site_distribution_dir="${project_root_directory%/}"/site
+does_canonical_files_file_exist=0
+site_canonical_files_file=site-canonical-files
+if [[ -f "${site_canonical_files_file}" ]] ; then
+    does_canonical_files_file_exist=1
+elif [[ -f /etc/picket/site-canonical-files ]] ; then
+    does_canonical_files_file_exist=1
+    site_canonical_files_file=/etc/picket/site-canonical-files
+fi
 
 echo --------------------------------------------------------------------------------
 echo script: $0
@@ -143,7 +151,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads the site's metafiles
-    scp site-canonical-files ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    scp "${site_canonical_files_file}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
     upload_listed_files site_canonical_files
