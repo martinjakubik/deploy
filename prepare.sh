@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # sets up usage
 USAGE="usage: $0 -i|--inputDir project_root_directory s|--siteId siteId --siteNickname siteNickname -d|--debug"
 
