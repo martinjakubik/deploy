@@ -160,8 +160,8 @@ if [[ $DEBUG -eq 0 ]] ; then
         upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
-    # uploads the site's metafiles
-    scp "${site_canonical_source_code_file_list}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    # uploads the site's metadata files
+    scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" ${siteId}-custom-source-code-files ${siteId}-custom-binary-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
     upload_listed_files "${site_canonical_source_code_file_list}"

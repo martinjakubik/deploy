@@ -82,7 +82,7 @@ build_listed_files() {
                 if [[ ! -d "${site_distribution_directory}" ]] ; then
                     mkdir "${site_distribution_directory}"
                 fi
-                mv "${requested_filename}" "${site_distribution_directory}"/
+                cp "${requested_filename}" "${site_distribution_directory}"/
             else
                 echo the file: "$requested_filename" does not exist
             fi
