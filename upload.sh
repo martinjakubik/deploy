@@ -37,22 +37,22 @@ DESTINATION_DIR="${STAGING_DIR}"/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:"${DESTINATION_DIR}"
 site_distribution_dir="${project_root_directory%/}"/site
 
-does_canonical_source_code_files_file_exist=0
-site_canonical_source_code_files_file=site-canonical-source-codefiles
-if [[ -f "${site_canonical_source_code_files_file}" ]] ; then
-    does_canonical_source_code_files_file_exist=1
+does_canonical_source_code_file_list_exist=0
+site_canonical_source_code_file_list=site-canonical-source-code-files
+if [[ -f "${site_canonical_source_code_file_list}" ]] ; then
+    does_canonical_source_code_file_list_exist=1
 elif [[ -f /etc/picket/site-canonical-source-code-files ]] ; then
-    does_canonical_source_code_files_file_exist=1
-    site_canonical_source_code_files_file=/etc/picket/site-canonical-files
+    does_canonical_source_code_file_list_exist=1
+    site_canonical_source_code_file_list=/etc/picket/site-canonical-source-code-files
 fi
 
-does_canonical_binary_files_file_exist=0
-site_canonical_binary_files_file=site-canonical-binary-files-file
-if [[ -f "${site_canonical_binary_files_file}" ]] ; then
-    does_canonical_binary_files_file_exist=1
+does_canonical_binary_file_list_exist=0
+site_canonical_binary_file_list=site-canonical-binary-files
+if [[ -f "${site_canonical_binary_file_list}" ]] ; then
+    does_canonical_binary_file_list_exist=1
 elif [[ -f /etc/picket/site-canonical-binary-files ]] ; then
-    does_canonical_binary_files_file_exist=1
-    site_canonical_binary_files_file=/etc/picket/site-canonical-binary-files
+    does_canonical_binary_file_list_exist=1
+    site_canonical_binary_file_list=/etc/picket/site-canonical-binary-files
 fi
 
 echo --------------------------------------------------------------------------------
@@ -161,11 +161,11 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads the site's metafiles
-    scp "${site_canonical_source_code_files_file}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    scp "${site_canonical_source_code_file_list}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
-    upload_listed_files "${site_canonical_source_code_files_file}"
-    upload_listed_files "${site_canonical_binary_files_file}"
+    upload_listed_files "${site_canonical_source_code_file_list}"
+    upload_listed_files "${site_canonical_binary_file_list}"
     upload_listed_files ${project_root_directory}/${siteId}-custom-source-code-files
     upload_listed_files ${project_root_directory}/${siteId}-custom-binary-files
 
@@ -195,7 +195,8 @@ else
         upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
-    upload_listed_files "${site_canonical_source_code_files_file}"
-    upload_listed_files "${site_canonical_binary_files_file}"
-    upload_listed_files ${project_root_directory}/${siteId}-custom-files
+    upload_listed_files "${site_canonical_source_code_file_list}"
+    upload_listed_files "${site_canonical_binary_file_list}"
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 fi
