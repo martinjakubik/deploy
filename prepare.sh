@@ -37,6 +37,37 @@ echo   "site ID                     : ${siteId}"
 echo --------------------------------------------------------------------------------
 echo
 
+build_listed_files() {
+    file_listing_files_to_build="$1"
+    echo ---
+    echo "building files listed in $file_listing_files_to_build"
+    if [[ -e "$file_listing_files_to_build" ]] ; then
+        file_array=()
+
+        while IFS= read -r line; do
+            file_array+=($line)
+        done < "$file_listing_files_to_build"
+
+        for filename in "${file_array[@]}" ; do
+            requested_filename="${project_root_directory}"/"$filename"
+            if [[ -e "$requested_filename" ]] ; then
+                if [[ ! -d "${site_distribution_directory}" ]] ; then
+                    mkdir "${site_distribution_directory}"
+                fi
+                mv "${requested_filename}" "${site_distribution_directory}"/
+            else
+                echo the file: "$requested_filename" does not exist
+            fi
+        done
+    else
+        echo "the list of files $file_listing_files_to_build does not exist"
+    fi
+    echo ---
+}
+
+build_listed_files site_canonical_files
+build_listed_files ${project_root_directory}/${siteId}-custom-files
+
 if [[ $DEBUG -eq 0 ]] ; then
     cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_distribution_directory}/title.png
     cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_distribution_directory}/logo.png
