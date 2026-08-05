@@ -39,6 +39,16 @@ echo
 
 build_listed_files() {
     file_listing_files_to_build="$1"
+    source_code_or_binary_resource="$2"
+    if [[ $source_code_or_binary_resource -eq "source_code" ]] ; then
+        parent_dir="src"
+    elif [[ $source_code_or_binary_resource -eq "binary_resource" ]] ; then
+        parent_dir="resources"
+    else
+        echo parent directory for file collection of type "$source_code_or_binary_resource" not found
+        exit 1
+    fi
+
     echo ---
     echo "building files listed in $file_listing_files_to_build"
     if [[ -e "$file_listing_files_to_build" ]] ; then
@@ -49,7 +59,7 @@ build_listed_files() {
         done < "$file_listing_files_to_build"
 
         for filename in "${file_array[@]}" ; do
-            requested_filename="${project_root_directory}"/"$filename"
+            requested_filename="${project_root_directory}"/"${source_code_or_binary_resource}"/"$filename"
             if [[ -e "$requested_filename" ]] ; then
                 if [[ ! -d "${site_distribution_directory}" ]] ; then
                     mkdir "${site_distribution_directory}"
@@ -65,23 +75,15 @@ build_listed_files() {
     echo ---
 }
 
-build_listed_files site_canonical_files
-build_listed_files ${project_root_directory}/${siteId}-custom-files
+build_listed_source_code_files() {
+    build_listed_files "$1" "source_code"
+}
 
-if [[ $DEBUG -eq 0 ]] ; then
-    cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_distribution_directory}/title.png
-    cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_distribution_directory}/logo.png
-    cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_distribution_directory}/background.png
-    cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_distribution_directory}/background-tile.png
-    cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_distribution_directory}/settings.png
-    cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_distribution_directory}/volume-on.png
-    cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_distribution_directory}/volume-off.png
-else
-    echo cp ${project_root_directory}/resources/${siteNickname}-title.png ${site_distribution_directory}/title.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-logo.png ${site_distribution_directory}/logo.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-background.png ${site_distribution_directory}/background.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-background-tile.png ${site_distribution_directory}/background-tile.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-settings.png ${site_distribution_directory}/settings.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-volume-on.png ${site_distribution_directory}/volume-on.png
-    echo cp ${project_root_directory}/resources/${siteNickname}-volume-off.png ${site_distribution_directory}/volume-off.png
-fi
+build_listed_binary_files() {
+    build_listed_files "$1" "binary_resource"
+}
+
+build_listed_source_code_files site_canonical_source_code_files
+build_listed_binary_files site_canonical_binary_files
+build_listed_source_code_files ${project_root_directory}/${siteId}-custom-source-code-files
+build_listed_binary_files ${project_root_directory}/${siteId}-custom-binary-files

@@ -36,13 +36,23 @@ STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR="${STAGING_DIR}"/${siteId}
 DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:"${DESTINATION_DIR}"
 site_distribution_dir="${project_root_directory%/}"/site
-does_canonical_files_file_exist=0
-site_canonical_files_file=site-canonical-files
-if [[ -f "${site_canonical_files_file}" ]] ; then
-    does_canonical_files_file_exist=1
-elif [[ -f /etc/picket/site-canonical-files ]] ; then
-    does_canonical_files_file_exist=1
-    site_canonical_files_file=/etc/picket/site-canonical-files
+
+does_canonical_source_code_files_file_exist=0
+site_canonical_source_code_files_file=site-canonical-source-codefiles
+if [[ -f "${site_canonical_source_code_files_file}" ]] ; then
+    does_canonical_source_code_files_file_exist=1
+elif [[ -f /etc/picket/site-canonical-source-code-files ]] ; then
+    does_canonical_source_code_files_file_exist=1
+    site_canonical_source_code_files_file=/etc/picket/site-canonical-files
+fi
+
+does_canonical_binary_files_file_exist=0
+site_canonical_binary_files_file=site-canonical-binary-files-file
+if [[ -f "${site_canonical_binary_files_file}" ]] ; then
+    does_canonical_binary_files_file_exist=1
+elif [[ -f /etc/picket/site-canonical-binary-files ]] ; then
+    does_canonical_binary_files_file_exist=1
+    site_canonical_binary_files_file=/etc/picket/site-canonical-binary-files
 fi
 
 echo --------------------------------------------------------------------------------
@@ -151,11 +161,13 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads the site's metafiles
-    scp "${site_canonical_files_file}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    scp "${site_canonical_source_code_files_file}" ${siteId}-custom-files ${siteId}-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
 
     # uploads the canonical files
-    upload_listed_files site_canonical_files
-    upload_listed_files ${project_root_directory}/${siteId}-custom-files
+    upload_listed_files "${site_canonical_source_code_files_file}"
+    upload_listed_files "${site_canonical_binary_files_file}"
+    upload_listed_files ${project_root_directory}/${siteId}-custom-source-code-files
+    upload_listed_files ${project_root_directory}/${siteId}-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
@@ -183,6 +195,7 @@ else
         upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
-    upload_listed_files site_canonical_files
+    upload_listed_files "${site_canonical_source_code_files_file}"
+    upload_listed_files "${site_canonical_binary_files_file}"
     upload_listed_files ${project_root_directory}/${siteId}-custom-files
 fi
