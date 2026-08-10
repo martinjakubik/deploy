@@ -4,6 +4,10 @@ set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-de
 
 set source_dirname $(dirname $source_files[1])
 
+if test ! -d $source_dirname/build
+    mkdir $source_dirname/build
+end
+
 for source_file in $source_files
     set destination_file $(basename $(path change-extension '' $source_file))
     cp $source_file $source_dirname/build/$destination_file
