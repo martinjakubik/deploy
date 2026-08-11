@@ -66,7 +66,7 @@ build_listed_files() {
         exit 1
     fi
 
-    echo ---
+    echo
     echo "building files listed in $file_listing_files_to_build"
     if [[ -e "$file_listing_files_to_build" ]] ; then
         file_array=()
@@ -89,7 +89,8 @@ build_listed_files() {
     else
         echo "the list of files $file_listing_files_to_build does not exist"
     fi
-    echo ---
+    echo ... done
+    echo
 }
 
 build_listed_source_code_files() {

@@ -92,7 +92,7 @@ ensure_directory_exists_for_file() {
 
 upload_listed_site_files() {
     file_listing_files_to_upload="$1"
-    echo ---
+    echo
     echo "uploading files listed in $file_listing_files_to_upload"
     upload_count=0
     upload_count_in_set=0
@@ -127,7 +127,8 @@ upload_listed_site_files() {
     else
         echo "the list of files $file_listing_files_to_upload does not exist"
     fi
-    echo ---
+    echo ... done
+    echo
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
@@ -145,24 +146,34 @@ if [[ $DEBUG -eq 0 ]] ; then
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
         ensure_directory_exists_for_file server/dummy.txt
+        echo
+        echo "uploading server files"
         scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+        echo ... done
+        echo
     fi
 
     # uploads content to the library directory
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store -delete
+        echo
+        echo "uploading site library files"
         scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+        echo ... done
+        echo
     fi
-
-    # uploads the project's npm package description
-    scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
         upload_listed_site_files "${project_root_directory}/upload_files.txt"
     fi
 
-    # uploads the site's metadata files
+    # uploads the project files
+    echo
+    echo "uploading project files"
+    scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+    echo ... done
+    echo
 
     # uploads the canonical files
     upload_listed_site_files "${site_canonical_source_code_file_list}"
