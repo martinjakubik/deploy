@@ -34,7 +34,8 @@ done
 
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR="${STAGING_DIR}"/${siteId}
-DESTINATION_DIR_WITH_USER_AND_IP=${userId}@${ipAddress}:"${DESTINATION_DIR}"
+DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${DESTINATION_DIR}"
+DESTINATION_DIR_WITH_USER_AND_IP_SITE="${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/site
 site_distribution_dir="${project_root_directory%/}"/site
 
 does_canonical_source_code_file_list_exist=0
@@ -60,7 +61,7 @@ echo script: $0
 echo you entered values
 echo   "From project root dir       : ${project_root_directory}"
 echo   "and site distribution dir   : ${site_distribution_dir}"
-echo   "To                          : ${DESTINATION_DIR_WITH_USER_AND_IP}"
+echo   "To                          : ${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"
 echo   "site ID                     : ${siteId}"
 echo   "site nickname               : ${siteNickname}"
 echo   "user                        : ${userId}"
@@ -89,7 +90,7 @@ ensure_directory_exists_for_file() {
     fi
 }
 
-upload_listed_files() {
+upload_listed_site_files() {
     file_listing_files_to_upload="$1"
     echo ---
     echo "uploading files listed in $file_listing_files_to_upload"
@@ -105,11 +106,11 @@ upload_listed_files() {
         for filename in "${file_array[@]}" ; do
             requested_filename="${site_distribution_dir}"/"$filename"
             if [[ -e "$requested_filename" ]] ; then
-                ensure_directory_exists_for_file "$filename"
+                ensure_directory_exists_for_file site/"$filename"
                 if [[ $DEBUG -eq 0 ]] ; then
-                    scp "$requested_filename" "${DESTINATION_DIR_WITH_USER_AND_IP}"/"$filename"
+                    scp "$requested_filename" "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
                 else
-                    echo uploading "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP}"/"$filename"
+                    echo uploading "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
                 fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -144,30 +145,30 @@ if [[ $DEBUG -eq 0 ]] ; then
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
         ensure_directory_exists_for_file server/dummy.txt
-        scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+        scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # uploads content to the library directory
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store -delete
-        scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+        scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # uploads the project's npm package description
-    scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_files "${project_root_directory}/upload_files.txt"
+        upload_listed_site_files "${project_root_directory}/upload_files.txt"
     fi
 
     # uploads the site's metadata files
-    scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     # uploads the canonical files
-    upload_listed_files "${site_canonical_source_code_file_list}"
-    upload_listed_files "${site_canonical_binary_file_list}"
-    upload_listed_files ${project_root_directory}/${siteId}-custom-source-code-files
-    upload_listed_files ${project_root_directory}/${siteId}-custom-binary-files
+    upload_listed_site_files "${site_canonical_source_code_file_list}"
+    upload_listed_site_files "${site_canonical_binary_file_list}"
+    upload_listed_site_files ${project_root_directory}/${siteId}-custom-source-code-files
+    upload_listed_site_files ${project_root_directory}/${siteId}-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
@@ -179,24 +180,24 @@ else
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store
         ensure_directory_exists_for_file server/dummy.txt
-        echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+        echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # debugs upload of the library directory
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store
-        echo scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+        echo scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # debugs upload of the project's npm package description
-    echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP}"/
+    echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_files "${project_root_directory}/upload_files.txt"
+        upload_listed_site_files "${project_root_directory}/upload_files.txt"
     fi
 
-    upload_listed_files "${site_canonical_source_code_file_list}"
-    upload_listed_files "${site_canonical_binary_file_list}"
-    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    upload_listed_site_files "${site_canonical_source_code_file_list}"
+    upload_listed_site_files "${site_canonical_binary_file_list}"
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 fi
