@@ -4,7 +4,7 @@ set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/dep
 
 set files_to_install_local_dirname $(dirname $local_files_to_install[1])
 
-set string_ssh_command "echo ssh -t martin@192.46.222.142 '"
+set string_ssh_command "ssh -t martin@192.46.222.142 '"
 
 for local_file_to_install in $local_files_to_install
     if test -f $local_file_to_install
@@ -24,6 +24,6 @@ echo debugging the upload command:
 echo $string_ssh_command
 echo ---
 
-# eval $string_ssh_command
+eval $string_ssh_command
 
 ssh martin@192.46.222.142 'ls -la /usr/local/bin'
