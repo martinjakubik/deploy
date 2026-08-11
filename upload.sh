@@ -178,8 +178,8 @@ if [[ $DEBUG -eq 0 ]] ; then
     # uploads the canonical files
     upload_listed_site_files "${site_canonical_source_code_file_list}"
     upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files ${project_root_directory}/${siteId}-custom-source-code-files
-    upload_listed_site_files ${project_root_directory}/${siteId}-custom-binary-files
+    upload_listed_site_files "${project_root_directory}"/${siteId}-custom-source-code-files
+    upload_listed_site_files "${project_root_directory}"/${siteId}-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
