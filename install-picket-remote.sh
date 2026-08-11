@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/usr/bin/env fish
 
 set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/deploy/build/picket-deploy-site ~/code/gitwork/deploy/build/picket-undeploy-site ~/code/gitwork/deploy/build/picket-delete-site
 
@@ -12,8 +12,6 @@ for local_file_to_install in $local_files_to_install
         scp $local_file_to_install martin@192.46.222.142:~/
 
         set --append string_ssh_command "sudo mv ~/"$file_to_install_basename" /usr/local/bin/"$file_to_install_basename" ; sudo chmod a+x /usr/local/bin/"$file_to_install_basename" ; sudo chown root:root /usr/local/bin/"$file_to_install_basename" ; "
-
-        ssh -t martin@192.46.222.142 'sudo mv ~/'$file_to_install_basename' /usr/local/bin/'$file_to_install_basename' ; sudo chmod a+x /usr/local/bin/'$file_to_install_basename' ; sudo chown root:root /usr/local/bin/'$file_to_install_basename
     end
 end
 
