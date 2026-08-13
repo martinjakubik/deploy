@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 deploy | undeploy | stage | unstage | delete | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress --help"
+USAGE="usage: $0 deploy | undeploy | stage | unstage | delete | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
 
 #set up defaults
 incremental=0
@@ -23,11 +23,23 @@ do
         (--ip) ipAddress="$2"; shift;;
 		(-c) incremental=1;;
 		(--incremental) incremental=1;;
+        (-d) DEBUG=1;;
+        (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
 		exit 1;;
 	esac
 		shift
 done
+
+argument_value_incremental=""
+if [[ $incremental -eq 1 ]] ; then
+    argument_value_incremental="--incremental"
+fi
+
+argument_value_debug=""
+if [[ $DEBUG -eq 1 ]] ; then
+    argument_value_debug="--debug"
+fi
 
 case "${picket_command}" in
     (deploy)
@@ -37,7 +49,7 @@ case "${picket_command}" in
         picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
     ;;
     (stage)
-        picket-stage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
+        picket-stage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (unstage)
         picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress

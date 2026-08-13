@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/deploy/build/picket-deploy-site ~/code/gitwork/deploy/build/picket-undeploy-site ~/code/gitwork/deploy/build/picket-delete-site ~/code/gitwork/deploy/build/picket-unstage-site ~/code/gitwork/deploy/build/picket-function-prepare ~/code/gitwork/deploy/build/picket-function-upload ~/code/gitwork/deploy/build/picket-function-delete-stage ~/code/gitwork/deploy/build/picket-function-get-site-project-root-from-id
+set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/deploy/build/picket-deploy-site ~/code/gitwork/deploy/build/picket-undeploy-site ~/code/gitwork/deploy/build/picket-delete-site ~/code/gitwork/deploy/build/picket-stage-site ~/code/gitwork/deploy/build/picket-unstage-site ~/code/gitwork/deploy/build/picket-function-prepare ~/code/gitwork/deploy/build/picket-function-upload ~/code/gitwork/deploy/build/picket-function-delete-stage ~/code/gitwork/deploy/build/picket-function-get-site-nickname-from-id ~/code/gitwork/deploy/build/picket-function-get-site-project-root-from-id
 
 set files_to_install_local_dirname $(dirname $local_files_to_install[1])
 

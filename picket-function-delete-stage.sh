@@ -23,6 +23,7 @@ do
     esac
     shift
 done
+
 all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
 SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/${siteId}
