@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-deploy-site.sh ~/code/gitwork/deploy/picket-undeploy-site.sh ~/code/gitwork/deploy/picket-delete-site.sh ~/code/gitwork/deploy/upload.sh ~/code/gitwork/deploy/delete-stage.sh ~/code/gitwork/deploy/picket-function-get-site-project-root-from-id.sh
+set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-deploy-site.sh ~/code/gitwork/deploy/picket-undeploy-site.sh ~/code/gitwork/deploy/picket-delete-site.sh ~/code/gitwork/deploy/picket-unstage-site.sh ~/code/gitwork/deploy/picket-function-prepare.sh ~/code/gitwork/deploy/picket-function-upload.sh ~/code/gitwork/deploy/picket-function-delete-stage.sh ~/code/gitwork/deploy/picket-function-get-site-project-root-from-id.sh
 
 set source_dirname $(dirname $source_files[1])
 

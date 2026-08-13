@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 deploy | undeploy | delete -s|--siteId siteId | help"
+USAGE="usage: $0 deploy | undeploy | stage | unstage | delete -s|--siteId siteId | help"
 
 #set up defaults
 incremental=0
@@ -13,6 +13,8 @@ do
 	case "$1" in
 		(deploy) picket_command=deploy;;
 		(undeploy) picket_command=undeploy;;
+		(stage) picket_command=stage;;
+		(unstage) picket_command=unstage;;
 		(delete) picket_command=delete;;
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
@@ -30,6 +32,12 @@ case "${picket_command}" in
     ;;
     (undeploy)
         picket-undeploy-site --siteId "${siteId}"
+    ;;
+    (stage)
+        picket-stage-site --siteId "${siteId}"
+    ;;
+    (unstage)
+        picket-unstage-site --siteId "${siteId}"
     ;;
     (delete)
         picket-delete-site --siteId "${siteId}"
