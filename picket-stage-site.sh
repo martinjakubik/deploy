@@ -18,8 +18,8 @@ do
 done
 
 echo
-echo unstaging site \"${siteId}\"
-picket-function-delete-stage --siteId $siteId --userId "${userId}" --ip $ipAddress
+echo staging site \"${siteId}\"
+echo need picket-function-upload --inputDir "$project_root_directory" --siteId $siteId --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress
 echo ... done
 echo 
 
