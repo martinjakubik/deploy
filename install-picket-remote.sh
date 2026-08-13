@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/deploy/build/picket-deploy-site ~/code/gitwork/deploy/build/picket-undeploy-site ~/code/gitwork/deploy/build/picket-delete-site
+set local_files_to_install ~/code/gitwork/deploy/build/picket ~/code/gitwork/deploy/build/picket-deploy-site ~/code/gitwork/deploy/build/picket-undeploy-site ~/code/gitwork/deploy/build/picket-delete-site ~/code/gitwork/deploy/delete-stage
 
 set files_to_install_local_dirname $(dirname $local_files_to_install[1])
 
