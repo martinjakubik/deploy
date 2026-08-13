@@ -10,7 +10,6 @@ picket_command=help
 # parses and reads command line arguments
 while [ $# -gt 0 ]
 do
-    echo parsing argument "$1"
 	case "$1" in
 		(deploy) picket_command=deploy;;
 		(undeploy) picket_command=undeploy;;
