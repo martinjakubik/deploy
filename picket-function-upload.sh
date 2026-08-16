@@ -132,7 +132,7 @@ upload_listed_site_files() {
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    ./picket-function-prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname}
+    picket-function-prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname}
 
     # checks if a plain file already exists with the name of the destination directory
     ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
@@ -185,7 +185,7 @@ if [[ $DEBUG -eq 0 ]] ; then
         ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
     fi
 else
-    ./picket-function-prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} --debug
+    picket-function-prepare.sh --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} --debug
 
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
