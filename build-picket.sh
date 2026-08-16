@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-deploy-site.sh ~/code/gitwork/deploy/picket-undeploy-site.sh ~/code/gitwork/deploy/picket-delete-site.sh ~/code/gitwork/deploy/picket-stage-site.sh ~/code/gitwork/deploy/picket-unstage-site.sh ~/code/gitwork/deploy/picket-function-prepare.sh ~/code/gitwork/deploy/picket-function-upload.sh ~/code/gitwork/deploy/picket-function-delete-stage.sh ~/code/gitwork/deploy/picket-function-get-site-nickname-from-id.sh ~/code/gitwork/deploy/picket-function-get-site-project-root-from-id.sh
+set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-deploy-site.sh ~/code/gitwork/deploy/picket-undeploy-site.sh ~/code/gitwork/deploy/picket-delete-site.sh ~/code/gitwork/deploy/picket-stage-site.sh ~/code/gitwork/deploy/picket-unstage-site.sh ~/code/gitwork/deploy/picket-function-prepare.sh ~/code/gitwork/deploy/picket-function-upload.sh ~/code/gitwork/deploy/picket-function-delete-stage.sh ~/code/gitwork/deploy/picket-function-get-site-nickname-from-id.sh ~/code/gitwork/deploy/picket-function-get-site-project-root-from-id.sh ~/code/gitwork/deploy/picket-function-is-ipv6.sh
 
 set source_dirname $(dirname $source_files[1])
 
@@ -13,3 +13,6 @@ for source_file in $source_files
     cp $source_file $source_dirname/build/$destination_file
     chmod u+x $source_dirname/build/$destination_file
 end
+
+cp "$source_dirname"/site-canonical-source-code-files "$source_dirname"/build/
+cp "$source_dirname"/site-canonical-binary-files "$source_dirname"/build/

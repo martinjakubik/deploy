@@ -34,7 +34,11 @@ done
 
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR="${STAGING_DIR}"/${siteId}
-DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${DESTINATION_DIR}"
+if [[ $(picket-function-is-ipv6 $ipAddress) -eq 1 ]] ; then
+    DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@\[${ipAddress}\]:"${DESTINATION_DIR}"
+else
+    DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${DESTINATION_DIR}"
+fi
 DESTINATION_DIR_WITH_USER_AND_IP_SITE="${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/site
 site_distribution_dir="${project_root_directory%/}"/site
 
@@ -82,9 +86,17 @@ ensure_directory_exists_for_file() {
     if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
         echo creating remote directory "${remoteTargetDirectory}"
         if [[ $DEBUG -eq 0 ]] ; then
-            ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            if [[ $(picket-function-is-ipv6 $ipAddress) -eq 1 ]] ; then
+                ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            else
+                ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            fi
         elif [[ $DEBUG -eq 1 ]] ; then
-            echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            if [[ $(picket-function-is-ipv6 $ipAddress) -eq 1 ]] ; then
+                echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            else
+                echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
+            fi
         fi
         existing_directory_array+=("$remoteTargetDirectory")
     fi
@@ -135,7 +147,11 @@ if [[ $DEBUG -eq 0 ]] ; then
     picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname}
 
     # checks if a plain file already exists with the name of the destination directory
-    ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
+    if [[ $(picket-function-is-ipv6 $ipAddress) -eq 1 ]] ; then
+        ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
+    else
+        ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
+    fi
     check_destination_directory_exit_code=$?
     if [[ $check_destination_directory_exit_code -eq 1 ]] ; then
         echo "a plain file called ${DESTINATION_DIR} already exists; stopping."
@@ -182,7 +198,11 @@ if [[ $DEBUG -eq 0 ]] ; then
     upload_listed_site_files "${project_root_directory}"/${siteId}-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
-        ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
+        if [[ $(picket-function-is-ipv6 $ipAddress) -eq 1 ]] ; then
+            ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
+        else
+            ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
+        fi
     fi
 else
     picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} --debug
