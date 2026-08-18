@@ -19,7 +19,7 @@ do
 		shift
 done
 
-siteName=www.abcdhome.name
+siteName=$(picket-function-get-site-project-root-from-id "$siteId")
 isValidSiteFullName=true
 if [[ ! isValidSiteFullName ]] ; then
 	exit 1
