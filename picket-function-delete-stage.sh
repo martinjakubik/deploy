@@ -30,7 +30,7 @@ SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/${siteId}
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
 SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${SITE_STAGING_DIR_ROOT}"
 SITE_STAGING_DIR_WITH_USER_AND_IP_SITE=${userId}@${ipAddress}:"${SITE_STAGING_DIR_SITE}"
-project_root_directory="${all_project_root}"/$(./build/picket-function-get-site-project-root-from-id "$siteId")
+project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId")
 
 if [[ ! -d "$project_root_directory" ]] ; then
     echo the directory "$project_root_directory" does not exist
