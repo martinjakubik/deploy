@@ -58,7 +58,7 @@ fi
 move_single_file_from_staging_to_live () {
     single_file="$1"
     # if [[ -f ${SITE_STAGING_DIR_SITE}/${single_file} ]] ; then
-        echo "sudo cp ${SITE_STAGING_DIR_SITE}/${single_file} ${siteHypertextDirectory}/ ; sudo rm ${SITE_STAGING_DIR_SITE}/${single_file} ;"
+        echo "cp ${SITE_STAGING_DIR_SITE}/${single_file} ${siteHypertextDirectory}/ ; rm ${SITE_STAGING_DIR_SITE}/${single_file} ;"
     # fi
 }
 
@@ -86,7 +86,7 @@ install_listed_site_files () {
     else
         echo "the list of files $file_listing_files_to_install does not exist"
     fi
-    echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+    ssh -t ${userId}@${ipAddress} "$ssh_install_command"
     echo ... done
     echo
 }
