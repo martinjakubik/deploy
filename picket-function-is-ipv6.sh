@@ -24,16 +24,8 @@ if [[ ! "$ipAddress" ]] ; then
     exit 1
 fi
 
-if command -v ip > /dev/null 2>&1 ; then
-    ip -6 route get "$ipAddress"/128 >/dev/null 2>&1
-    case "$?" in
-        (0|2) is_ipv6=0;;
-        (1) is_ipv6=1;;
-    esac
-else
-    if [[ "$ipAddress" =~ [0-9a-fA-f]*:[0-9a-fA-f]* ]] ; then
-        is_ipv6=1
-    fi
+if [[ "$ipAddress" =~ .*:.* ]] ; then
+    is_ipv6=1
 fi
 
 echo $is_ipv6
