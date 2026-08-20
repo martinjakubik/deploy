@@ -1,18 +1,17 @@
 #!/usr/bin/env fish
 
-set source_files ~/code/gitwork/deploy/picket.sh ~/code/gitwork/deploy/picket-deploy-site.sh ~/code/gitwork/deploy/picket-undeploy-site.sh ~/code/gitwork/deploy/picket-delete-site.sh ~/code/gitwork/deploy/picket-stage-site.sh ~/code/gitwork/deploy/picket-unstage-site.sh ~/code/gitwork/deploy/picket-function-prepare.sh ~/code/gitwork/deploy/picket-function-upload.sh ~/code/gitwork/deploy/picket-function-delete-stage.sh ~/code/gitwork/deploy/picket-function-get-site-nickname-from-id.sh ~/code/gitwork/deploy/picket-function-get-site-project-root-from-id.sh ~/code/gitwork/deploy/picket-function-is-ipv6.sh
+set project_parent_path ~/code/gitwork/deploy
+set source_files picket.sh picket-deploy-site.sh picket-undeploy-site.sh picket-delete-site.sh picket-stage-site.sh picket-unstage-site.sh picket-function-prepare.sh picket-function-upload.sh picket-function-delete-stage.sh picket-function-get-site-nickname-from-id.sh picket-function-get-site-project-root-from-id.sh picket-function-is-ipv6.sh
 
-set source_dirname $(dirname $source_files[1])
-
-if test ! -d $source_dirname/build
-    mkdir $source_dirname/build
+if test ! -d $project_parent_path/build
+    mkdir $project_parent_path/build
 end
 
 for source_file in $source_files
-    set destination_file $(basename $(path change-extension '' $source_file))
-    cp $source_file $source_dirname/build/$destination_file
-    chmod u+x $source_dirname/build/$destination_file
+    set destination_file $(path change-extension '' $source_file)
+    cp $project_parent_path/$source_file $project_parent_path/build/$destination_file
+    chmod u+x $project_parent_path/build/$destination_file
 end
 
-cp "$source_dirname"/site-canonical-source-code-files "$source_dirname"/build/
-cp "$source_dirname"/site-canonical-binary-files "$source_dirname"/build/
+cp "$project_parent_path"/site-canonical-source-code-files "$project_parent_path"/build/
+cp "$project_parent_path"/site-canonical-binary-files "$project_parent_path"/build/
