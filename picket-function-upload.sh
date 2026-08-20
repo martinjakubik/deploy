@@ -104,6 +104,7 @@ ensure_directory_exists_for_file() {
 
 upload_listed_site_files() {
     max_upload_count_before_throttle=4
+    throttle_sleep_time_between_uploads=45s
     file_listing_files_to_upload="$1"
     echo
     echo "uploading files listed in $file_listing_files_to_upload"
@@ -129,8 +130,8 @@ upload_listed_site_files() {
                 upload_count_in_set=$(( upload_count_in_set+1 ))
                 echo $upload_count files uploaded $upload_count_in_set files uploaded in set
                 if [[ $upload_count_in_set -gt $max_upload_count_before_throttle ]] ; then
-                    echo sleeping 30s
-                    sleep 30s
+                    echo sleeping $throttle_sleep_time_between_uploads
+                    sleep $throttle_sleep_time_between_uploads
                     upload_count_in_set=0
                 fi
             else
