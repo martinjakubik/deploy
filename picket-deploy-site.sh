@@ -4,6 +4,7 @@ USAGE="usage: $0 -s|--siteId siteId -u|--userId userId --ip ipAddress -c|--incre
 
 # set up defaults
 incremental=0
+DEBUG=0
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]

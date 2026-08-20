@@ -43,19 +43,19 @@ fi
 
 case "${picket_command}" in
     (deploy)
-        picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
+        picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (undeploy)
-        picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
+        picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (stage)
         picket-stage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (unstage)
-        picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
+        picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (delete)
-        picket-delete-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress
+        picket-delete-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (-*)
         echo >&2 ${USAGE}
