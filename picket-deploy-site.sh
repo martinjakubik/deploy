@@ -31,9 +31,11 @@ if [[ ! isValidSiteFullName ]] ; then
 	exit 1
 fi
 
+all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
 SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/${siteId}
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
+project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId")
 
 LIVE_DIR=/var/www
 sitePackageRootDirectory=${LIVE_DIR}/${siteName}
@@ -86,7 +88,13 @@ install_listed_site_files () {
     else
         echo "the list of files $file_listing_files_to_install does not exist"
     fi
-    ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+
+    if [[ $DEBUG -eq 0 ]] ; then
+        ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+    else
+        echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+    fi
+
     echo ... done
     echo
 }
