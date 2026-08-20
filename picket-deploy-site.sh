@@ -63,7 +63,6 @@ move_single_file_from_staging_to_live () {
 }
 
 install_listed_site_files () {
-    # move_single_file_from_staging_to_live settings.png
     file_listing_files_to_install="$1"
     echo
     echo "installing files listed in $file_listing_files_to_install"
