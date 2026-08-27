@@ -25,9 +25,9 @@ for test_file in "${test_files[@]}"; do
   # extracts success and failure counts from the output
   # The format is: "number of tests: X succeeded: Y failed: Z"
   # uses grep to extract these values
-  success_count=$(echo "$output" | grep -o "succeeded: *[0-9]*" | cut -w -f 2)
-  failure_count=$(echo "$output" | grep -o "failed: *[0-9]*" | cut -w -f 2)
-  test_count=$(echo "$output" | grep -o "number of tests: *[0-9]*" | cut -w -f 4)
+  success_count=$(echo "$output" | grep -o "succeeded: *[0-9]*" | grep -o "[0-9]*")
+  failure_count=$(echo "$output" | grep -o "failed: *[0-9]*" | grep -o "[0-9]*")
+  test_count=$(echo "$output" | grep -o "number of tests: *[0-9]*" | grep -o "[0-9]*")
 
   # accumulates totals
   total_tests=$((total_tests + test_count))
