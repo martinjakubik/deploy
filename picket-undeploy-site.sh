@@ -14,5 +14,9 @@ do
 		shift
 done
 
+echo
 echo undeploying site \"${siteId}\"
+echo ...done
+echo
+
 exit 0
