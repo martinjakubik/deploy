@@ -33,7 +33,7 @@ fi
 
 all_project_root=~/code/gitwork
 siteNickname=$(picket-function-get-site-nickname-from-id "$siteId")
-project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId")
+project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
 
 echo
 echo staging site \"${siteId}\"

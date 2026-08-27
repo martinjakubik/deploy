@@ -32,9 +32,19 @@ do
     shift
 done
 
+argument_value_incremental=""
+if [[ $incremental -eq 1 ]] ; then
+    argument_value_incremental="--incremental"
+fi
+
+argument_value_debug=""
+if [[ $DEBUG -eq 1 ]] ; then
+    argument_value_debug="--debug"
+fi
+
 STAGING_DIR=/var/x-www-staging
 DESTINATION_DIR="${STAGING_DIR}"/${siteId}
-if [[ $(picket-function-is-ipv6 --ip $ipAddress) -eq 1 ]] ; then
+if [[ $(picket-function-is-ipv6 --ip $ipAddress  $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
     DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@\[${ipAddress}\]:"${DESTINATION_DIR}"
 else
     DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${DESTINATION_DIR}"
@@ -86,13 +96,13 @@ ensure_directory_exists_for_file() {
     if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
         echo creating remote directory "${remoteTargetDirectory}"
         if [[ $DEBUG -eq 0 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress) -eq 1 ]] ; then
+            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
                 ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             else
                 ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             fi
         elif [[ $DEBUG -eq 1 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress) -eq 1 ]] ; then
+            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
                 echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             else
                 echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
@@ -146,10 +156,10 @@ upload_listed_site_files() {
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname}
+    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} $argument_value_incremental $argument_value_debug
 
     # checks if a plain file already exists with the name of the destination directory
-    if [[ $(picket-function-is-ipv6 --ip $ipAddress) -eq 1 ]] ; then
+    if [[ $(picket-function-is-ipv6 --ip $ipAddress  $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
         ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
     else
         ssh ${userId}@${ipAddress} "if [[ -f ${DESTINATION_DIR} ]] ; then exit 1 ; fi"
@@ -200,14 +210,14 @@ if [[ $DEBUG -eq 0 ]] ; then
     upload_listed_site_files "${project_root_directory}"/${siteId}-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
-        if [[ $(picket-function-is-ipv6 --ip $ipAddress) -eq 1 ]] ; then
+        if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
             ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
         else
             ssh ${userId}@${ipAddress} "touch ${DESTINATION_DIR}/all_files_uploaded"
         fi
     fi
 else
-    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} --debug
+    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} $argument_value_incremental $argument_value_debug
 
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
