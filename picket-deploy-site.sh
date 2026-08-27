@@ -82,8 +82,10 @@ install_listed_site_files () {
     if [[ -e "$file_listing_files_to_install" ]] ; then
         file_array=()
 
-        while IFS= read -r line; do
-            file_array+=($line)
+        finished_reading_file=false
+        until $finished_reading_file; do
+            read -r || finished_reading_file=true
+            file_array+=("$REPLY")
         done < "$file_listing_files_to_install"
 
         ssh_install_command=""
