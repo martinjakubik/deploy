@@ -57,8 +57,12 @@ case "${picket_command}" in
     (delete)
         picket-delete-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
+    (help)
+        echo ${USAGE}
+    ;;
     (-*)
         echo >&2 ${USAGE}
         exit 1
     ;;
 esac
+exit 0
