@@ -9,6 +9,7 @@ total_failures=0
 
 # array of test files to run
 test_files=(
+  "test_picket_000_picket_commands.sh"
   "test_picket_110_function_is-ipv6.sh"
 )
 
