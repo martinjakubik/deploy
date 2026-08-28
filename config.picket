@@ -1,0 +1,5 @@
+path_to_site_database=/etc/picket/picket-sites
+path_to_canonical_source_code_file_list_file=/etc/picket/site-canonical-source-code-files
+path_to_canonical_binary_file_list_file=/etc/picket/site-canonical-binary-files
+path_to_custom_source_code_file_list_file="${project_root_directory}"/"${siteId}"-custom-source-code-files
+path_to_custom_binary_file_list_file="${project_root_directory}"/"${siteId}"-custom-binary-files
