@@ -37,7 +37,8 @@ fi
 
 siteName=$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
 isValidSiteFullName=true
-if [[ ! isValidSiteFullName ]] ; then
+if [[ ! $isValidSiteFullName ]] ; then
+    echo site name is not valid
 	exit 1
 fi
 
