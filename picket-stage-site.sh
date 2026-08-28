@@ -32,12 +32,12 @@ if [[ $DEBUG -eq 1 ]] ; then
 fi
 
 all_project_root=~/code/gitwork
-siteNickname=$(picket-function-get-site-nickname-from-id "$siteId")
-project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
+siteNickname="$(picket-function-get-site-nickname-from-id $siteId)"
+project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 echo
 echo staging site \"${siteId}\"
-picket-function-upload --inputDir "$project_root_directory" --siteId $siteId --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
+picket-function-upload --inputDir "$project_root_directory" --siteId "$siteId" --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
 echo ... done
 echo 
 

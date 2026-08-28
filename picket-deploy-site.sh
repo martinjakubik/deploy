@@ -44,13 +44,13 @@ fi
 
 all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
-SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/${siteId}
+SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/"${siteId}"
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
-project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
+project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 LIVE_DIR=/var/www
-sitePackageRootDirectory=${LIVE_DIR}/${siteName}
-siteHypertextDirectory=${sitePackageRootDirectory}/htdocs
+sitePackageRootDirectory="${LIVE_DIR}"/"${siteName}"
+siteHypertextDirectory="${sitePackageRootDirectory}"/htdocs
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files
@@ -69,7 +69,7 @@ elif [[ -f /etc/picket/site-canonical-binary-files ]] ; then
     site_canonical_binary_file_list=/etc/picket/site-canonical-binary-files
 fi
 
-move_single_file_from_staging_to_live () {
+print_command_to_move_single_file_from_staging_to_live () {
     single_file="$1"
     # if [[ -f ${SITE_STAGING_DIR_SITE}/${single_file} ]] ; then
         echo "cp ${SITE_STAGING_DIR_SITE}/${single_file} ${siteHypertextDirectory}/ ; rm ${SITE_STAGING_DIR_SITE}/${single_file} ;"
@@ -93,7 +93,7 @@ install_listed_site_files () {
         for filename in "${file_array[@]}" ; do
             # ensure_directory_exists_for_file site/"${requested_filename}"
             if [[ $DEBUG -eq 0 ]] ; then
-                ssh_install_command+=" $(move_single_file_from_staging_to_live ${filename})"
+                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename})"
             else
                 echo installing "$filename"
             fi
@@ -113,12 +113,12 @@ install_listed_site_files () {
 }
 
 clean_install_site_canonical_files () {
-	if [[ ! -d ${sitePackageRootDirectory} ]] ; then
+	if [[ ! -d "${sitePackageRootDirectory}" ]] ; then
 		echo "${sitePackageRootDirectory} does not exist; creating it."
 		ssh_make_directory_command="sudo mkdir ${sitePackageRootDirectory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command
-	if [[ ! -d ${siteHypertextDirectory} ]] ; then
+	if [[ ! -d "${siteHypertextDirectory}" ]] ; then
 		echo "${siteHypertextDirectory} does not exist; creating it."
 		ssh_make_directory_command="sudo mkdir ${siteHypertextDirectory}"
 	fi
@@ -137,8 +137,8 @@ clean_install_site_custom_files() {
 }
 
 delete_files_uploaded_marker() {
-    if [[ -f ${SITE_STAGING_DIR_ROOT}/all_files_uploaded ]] ; then
-        rm ${SITE_STAGING_DIR_ROOT}/all_files_uploaded
+    if [[ -f "${SITE_STAGING_DIR_ROOT}"/all_files_uploaded ]] ; then
+        rm "${SITE_STAGING_DIR_ROOT}"/all_files_uploaded
     fi
 }
 

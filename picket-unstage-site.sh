@@ -26,7 +26,7 @@ fi
 
 echo
 echo unstaging site \"${siteId}\"
-picket-function-delete-stage --siteId $siteId --userId "${userId}" --ip $ipAddress $argument_value_debug
+picket-function-delete-stage --siteId "$siteId" --userId "${userId}" --ip $ipAddress $argument_value_debug
 echo ... done
 echo 
 

@@ -31,11 +31,11 @@ fi
 
 all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
-SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/${siteId}
+SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/"${siteId}"
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
 SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${SITE_STAGING_DIR_ROOT}"
 SITE_STAGING_DIR_WITH_USER_AND_IP_SITE=${userId}@${ipAddress}:"${SITE_STAGING_DIR_SITE}"
-project_root_directory="${all_project_root}"/$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
+project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 if [[ ! -d "$project_root_directory" ]] ; then
     echo the directory "$project_root_directory" does not exist
@@ -108,13 +108,13 @@ delete_listed_site_files() {
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    # deletes content to the server directory
+    # deletes content from the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
         # scp -r "${project_root_directory}"/server "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
-    # deletes content to the library directory
+    # deletes content from the library directory
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store -delete
         # scp -r "${site_distribution_dir}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
@@ -131,19 +131,19 @@ if [[ $DEBUG -eq 0 ]] ; then
     # deletes the canonical files
     delete_listed_site_files "${site_canonical_source_code_file_list}"
     delete_listed_site_files "${site_canonical_binary_file_list}"
-    delete_listed_site_files ${project_root_directory}/${siteId}-custom-source-code-files
-    delete_listed_site_files ${project_root_directory}/${siteId}-custom-binary-files
+    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
     ssh ${userId}@${ipAddress} "rm ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
 else
     # debugs delete of the library directory
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store
-        ## echo scp -r "${site_distribution_dir}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
+        echo scp -r "${site_distribution_dir}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # debugs delete of the project's npm package description
-    ## echo scp "${project_root_directory}"/package.json "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
+    echo scp "${project_root_directory}"/package.json "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
 
     delete_listed_site_files "${project_root_directory}/upload_files.txt"
 

@@ -43,7 +43,7 @@ if [[ $DEBUG -eq 1 ]] ; then
 fi
 
 STAGING_DIR=/var/x-www-staging
-DESTINATION_DIR="${STAGING_DIR}"/${siteId}
+DESTINATION_DIR="${STAGING_DIR}"/"${siteId}"
 if [[ $(picket-function-is-ipv6 --ip $ipAddress  $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
     DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@\[${ipAddress}\]:"${DESTINATION_DIR}"
 else
@@ -158,7 +158,7 @@ upload_listed_site_files() {
 }
 
 if [[ $DEBUG -eq 0 ]] ; then
-    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} $argument_value_incremental $argument_value_debug
+    picket-function-prepare --inputDir "${project_root_directory}" -s "${siteId}" --siteNickname "${siteNickname}" $argument_value_incremental $argument_value_debug
 
     # checks if a plain file already exists with the name of the destination directory
     if [[ $(picket-function-is-ipv6 --ip $ipAddress  $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
@@ -208,8 +208,8 @@ if [[ $DEBUG -eq 0 ]] ; then
     # uploads the canonical files
     upload_listed_site_files "${site_canonical_source_code_file_list}"
     upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files "${project_root_directory}"/${siteId}-custom-source-code-files
-    upload_listed_site_files "${project_root_directory}"/${siteId}-custom-binary-files
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
     if [[ ${incremental} -eq 0 ]] ; then
         if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
@@ -219,7 +219,7 @@ if [[ $DEBUG -eq 0 ]] ; then
         fi
     fi
 else
-    picket-function-prepare --inputDir "${project_root_directory}" -s ${siteId} --siteNickname ${siteNickname} $argument_value_incremental $argument_value_debug
+    picket-function-prepare --inputDir "${project_root_directory}" -s "${siteId}" --siteNickname "${siteNickname}" $argument_value_incremental $argument_value_debug
 
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then

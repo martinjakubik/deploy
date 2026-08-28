@@ -25,7 +25,7 @@ do
   shift
 done
 
-site_distribution_directory=${project_root_directory%\/}/site
+site_distribution_directory="${project_root_directory%\/}"/site
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files
@@ -105,5 +105,5 @@ build_listed_binary_files() {
 
 build_listed_source_code_files "${site_canonical_source_code_file_list}"
 build_listed_binary_files "${site_canonical_binary_file_list}"
-build_listed_source_code_files ${project_root_directory}/${siteId}-custom-source-code-files
-build_listed_binary_files ${project_root_directory}/${siteId}-custom-binary-files
+build_listed_source_code_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+build_listed_binary_files "${project_root_directory}"/"${siteId}"-custom-binary-files
