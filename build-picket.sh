@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 set project_parent_path ~/code/gitwork/deploy
-set source_files picket.sh picket-deploy-site.sh picket-undeploy-site.sh picket-delete-site.sh picket-stage-site.sh picket-unstage-site.sh picket-function-prepare.sh picket-function-upload.sh picket-function-delete-stage.sh picket-function-get-site-nickname-from-id.sh picket-function-get-site-project-root-from-id.sh picket-function-is-ipv6.sh
+set source_files picket.sh picket-create-site.sh picket-deploy-site.sh picket-undeploy-site.sh picket-delete-site.sh picket-list-sites.sh picket-stage-site.sh picket-unstage-site.sh picket-function-prepare.sh picket-function-upload.sh picket-function-delete-stage.sh picket-function-get-site-nickname-from-id.sh picket-function-get-site-project-root-from-id.sh picket-function-is-ipv6.sh
 
 if test ! -d $project_parent_path/build
     mkdir $project_parent_path/build

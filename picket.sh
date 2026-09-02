@@ -11,6 +11,8 @@ picket_command=help
 while [ $# -gt 0 ]
 do
 	case "$1" in
+		(create-site) picket_command=create-site;;
+		(list-sites) picket_command=list-sites;;
 		(deploy) picket_command=deploy;;
 		(undeploy) picket_command=undeploy;;
 		(stage) picket_command=stage;;
@@ -42,6 +44,12 @@ if [[ $DEBUG -eq 1 ]] ; then
 fi
 
 case "${picket_command}" in
+    (create-site)
+        picket-create-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
+    ;;
+    (list-sites)
+        picket-list-sites --userId "${userId}" --ip $ipAddress $argument_value_debug
+    ;;
     (deploy)
         picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
