@@ -14,6 +14,8 @@ do
         (-u) userId="$2"; shift;;
         (--userId) userId="$2"; shift;;
         (--ip) ipAddress="$2"; shift;;
+        (-d) DEBUG=1;;
+        (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
 		exit 1;;
 	esac
