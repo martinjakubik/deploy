@@ -30,6 +30,12 @@ if [[ "${argument_value_siteNickname}" ]] ; then
     siteNickname="${argument_value_siteNickname}"
 fi
 
+is_valid_site_id=false
+if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
+    echo site id is not valid, exiting
+    exit 1
+fi
+
 echo creating site \"${siteId}\"
 
 file_listing_sites=/etc/picket/sites.db/sites
