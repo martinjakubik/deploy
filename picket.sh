@@ -45,10 +45,10 @@ fi
 
 case "${picket_command}" in
     (create-site)
-        picket-create-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
+        picket-create-site --siteId "${siteId}" $argument_value_debug
     ;;
     (list-sites)
-        picket-list-sites --userId "${userId}" --ip $ipAddress $argument_value_debug
+        picket-list-sites $argument_value_debug
     ;;
     (deploy)
         if [[ ! -n "${siteId}" ]] ; then

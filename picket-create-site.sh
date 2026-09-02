@@ -11,9 +11,6 @@ do
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
         (--siteNickname) argument_value_siteNickname="$2"; shift;;
-        (-u) userId="$2"; shift;;
-        (--userId) userId="$2"; shift;;
-        (--ip) ipAddress="$2"; shift;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
