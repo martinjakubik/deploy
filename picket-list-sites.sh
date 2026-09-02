@@ -36,7 +36,13 @@ done < "${file_listing_sites}"
 
 site_count=0
 for siteId in "${existing_site_array[@]}" ; do
-    echo "${siteId}"
+    site_count_padded=$site_count
+    if [[ ${#site_count_padded} -lt 2 ]] ; then
+        site_count_padded=00${site_count_padded}
+    elif [[ ${#site_count_padded} -lt 3 ]] ; then
+        site_count_padded=0${site_count_padded}
+    fi
+    echo ${site_count_padded}. "${siteId}"
     site_count=$(( site_count+1 ))
 done
 
