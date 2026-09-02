@@ -27,7 +27,7 @@ fi
 if [[ "${siteId}" =~ '.* .*' ]] ; then
     is_valid_site_id=0
     exit 1
-elif [[ "${#siteId}" -gt 99 ]] ; then
+elif [[ "${#siteId}" -gt 29 ]] ; then
     is_valid_site_id=0
     exit 1
 else
