@@ -11,6 +11,7 @@ total_failures=0
 test_files=(
   "test_picket_000_picket_commands.sh"
   "test_picket_110_function_is-ipv6.sh"
+  "test_picket_120_function_is-valid-site-id.sh"
 )
 
 # runs each test file
