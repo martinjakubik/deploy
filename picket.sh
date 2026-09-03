@@ -63,7 +63,7 @@ case "${picket_command}" in
         picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (delete)
-        picket-delete-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
+        picket-delete-site --siteId "${siteId}" $argument_value_debug
     ;;
     (help)
         echo ${USAGE}
