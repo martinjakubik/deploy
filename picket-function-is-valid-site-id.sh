@@ -24,7 +24,7 @@ if [[ ! "${siteId}" ]] ; then
     exit 1
 fi
 
-if [[ "${siteId}" =~ '.* .*' ]] ; then
+if [[ "${siteId}" =~ .*\ .* ]] ; then
     is_valid_site_id=0
     exit 1
 elif [[ "${#siteId}" -gt 29 ]] ; then
