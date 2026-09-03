@@ -8,7 +8,7 @@ test_case="no arguments"
 echo case $test_case
 input=""
 expected="usage: ./picket-function-is-valid-site-id.sh -d|--debug"
-actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
+actual=$(./picket-function-is-valid-site-id.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -26,7 +26,7 @@ test_case="valid site id"
 echo case $test_case
 input="abcd"
 expected="1"
-actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
+actual=$(./picket-function-is-valid-site-id.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -44,7 +44,7 @@ test_case="valid site id: maximum length"
 echo case $test_case
 input="124566789x123456789x123456789"
 expected="1"
-actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
+actual=$(./picket-function-is-valid-site-id.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -134,7 +134,7 @@ test_case="invalid site id: too long"
 echo case $test_case
 input="123456789x123456789x123456789x"
 expected="0"
-actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
+actual=$(./picket-function-is-valid-site-id.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))

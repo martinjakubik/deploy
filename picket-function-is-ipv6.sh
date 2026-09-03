@@ -19,6 +19,8 @@ do
     shift
 done
 
+if [[ $DEBUG -eq 1 ]] ; then echo "testing ip address '${ipAddress}'" ; fi
+
 if [[ ! "$ipAddress" ]] ; then
     echo >&2 ${USAGE}
     exit 1
