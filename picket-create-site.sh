@@ -48,18 +48,7 @@ if [[ ! -e "${file_listing_sites}" ]] ; then
     touch "${file_listing_sites}"
 fi
 
-existing_site_array=()
-finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    existing_site_array+=("$REPLY")
-done < "${file_listing_sites}"
-
-if printf '%s\0' "${existing_site_array[@]}" | grep -Fxqz -- "${siteId}" ; then
-    does_site_exist_in_database=1
-else
-    does_site_exist_in_database=0
-fi
+does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
     echo "site does not exist; creating it"
