@@ -41,6 +41,12 @@ if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     exit 1
 fi
 
+does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
+if [[ $does_site_exist_in_database -eq 0 ]] ; then
+    echo "Site does not exist. Stopping."
+    exit 1
+fi
+
 siteName=$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
 isValidSiteFullName=true
 if [[ ! $isValidSiteFullName ]] ; then
