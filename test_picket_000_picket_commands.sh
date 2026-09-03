@@ -40,6 +40,42 @@ else
     echo
 fi
 
+test_case="command deploy, user not logged in, valid site argument"
+echo case $test_case
+input="deploy --siteId wxyz"
+expected="You did not provide a user ID. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
+test_case="command deploy, user logged in, valid site argument"
+echo case $test_case
+input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
+expected="Trying to deploy site ''wxyz''. Site does not exist. Stopping."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 test_case="command undeploy, no arguments"
 echo case $test_case
 input="undeploy"

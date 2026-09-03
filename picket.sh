@@ -56,11 +56,11 @@ case "${picket_command}" in
             exit 1
         fi
         if [[ ! -n "${userId}" ]] ; then
-            echo "User ID \'${userId}\' is not valid. Exiting."
+            echo "You did not provide a user ID. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
             exit 1
         fi
         if [[ ! -n "${ipAddress}" ]] ; then
-            echo "IP address \'${ipAddress}\' is not valid. Exiting."
+            echo "You did not provide an IP address. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
             exit 1
         fi
         picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
