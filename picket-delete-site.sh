@@ -21,11 +21,11 @@ if [[ -z "${siteId}" ]] ; then
 	exit 1
 fi
 
-file_listing_sites=/etc/picket/sites.db/sites
+file_listing_sites=$HOME/.picket/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
-    echo "no site database was found; check if /etc/picket/sites.db exists"
+    echo "no site database was found; check if $HOME/.picket/sites.db exists"
     exit 1
 fi
 
