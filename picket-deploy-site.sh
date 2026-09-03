@@ -35,6 +35,12 @@ if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
 fi
 
+is_valid_site_id=false
+if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
+    echo site id is not valid, exiting
+    exit 1
+fi
+
 siteName=$(picket-function-get-site-project-root-from-id "$siteId" $argument_value_debug)
 isValidSiteFullName=true
 if [[ ! $isValidSiteFullName ]] ; then
