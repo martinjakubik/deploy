@@ -51,6 +51,18 @@ case "${picket_command}" in
         picket-list-sites --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (deploy)
+        if [[ ! -n "${siteId}" ]] ; then
+            echo "You did not select a site. Use ''picket deploy --siteId wxyz'' to choose a site to deploy."
+            exit 1
+        fi
+        if [[ ! -n "${userId}" ]] ; then
+            echo "User ID \'${userId}\' is not valid. Exiting."
+            exit 1
+        fi
+        if [[ ! -n "${ipAddress}" ]] ; then
+            echo "IP address \'${ipAddress}\' is not valid. Exiting."
+            exit 1
+        fi
         picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (undeploy)

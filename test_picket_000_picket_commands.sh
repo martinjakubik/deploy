@@ -25,7 +25,7 @@ fi
 test_case="correct command no arguments"
 echo case $test_case
 input="deploy"
-expected="You did not select a site. Use picket deploy --siteId wxyz to choose a site to deploy."
+expected="You did not select a site. Use ''picket deploy --siteId wxyz'' to choose a site to deploy."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
