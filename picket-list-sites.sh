@@ -31,7 +31,9 @@ existing_site_array=()
 finished_reading_file=false
 until $finished_reading_file; do
     read -r || finished_reading_file=true
-    existing_site_array+=("$REPLY")
+    if [[ -n "$REPLY" ]] ; then
+        existing_site_array+=("$REPLY")
+    fi
 done < "${file_listing_sites}"
 
 site_count=0
@@ -47,10 +49,11 @@ for siteId in "${existing_site_array[@]}" ; do
 done
 
 if [[ $site_count -gt 0 ]] ; then
+    echo
     if [[ $site_count -eq 1 ]] ; then
-        echo "1 site found"
+        echo "... 1 site found"
     else
-        echo "$site_count sites found"
+        echo "... $site_count sites found"
     fi
 fi
 
