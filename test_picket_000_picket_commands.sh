@@ -58,7 +58,7 @@ else
     echo
 fi
 
-test_case="command deploy, user logged in, valid site argument"
+test_case="command deploy, user logged in, valid site argument but site does not exist"
 echo case $test_case
 input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
 expected="Trying to deploy site ''wxyz''. Site does not exist. Stopping."
