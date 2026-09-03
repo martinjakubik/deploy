@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 deploy | undeploy | stage | unstage | delete | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
+USAGE="usage: $0 deploy | undeploy | stage | unstage | create-site | delete-site | list-sites | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
 
 #set up defaults
 incremental=0
@@ -12,6 +12,7 @@ while [ $# -gt 0 ]
 do
 	case "$1" in
 		(create-site) picket_command=create-site;;
+		(delete-site) picket_command=delete-site;;
 		(list-sites) picket_command=list-sites;;
 		(deploy) picket_command=deploy;;
 		(undeploy) picket_command=undeploy;;
@@ -46,6 +47,9 @@ fi
 case "${picket_command}" in
     (create-site)
         picket-create-site --siteId "${siteId}" $argument_value_debug
+    ;;
+    (delete-site)
+        picket-delete-site --siteId "${siteId}" $argument_value_debug
     ;;
     (list-sites)
         picket-list-sites $argument_value_debug
