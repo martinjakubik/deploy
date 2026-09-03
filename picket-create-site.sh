@@ -22,6 +22,12 @@ do
 		shift
 done
 
+is_valid_site_id=false
+if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
+    echo site id is not valid, exiting
+    exit 1
+fi
+
 project_root_directory="${siteId}"
 if [[ "${argument_value_project_root_directory}" ]] ; then
     project_root_directory="${argument_value_project_root_directory}"
@@ -30,12 +36,6 @@ fi
 siteNickname="${siteId}"
 if [[ "${argument_value_siteNickname}" ]] ; then
     siteNickname="${argument_value_siteNickname}"
-fi
-
-is_valid_site_id=false
-if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
-    echo site id is not valid, exiting
-    exit 1
 fi
 
 echo creating site \"${siteId}\"
