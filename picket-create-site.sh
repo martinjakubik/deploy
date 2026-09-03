@@ -44,12 +44,11 @@ file_listing_sites=$HOME/.picket/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
-    sudo mkdir -p "${parent_path_to_file_listing_sites}"
+    mkdir -p "${parent_path_to_file_listing_sites}"
 fi
 
 if [[ ! -e "${file_listing_sites}" ]] ; then
-    sudo touch "${file_listing_sites}"
-    sudo chmod a+w "${file_listing_sites}"
+    touch "${file_listing_sites}"
 fi
 
 existing_site_array=()
@@ -67,7 +66,7 @@ fi
 
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
     echo "site does not exist; creating it"
-    sudo echo "${siteId}" >> "${file_listing_sites}"
+    echo "${siteId}" >> "${file_listing_sites}"
 else
     echo "site already exists; not creating it"
 fi
