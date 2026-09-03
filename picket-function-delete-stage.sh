@@ -46,18 +46,18 @@ does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files
 if [[ -f "${site_canonical_source_code_file_list}" ]] ; then
     does_canonical_source_code_file_list_exist=1
-elif [[ -f /etc/picket/site-canonical-source-code-files ]] ; then
+elif [[ -f $HOME/.picket/site-canonical-source-code-files ]] ; then
     does_canonical_source_code_file_list_exist=1
-    site_canonical_source_code_file_list=/etc/picket/site-canonical-source-code-files
+    site_canonical_source_code_file_list=$HOME/.picket/site-canonical-source-code-files
 fi
 
 does_canonical_binary_file_list_exist=0
 site_canonical_binary_file_list=site-canonical-binary-files
 if [[ -f "${site_canonical_binary_file_list}" ]] ; then
     does_canonical_binary_file_list_exist=1
-elif [[ -f /etc/picket/site-canonical-binary-files ]] ; then
+elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     does_canonical_binary_file_list_exist=1
-    site_canonical_binary_file_list=/etc/picket/site-canonical-binary-files
+    site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
 echo --------------------------------------------------------------------------------

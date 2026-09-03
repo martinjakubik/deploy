@@ -40,7 +40,7 @@ fi
 
 echo creating site \"${siteId}\"
 
-file_listing_sites=/etc/picket/sites.db/sites
+file_listing_sites=$HOME/.picket/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
@@ -73,4 +73,3 @@ else
 fi
 
 exit 0
-

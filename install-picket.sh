@@ -17,14 +17,19 @@ for local_executable_file_to_install in $local_binary_files_to_install
     end
 end
 
+if test ! -d $HOME/.picket
+    mkdir $HOME/.picket
+end
+
 set local_configuration_file_to_install $project_parent_path/site-canonical-source-code-files
-sudo cp $local_configuration_file_to_install /etc/picket/
+sudo cp $local_configuration_file_to_install $HOME/.picket/
 
 set local_configuration_file_to_install $project_parent_path/site-canonical-binary-files
-sudo cp $local_configuration_file_to_install /etc/picket/
+sudo cp $local_configuration_file_to_install $HOME/.picket/
 
 set local_configuration_file_to_install $project_parent_path/config.picket
 sudo cp $local_configuration_file_to_install /etc/picket/
+sudo cp $local_configuration_file_to_install $HOME/.picket/
 
 set --append string_ssh_command "'"
 
