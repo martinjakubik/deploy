@@ -8,17 +8,25 @@ incremental=0
 picket_command=help
 
 # parses and reads command line arguments
+# finds the principal command
+case "$1" in
+	(create-site) picket_command=create-site;;
+	(delete-site) picket_command=delete-site;;
+	(list-sites) picket_command=list-sites;;
+	(deploy) picket_command=deploy;;
+	(undeploy) picket_command=undeploy;;
+	(stage) picket_command=stage;;
+	(unstage) picket_command=unstage;;
+	(delete) picket_command=delete;;
+	(*) echo >&2 ${USAGE}
+	exit 1;;
+esac
+shift
+
+# parses the remaining arguments
 while [ $# -gt 0 ]
 do
-	case "$1" in
-		(create-site) picket_command=create-site;;
-		(delete-site) picket_command=delete-site;;
-		(list-sites) picket_command=list-sites;;
-		(deploy) picket_command=deploy;;
-		(undeploy) picket_command=undeploy;;
-		(stage) picket_command=stage;;
-		(unstage) picket_command=unstage;;
-		(delete) picket_command=delete;;
+    case "$1" in
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
         (-u) userId="$2"; shift;;
