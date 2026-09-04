@@ -10,6 +10,8 @@ picket_command=help
 # parses and reads command line arguments
 # finds the principal command
 case "$1" in
+    (login) picket_command=login;;
+    (logout) picket_command=logout;;
 	(create-site) picket_command=create-site;;
 	(delete-site) picket_command=delete-site;;
 	(list-sites) picket_command=list-sites;;
@@ -53,6 +55,12 @@ if [[ $DEBUG -eq 1 ]] ; then
 fi
 
 case "${picket_command}" in
+    (login)
+        picket-login $argument_value_debug
+    ;;
+    (logout)
+        picket-logout $argument_value_debug
+    ;;
     (create-site)
         picket-create-site --siteId "${siteId}" $argument_value_debug
     ;;

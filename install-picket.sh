@@ -2,7 +2,7 @@
 
 set project_parent_path ~/code/gitwork/deploy
 set local_binary_files_to_install_source_parent_path $project_parent_path/build
-set local_binary_files_to_install picket-create-site picket picket-deploy-site picket-undeploy-site picket-delete-site picket-list-sites picket-stage-site picket-unstage-site picket-function-check-if-argument-provided-ip picket-function-check-if-argument-provided-siteid picket-function-check-if-argument-provided-userid picket-function-does-site-exist-in-database picket-function-prepare picket-function-upload picket-function-delete-stage picket-function-get-site-nickname-from-id picket-function-get-site-project-root-from-id picket-function-is-ipv6 picket-function-is-valid-site-id
+set local_binary_files_to_install picket-create-site picket picket-deploy-site picket-undeploy-site picket-delete-site picket-list-sites picket-stage-site picket-unstage-site picket-function-check-if-argument-provided-ip picket-function-check-if-argument-provided-siteid picket-function-check-if-argument-provided-userid picket-function-does-site-exist-in-database picket-function-prepare picket-function-upload picket-function-delete-stage picket-function-get-site-nickname-from-id picket-function-get-site-project-root-from-id picket-function-is-ipv6 picket-function-is-valid-site-id picket-login picket-logout
 
 set string_ssh_command "ssh -t martin@192.46.222.142 '"
 
