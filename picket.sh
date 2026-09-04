@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 deploy | undeploy | stage | unstage | create-site | delete-site | list-sites | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
+USAGE="usage: $0 <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
 
 #set up defaults
 incremental=0

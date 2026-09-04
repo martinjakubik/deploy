@@ -7,7 +7,7 @@ fail_count=0
 test_case="no arguments"
 echo case $test_case
 input=""
-expected="usage: ./picket.sh deploy | undeploy | stage | unstage | create-site | delete-site | list-sites | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
+expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
 actual=$(./picket.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
@@ -97,7 +97,7 @@ fi
 test_case="incorrect command"
 echo case $test_case
 input="think"
-expected="usage: ./picket.sh deploy | undeploy | stage | unstage | create-site | delete-site | list-sites | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
+expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -d|--debug --help"
 actual=$(./picket.sh "$input" 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
