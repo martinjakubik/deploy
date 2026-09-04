@@ -18,4 +18,7 @@ do
 done
 
 echo "logging out"
+if [[ -f $HOME/.picket/user ]] ; then
+    rm $HOME/.picket/user
+fi
 exit 0

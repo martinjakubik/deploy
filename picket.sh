@@ -56,7 +56,7 @@ fi
 
 case "${picket_command}" in
     (login)
-        picket-login $argument_value_debug
+        picket-login --userId "$userId" $argument_value_debug
     ;;
     (logout)
         picket-logout $argument_value_debug

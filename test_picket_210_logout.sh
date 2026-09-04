@@ -6,7 +6,7 @@ fail_count=0
 
 test_case="no arguments"
 echo case $test_case
-input="logout"
+input=""
 expected="logging out"
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))

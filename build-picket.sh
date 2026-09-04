@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 set project_parent_path ~/code/gitwork/deploy
-set source_files picket.sh picket-create-site.sh picket-deploy-site.sh picket-undeploy-site.sh picket-delete-site.sh picket-list-sites.sh picket-stage-site.sh picket-unstage-site.sh picket-function-check-if-argument-provided-ip.sh picket-function-check-if-argument-provided-siteid.sh picket-function-check-if-argument-provided-userid.sh picket-function-does-site-exist-in-database.sh picket-function-prepare.sh picket-function-upload.sh picket-function-delete-stage.sh picket-function-get-site-nickname-from-id.sh picket-function-get-site-project-root-from-id.sh picket-function-is-ipv6.sh picket-function-is-valid-site-id.sh picket-login.sh picket-logout.sh
+set source_files picket.sh picket-create-site.sh picket-deploy-site.sh picket-undeploy-site.sh picket-delete-site.sh picket-list-sites.sh picket-stage-site.sh picket-unstage-site.sh picket-function-check-if-argument-provided-ip.sh picket-function-check-if-argument-provided-siteid.sh picket-function-check-if-argument-provided-userid.sh picket-function-does-site-exist-in-database.sh picket-function-prepare.sh picket-function-upload.sh picket-function-delete-stage.sh picket-function-get-site-nickname-from-id.sh picket-function-get-site-project-root-from-id.sh picket-function-is-ipv6.sh picket-function-is-valid-site-id.sh picket-function-is-valid-user-id.sh picket-login.sh picket-logout.sh
 
 if test ! -d $project_parent_path/build
     mkdir $project_parent_path/build
