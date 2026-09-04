@@ -25,7 +25,7 @@ fi
 test_case="command deploy, no arguments"
 echo case $test_case
 input="deploy"
-expected="You did not select a site. Use ''picket deploy --siteId wxyz'' to choose a site to deploy."
+expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
@@ -43,7 +43,7 @@ fi
 test_case="command deploy, user not logged in, valid site argument"
 echo case $test_case
 input="deploy --siteId wxyz -d"
-expected="You did not provide a user ID. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
+expected="You did not provide a user ID. Use ''picket <command> --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
@@ -79,7 +79,7 @@ fi
 test_case="command undeploy, no arguments"
 echo case $test_case
 input="undeploy"
-expected="You did not select a site. Use ''picket undeploy --siteId wxyz'' to choose a site to undeploy."
+expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then

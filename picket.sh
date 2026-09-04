@@ -55,33 +55,15 @@ case "${picket_command}" in
         picket-list-sites $argument_value_debug
     ;;
     (deploy)
-        if [[ ! -n "${siteId}" ]] ; then
-            echo "You did not select a site. Use ''picket deploy --siteId wxyz'' to choose a site to deploy."
-            exit 1
-        fi
-        if [[ ! -n "${userId}" ]] ; then
-            echo "You did not provide a user ID. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
-            exit 1
-        fi
-        if [[ ! -n "${ipAddress}" ]] ; then
-            echo "You did not provide an IP address. Use ''picket deploy --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
-            exit 1
-        fi
+        picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (undeploy)
-        if [[ ! -n "${siteId}" ]] ; then
-            echo "You did not select a site. Use ''picket undeploy --siteId wxyz'' to choose a site to undeploy."
-            exit 1
-        fi
-        if [[ ! -n "${userId}" ]] ; then
-            echo "User ID \'${userId}\' is not valid. Exiting."
-            exit 1
-        fi
-        if [[ ! -n "${ipAddress}" ]] ; then
-            echo "IP address \'${ipAddress}\' is not valid. Exiting."
-            exit 1
-        fi
+        picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (stage)
