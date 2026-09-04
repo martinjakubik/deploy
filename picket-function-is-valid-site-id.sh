@@ -7,7 +7,7 @@ siteId=''
 is_valid_site_id=0
 
 # parses and reads command line arguments
-siteId=$1
+siteId="$1"
 shift
 
 while [ $# -gt 0 ]
