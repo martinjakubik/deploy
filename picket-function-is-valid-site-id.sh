@@ -27,6 +27,7 @@ if [[ ! "${siteId}" ]] ; then
 fi
 
 if [[ $DEBUG -eq 1 ]] ; then echo "testing site id: '${siteId}'" ; fi
+
 if [[ "${siteId}" =~ .*\ .* ]] ; then
     if [[ $DEBUG -eq 1 ]] ; then echo "site id has blank '${siteId}'" ; fi
     is_valid_site_id=0
