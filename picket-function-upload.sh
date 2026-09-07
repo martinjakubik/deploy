@@ -157,9 +157,7 @@ upload_listed_site_files() {
                 upload_count_in_set=$(( upload_count_in_set+1 ))
                 echo $upload_count files added to upload command $upload_count_in_set files added in set
                 if [[ $upload_count_in_set -gt $max_upload_count_before_throttle ]] ; then
-                    ###
-                    # once max number of files is reached, save the current scp_upload_command in an array scp_command_array, and start a new one
-                    ###
+                    # once max number of files is reached, saves the current scp_upload_command in an array scp_command_array, and starts a new one
                     scp_upload_command+=" ${remote_destination_directory}/"
                     echo "adding command $scp_upload_command to array"
                     scp_command_array+=("$scp_upload_command")
