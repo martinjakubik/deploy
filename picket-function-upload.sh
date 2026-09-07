@@ -153,7 +153,7 @@ upload_listed_site_files() {
                     ###
                     scp_upload_command+=" ${remote_destination_directory}/"
                     echo "adding command $scp_upload_command to array"
-                    scp_command_array+=("$scp_upload_command",)
+                    scp_command_array+=("$scp_upload_command")
                     scp_upload_command="scp "
                     upload_count_in_set=0
                 fi
@@ -169,15 +169,13 @@ upload_listed_site_files() {
 
         # loops through the scp upload commands
         echo "running all upload commands"
-        SAVEIFS=$IFS
-        IFS="," ; for scp_upload_command in $scp_command_array ; do
+        for scp_upload_command in "${scp_command_array[@]}" ; do
             if [[ $DEBUG -eq 0 ]] ; then
                 eval "$scp_upload_command"
             else
                 echo "$scp_upload_command"
             fi
         done
-        IFS=$SAVEIFS
     else
         echo "the list of files $file_listing_files_to_upload does not exist"
     fi
