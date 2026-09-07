@@ -8,7 +8,7 @@ test_case="no arguments"
 echo case $test_case
 input=""
 expected="logging out"
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket-logout.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
