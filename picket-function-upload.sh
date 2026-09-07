@@ -97,13 +97,13 @@ ensure_directory_exists_for_file() {
     if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
         echo creating remote directory "${remoteTargetDirectory}"
         if [[ $DEBUG -eq 0 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
+            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental) -eq 1 ]] ; then
                 ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             else
                 ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             fi
         elif [[ $DEBUG -eq 1 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
+            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental) -eq 1 ]] ; then
                 echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
             else
                 echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
@@ -127,30 +127,55 @@ upload_listed_site_files() {
         finished_reading_file=false
         until $finished_reading_file; do
             read -r || finished_reading_file=true
-            file_array+=("$REPLY")
+            file_array+=("${REPLY/\\n/}")
         done < "$file_listing_files_to_upload"
 
+        scp_command_array=()
+        scp_upload_command="scp "
         for filename in "${file_array[@]}" ; do
             requested_filename="${site_distribution_dir}"/"$filename"
-            if [[ -e "$requested_filename" ]] ; then
+            if [[ -e "$requested_filename" && -f "$requested_filename" ]] ; then
                 ensure_directory_exists_for_file site/"$filename"
                 if [[ $DEBUG -eq 0 ]] ; then
-                    scp "$requested_filename" "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
+                    scp_upload_command+=" $requested_filename"
                 else
-                    echo uploading "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
+                    echo adding upload command for "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
+                    scp_upload_command+=" $requested_filename"
                 fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
-                echo $upload_count files uploaded $upload_count_in_set files uploaded in set
+                echo $upload_count files added to upload command $upload_count_in_set files added in set
                 if [[ $upload_count_in_set -gt $max_upload_count_before_throttle ]] ; then
-                    echo sleeping $throttle_sleep_time_between_uploads
-                    sleep $throttle_sleep_time_between_uploads
+                    ###
+                    # once max number of files is reached, save the current scp_upload_command in an array scp_command_array, and start a new one
+                    ###
+                    scp_upload_command+=" ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/"
+                    echo "adding command $scp_upload_command to array"
+                    scp_command_array+=("$scp_upload_command",)
+                    scp_upload_command="scp "
                     upload_count_in_set=0
                 fi
             else
                 echo the file: "$requested_filename" does not exist
             fi
         done
+
+        # adds any remaining commands
+        scp_upload_command+=" ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/"
+        echo "adding command $scp_upload_command to array"
+        scp_command_array+=("$scp_upload_command")
+
+        # loops through the ssh upload commands
+        echo "running all upload commands"
+        SAVEIFS=$IFS
+        IFS="," ; for scp_upload_command in $scp_command_array ; do
+            if [[ $DEBUG -eq 0 ]] ; then
+                eval "$scp_upload_command"
+            else
+                echo "$scp_upload_command"
+            fi
+        done
+        IFS=$SAVEIFS
     else
         echo "the list of files $file_listing_files_to_upload does not exist"
     fi
