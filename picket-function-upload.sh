@@ -117,6 +117,7 @@ upload_listed_site_files() {
     max_upload_count_before_throttle=4
     throttle_sleep_time_between_uploads=45s
     file_listing_files_to_upload="$1"
+    remote_destination_directory="$2"
     echo
     echo "uploading files listed in $file_listing_files_to_upload"
     upload_count=0
@@ -130,6 +131,7 @@ upload_listed_site_files() {
             file_array+=("${REPLY/\\n/}")
         done < "$file_listing_files_to_upload"
 
+        # constructs upload commands for all of the files listed in the file
         scp_command_array=()
         scp_upload_command="scp "
         for filename in "${file_array[@]}" ; do
@@ -139,7 +141,7 @@ upload_listed_site_files() {
                 if [[ $DEBUG -eq 0 ]] ; then
                     scp_upload_command+=" $requested_filename"
                 else
-                    echo adding upload command for "$requested_filename" to "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/"$filename"
+                    echo adding upload command for "$requested_filename" to "${remote_destination_directory}"/"$filename"
                     scp_upload_command+=" $requested_filename"
                 fi
                 upload_count=$(( upload_count+1 ))
@@ -149,7 +151,7 @@ upload_listed_site_files() {
                     ###
                     # once max number of files is reached, save the current scp_upload_command in an array scp_command_array, and start a new one
                     ###
-                    scp_upload_command+=" ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/"
+                    scp_upload_command+=" ${remote_destination_directory}/"
                     echo "adding command $scp_upload_command to array"
                     scp_command_array+=("$scp_upload_command",)
                     scp_upload_command="scp "
@@ -160,12 +162,12 @@ upload_listed_site_files() {
             fi
         done
 
-        # adds any remaining commands
-        scp_upload_command+=" ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/"
+        # adds the last upload command if there is one
+        scp_upload_command+=" ${remote_destination_directory}/"
         echo "adding command $scp_upload_command to array"
         scp_command_array+=("$scp_upload_command")
 
-        # loops through the ssh upload commands
+        # loops through the scp upload commands
         echo "running all upload commands"
         SAVEIFS=$IFS
         IFS="," ; for scp_upload_command in $scp_command_array ; do
@@ -220,7 +222,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_site_files "${project_root_directory}/upload_files.txt"
+        upload_listed_site_files "${project_root_directory}/upload_files.txt" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
     fi
 
     # uploads the project files
@@ -232,10 +234,10 @@ if [[ $DEBUG -eq 0 ]] ; then
     echo
 
     # uploads the canonical files
-    upload_listed_site_files "${site_canonical_source_code_file_list}"
-    upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    upload_listed_site_files "${site_canonical_source_code_file_list}" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${site_canonical_binary_file_list}" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
 
     if [[ ${incremental} -eq 0 ]] ; then
         if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
@@ -264,11 +266,11 @@ else
     echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_site_files "${project_root_directory}/upload_files.txt"
+        upload_listed_site_files "${project_root_directory}/upload_files.txt" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
     fi
 
-    upload_listed_site_files "${site_canonical_source_code_file_list}"
-    upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    upload_listed_site_files "${site_canonical_source_code_file_list}" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${site_canonical_binary_file_list}" "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
+    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files "$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
 fi
