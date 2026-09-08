@@ -72,10 +72,18 @@ echo
 
 existing_directory_array=()
 
-delete_listed_site_files() {
+delete_listed_files() {
     file_listing_files_in_site_stage="$1"
+    remote_destination_directory="$SITE_STAGING_DIR_SITE"
+    app=""
+    if [[ -n "$2" ]] ; then
+        app="$2"
+        remote_destination_directory="$SITE_STAGING_DIR_SITE/apps/$app/app"
+    fi
+
     echo
     echo "deleting files listed in $file_listing_files_in_site_stage"
+    echo "--------------------------------------------------------------------------------"
     if [[ -e "$file_listing_files_in_site_stage" ]] ; then
         file_array=()
 
@@ -94,9 +102,9 @@ delete_listed_site_files() {
         done
         for existing_filename in "${existing_file_array[@]}" ; do
             if [[ $DEBUG -eq 0 ]] ; then
-                ssh_delete_command+=" ${SITE_STAGING_DIR_SITE}/$existing_filename"
+                ssh_delete_command+=" ${remote_destination_directory}/$existing_filename"
             else
-                echo deleting "${SITE_STAGING_DIR_SITE}"/"$existing_filename"
+                echo deleting "${remote_destination_directory}"/"$existing_filename"
             fi
         done
         ssh -t ${userId}@${ipAddress} "$ssh_delete_command"
@@ -123,16 +131,26 @@ if [[ $DEBUG -eq 0 ]] ; then
     # deletes the project's npm package description
     # scp "${project_root_directory}"/package.json "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
 
-    delete_listed_site_files "${project_root_directory}/upload_files.txt"
+    delete_listed_files "${project_root_directory}/upload_files.txt"
 
     # deletes the site's metadata files
     # scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
 
     # deletes the canonical files
-    delete_listed_site_files "${site_canonical_source_code_file_list}"
-    delete_listed_site_files "${site_canonical_binary_file_list}"
-    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    delete_listed_files "${site_canonical_source_code_file_list}"
+    delete_listed_files "${site_canonical_binary_file_list}"
+    delete_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    delete_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+
+    apps=()
+    if [[ $siteId = "stitle" ]] ; then
+        apps+="cv"
+    fi
+    for app in "${apps[@]}" ; do
+        # deletes the app's metadata file
+        # scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
+        delete_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
+    done
 
     ssh ${userId}@${ipAddress} "rm ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
 else
@@ -145,10 +163,20 @@ else
     # debugs delete of the project's npm package description
     echo scp "${project_root_directory}"/package.json "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
 
-    delete_listed_site_files "${project_root_directory}/upload_files.txt"
+    delete_listed_files "${project_root_directory}/upload_files.txt"
 
-    delete_listed_site_files "${site_canonical_source_code_file_list}"
-    delete_listed_site_files "${site_canonical_binary_file_list}"
-    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    delete_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    delete_listed_files "${site_canonical_source_code_file_list}"
+    delete_listed_files "${site_canonical_binary_file_list}"
+    delete_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    delete_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+
+    apps=()
+    if [[ $siteId = "stitle" ]] ; then
+        apps+="cv"
+    fi
+    for app in "${apps[@]}" ; do
+        # deletes the app's metadata file
+        # scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
+        delete_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
+    done
 fi
