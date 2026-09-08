@@ -87,13 +87,25 @@ fi
 
 print_command_to_move_single_file_from_staging_to_live () {
     single_file="$1"
-    # if [[ -f ${SITE_STAGING_DIR_SITE}/${single_file} ]] ; then
-        echo "cp ${SITE_STAGING_DIR_SITE}/${single_file} ${siteHypertextDirectory}/ ; rm ${SITE_STAGING_DIR_SITE}/${single_file} ;"
-    # fi
+    staging_directory="${SITE_STAGING_DIR_SITE}"
+    live_directory="${siteHypertextDirectory}"
+    if [[ -n "$2" && -n "$3" ]] ; then
+        staging_directory="$2"
+        live_directory="$3"
+    fi
+    echo "cp ${staging_directory}/${single_file} ${live_directory}/ ; rm ${staging_directory}/${single_file} ;"
 }
 
-install_listed_site_files () {
+install_listed_files () {
     file_listing_files_to_install="$1"
+    path_to_file_in_site_live_directory="${siteHypertextDirectory}"
+    app=""
+    if [[ -n "$2" ]] ; then
+        app="$2"
+        path_to_file_in_site_staging_directory="$SITE_STAGING_DIR_SITE/apps/$app"
+        path_to_file_in_site_live_directory="$siteHypertextDirectory/apps/$app"
+    fi
+
     echo
     echo "installing files listed in $file_listing_files_to_install"
     if [[ -e "$file_listing_files_to_install" ]] ; then
@@ -109,7 +121,7 @@ install_listed_site_files () {
         for filename in "${file_array[@]}" ; do
             # ensure_directory_exists_for_file site/"${requested_filename}"
             if [[ $DEBUG -eq 0 ]] ; then
-                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename})"
+                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
             else
                 echo installing "$filename"
             fi
@@ -139,8 +151,8 @@ clean_install_site_canonical_files () {
 		ssh_make_directory_command="sudo mkdir ${siteHypertextDirectory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command
-	install_listed_site_files "${site_canonical_source_code_file_list}"
-    install_listed_site_files "${site_canonical_binary_file_list}"
+	install_listed_files "${site_canonical_source_code_file_list}"
+    install_listed_files "${site_canonical_binary_file_list}"
 }
 
 incremental_install_site_custom_content() {
@@ -148,8 +160,8 @@ incremental_install_site_custom_content() {
 }
 
 clean_install_site_custom_files() {
-    install_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    install_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    install_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    install_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 }
 
 delete_files_uploaded_marker() {
