@@ -118,6 +118,7 @@ upload_listed_files() {
     fi
 
     echo
+    echo "--------------------------------------------------------------------------------"
     echo "uploading files listed in $file_listing_files_to_upload"
     upload_count=0
     upload_count_in_set=0
@@ -141,7 +142,7 @@ upload_listed_files() {
                 remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
             fi
             if [[ -e "$local_filename" && -f "$local_filename" ]] ; then
-                ensure_directory_exists_for_file "${remote_full_path_to_file}" $argument_value_debug
+                ensure_directory_exists_for_file "${remote_full_path_to_file}"
                 if [[ $DEBUG -eq 0 ]] ; then
                     scp_upload_command+=" $local_filename"
                 else
@@ -199,8 +200,9 @@ if [[ $DEBUG -eq 0 ]] ; then
     # uploads content to the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt $argument_value_debug
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt
         echo
+        echo "--------------------------------------------------------------------------------"
         echo "uploading server files"
         scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
         echo ... done
@@ -211,6 +213,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store -delete
         echo
+        echo "--------------------------------------------------------------------------------"
         echo "uploading site library files"
         scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
         echo ... done
@@ -223,6 +226,7 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     # uploads the project files
     echo
+    echo "--------------------------------------------------------------------------------"
     echo "uploading project files"
     scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
@@ -240,9 +244,9 @@ if [[ $DEBUG -eq 0 ]] ; then
         apps+="cv"
     fi
     for app in "${apps[@]}" ; do
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}/${app}"-custom-source-code-files $argument_value_debug
-        scp "${project_root_directory}"/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${app}/"
-        upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files "${app}"
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}/${app}"-custom-source-code-files
+        scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
+        upload_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
     done
 
     if [[ ${incremental} -eq 0 ]] ; then
@@ -254,7 +258,7 @@ else
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt $argument_value_debug
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt
         echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 

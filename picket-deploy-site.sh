@@ -85,6 +85,26 @@ elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
+ensure_directory_exists_for_file() {
+    full_path_to_filename_to_check="$1"
+
+    remoteTargetDirectory=$(dirname "${full_path_to_filename_to_check}")
+    if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${remoteTargetDirectory}" ; then
+        is_directory_found_on_remote=1
+    else
+        is_directory_found_on_remote=0
+    fi
+
+    if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
+        if [[ $DEBUG -eq 0 ]] ; then
+            ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then  mkdir -p $remoteTargetDirectory ; fi"
+        elif [[ $DEBUG -eq 1 ]] ; then
+            echo ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then echo creating remote directory $remoteTargetDirectory ; mkdir -p $remoteTargetDirectory ; fi"
+        fi
+        existing_directory_array+=("$remoteTargetDirectory")
+    fi
+}
+
 print_command_to_move_single_file_from_staging_to_live () {
     single_file="$1"
     staging_directory="${SITE_STAGING_DIR_SITE}"
@@ -98,6 +118,7 @@ print_command_to_move_single_file_from_staging_to_live () {
 
 install_listed_files () {
     file_listing_files_to_install="$1"
+    path_to_file_in_site_staging_directory="${SITE_STAGING_DIR_SITE}"
     path_to_file_in_site_live_directory="${siteHypertextDirectory}"
     app=""
     if [[ -n "$2" ]] ; then
@@ -107,6 +128,7 @@ install_listed_files () {
     fi
 
     echo
+    echo "--------------------------------------------------------------------------------"
     echo "installing files listed in $file_listing_files_to_install"
     if [[ -e "$file_listing_files_to_install" ]] ; then
         file_array=()
@@ -119,8 +141,10 @@ install_listed_files () {
 
         ssh_install_command=""
         for filename in "${file_array[@]}" ; do
-            picket-function-ensure-directory-exists-for-file site/"${filename}"
-            ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
+            if [[ -n "${filename}" ]] ; then
+                ensure_directory_exists_for_file "${path_to_file_in_site_live_directory}"/"${filename}"
+                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
+            fi
         done
 
         if [[ $DEBUG -eq 0 ]] ; then
