@@ -113,7 +113,7 @@ ensure_directory_exists_for_file() {
     fi
 }
 
-upload_listed_site_files() {
+upload_listed_files() {
     max_upload_count_before_throttle=4
     throttle_sleep_time_between_uploads=45s
     file_listing_files_to_upload="$1"
@@ -227,7 +227,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_site_files "${project_root_directory}/upload_files.txt"
+        upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
     # uploads the project files
@@ -239,15 +239,15 @@ if [[ $DEBUG -eq 0 ]] ; then
     echo
 
     # uploads the canonical files
-    upload_listed_site_files "${site_canonical_source_code_file_list}"
-    upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    upload_listed_files "${site_canonical_source_code_file_list}"
+    upload_listed_files "${site_canonical_binary_file_list}"
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
     apps=()
     apps+="cv"
     for app in "${apps[@]}" ; do
-        upload_listed_site_files "${project_root_directory}"/"${app}"-custom-source-code-files "${app}"
+        upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files "${app}"
     done
 
     if [[ ${incremental} -eq 0 ]] ; then
@@ -277,17 +277,17 @@ else
     echo scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
 
     if [[ ${incremental} -eq 1 ]] ; then
-        upload_listed_site_files "${project_root_directory}/upload_files.txt"
+        upload_listed_files "${project_root_directory}/upload_files.txt"
     fi
 
-    upload_listed_site_files "${site_canonical_source_code_file_list}"
-    upload_listed_site_files "${site_canonical_binary_file_list}"
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    upload_listed_site_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    upload_listed_files "${site_canonical_source_code_file_list}"
+    upload_listed_files "${site_canonical_binary_file_list}"
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
     apps=()
     apps+="cv"
     for app in "${apps[@]}" ; do
-        upload_listed_site_files "${project_root_directory}"/"${app}"-custom-source-code-files ${app}
+        upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files ${app}
     done
 fi
