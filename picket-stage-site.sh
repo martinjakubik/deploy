@@ -38,7 +38,6 @@ project_root_directory="${all_project_root}"/"$(picket-function-get-site-project
 echo
 echo staging site \"${siteId}\"
 picket-function-upload --inputDir "$project_root_directory" --siteId "$siteId" --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
-echo ... done
-echo 
+echo
 
 exit 0

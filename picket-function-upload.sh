@@ -118,8 +118,8 @@ upload_listed_files() {
     fi
 
     echo
-    echo "--------------------------------------------------------------------------------"
     echo "uploading files listed in $file_listing_files_to_upload"
+    echo "--------------------------------------------------------------------------------"
     upload_count=0
     upload_count_in_set=0
     if [[ -e "$file_listing_files_to_upload" ]] ; then
@@ -182,6 +182,7 @@ upload_listed_files() {
     else
         echo "the list of files $file_listing_files_to_upload does not exist"
     fi
+    echo "--------------------------------------------------------------------------------"
     echo ... done
     echo
 }
@@ -202,9 +203,10 @@ if [[ $DEBUG -eq 0 ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
         ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt
         echo
-        echo "--------------------------------------------------------------------------------"
         echo "uploading server files"
+        echo "--------------------------------------------------------------------------------"
         scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+        echo "--------------------------------------------------------------------------------"
         echo ... done
         echo
     fi
@@ -213,9 +215,10 @@ if [[ $DEBUG -eq 0 ]] ; then
     if [[ -d "${site_distribution_dir}"/lib ]] ; then
         find "${site_distribution_dir}"/lib -name .DS_Store -delete
         echo
-        echo "--------------------------------------------------------------------------------"
         echo "uploading site library files"
+        echo "--------------------------------------------------------------------------------"
         scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+        echo "--------------------------------------------------------------------------------"
         echo ... done
         echo
     fi
@@ -226,10 +229,11 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     # uploads the project files
     echo
-    echo "--------------------------------------------------------------------------------"
     echo "uploading project files"
+    echo "--------------------------------------------------------------------------------"
     scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+    echo "--------------------------------------------------------------------------------"
     echo ... done
     echo
 

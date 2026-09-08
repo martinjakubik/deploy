@@ -128,8 +128,8 @@ install_listed_files () {
     fi
 
     echo
-    echo "--------------------------------------------------------------------------------"
     echo "installing files listed in $file_listing_files_to_install"
+    echo "--------------------------------------------------------------------------------"
     if [[ -e "$file_listing_files_to_install" ]] ; then
         file_array=()
 
@@ -156,6 +156,7 @@ install_listed_files () {
         echo "the list of files $file_listing_files_to_install does not exist"
     fi
 
+    echo "--------------------------------------------------------------------------------"
     echo ... done
     echo
 }
