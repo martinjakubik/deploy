@@ -119,7 +119,7 @@ install_listed_files () {
 
         ssh_install_command=""
         for filename in "${file_array[@]}" ; do
-            # ensure_directory_exists_for_file site/"${requested_filename}"
+            picket-function-ensure-directory-exists-for-file site/"${filename}"
             ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
         done
 

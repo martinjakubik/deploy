@@ -87,27 +87,20 @@ echo
 existing_directory_array=()
 
 ensure_directory_exists_for_file() {
-    filename_to_check="$1"
-    remoteTargetDirectory="$SITE_STAGING_DIR_ROOT"/$(dirname "$filename_to_check")
+    full_path_to_filename_to_check="$1"
+
+    remoteTargetDirectory=$(dirname "${full_path_to_filename_to_check}")
     if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${remoteTargetDirectory}" ; then
         is_directory_found_on_remote=1
     else
         is_directory_found_on_remote=0
     fi
+
     if [[ ! $is_directory_found_on_remote -eq 1 ]]; then
-        echo creating remote directory "${remoteTargetDirectory}"
         if [[ $DEBUG -eq 0 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental) -eq 1 ]] ; then
-                ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
-            else
-                ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
-            fi
+            ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then  mkdir -p $remoteTargetDirectory ; fi"
         elif [[ $DEBUG -eq 1 ]] ; then
-            if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental) -eq 1 ]] ; then
-                echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
-            else
-                echo ssh ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then mkdir -p $remoteTargetDirectory ; fi"
-            fi
+            echo ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then echo creating remote directory $remoteTargetDirectory ; mkdir -p $remoteTargetDirectory ; fi"
         fi
         existing_directory_array+=("$remoteTargetDirectory")
     fi
@@ -141,17 +134,19 @@ upload_listed_files() {
         scp_command_array=()
         scp_upload_command="scp "
         for filename in "${file_array[@]}" ; do
-            requested_filename="${site_distribution_dir}"/"$filename"
+            local_filename="${site_distribution_dir}"/"$filename"
+            remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/"${filename}"
             if [[ -n "$app" ]] ; then
-                requested_filename="${site_distribution_dir}/apps/${app}/app/${filename}"
+                local_filename="${site_distribution_dir}/apps/${app}/app/${filename}"
+                remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
             fi
-            if [[ -e "$requested_filename" && -f "$requested_filename" ]] ; then
-                ensure_directory_exists_for_file site/"$filename"
+            if [[ -e "$local_filename" && -f "$local_filename" ]] ; then
+                ensure_directory_exists_for_file "${remote_full_path_to_file}" $argument_value_debug
                 if [[ $DEBUG -eq 0 ]] ; then
-                    scp_upload_command+=" $requested_filename"
+                    scp_upload_command+=" $local_filename"
                 else
-                    echo adding upload command for "$requested_filename" to "${remote_destination_directory}"/"$filename"
-                    scp_upload_command+=" $requested_filename"
+                    echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename"
+                    scp_upload_command+=" $local_filename"
                 fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
@@ -165,7 +160,7 @@ upload_listed_files() {
                     upload_count_in_set=0
                 fi
             else
-                echo the file: "$requested_filename" does not exist
+                echo the file: "$local_filename" does not exist
             fi
         done
 
@@ -194,11 +189,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     picket-function-prepare --inputDir "${project_root_directory}" -s "${siteId}" --siteNickname "${siteNickname}" $argument_value_incremental $argument_value_debug
 
     # checks if a plain file already exists with the name of the destination directory
-    if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
-        ssh ${userId}@${ipAddress} "if [[ -f ${SITE_STAGING_DIR_ROOT} ]] ; then exit 1 ; fi"
-    else
-        ssh ${userId}@${ipAddress} "if [[ -f ${SITE_STAGING_DIR_ROOT} ]] ; then exit 1 ; fi"
-    fi
+    ssh ${userId}@${ipAddress} "if [[ -f ${SITE_STAGING_DIR_ROOT} ]] ; then exit 1 ; fi"
     check_destination_directory_exit_code=$?
     if [[ $check_destination_directory_exit_code -eq 1 ]] ; then
         echo "a plain file called ${SITE_STAGING_DIR_ROOT} already exists; stopping."
@@ -208,7 +199,7 @@ if [[ $DEBUG -eq 0 ]] ; then
     # uploads content to the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
-        ensure_directory_exists_for_file server/dummy.txt
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt $argument_value_debug
         echo
         echo "uploading server files"
         scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
@@ -245,19 +236,17 @@ if [[ $DEBUG -eq 0 ]] ; then
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
     apps=()
-    apps+="cv"
+    if [[ $siteId = "stitle" ]] ; then
+        apps+="cv"
+    fi
     for app in "${apps[@]}" ; do
-        ensure_directory_exists_for_file "site/apps/${app}/${app}-custom-source-code-files"
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}/${app}"-custom-source-code-files $argument_value_debug
         scp "${project_root_directory}"/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${app}/"
         upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files "${app}"
     done
 
     if [[ ${incremental} -eq 0 ]] ; then
-        if [[ $(picket-function-is-ipv6 --ip $ipAddress $argument_value_incremental $argument_value_debug) -eq 1 ]] ; then
-            ssh ${userId}@${ipAddress} "touch ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
-        else
-            ssh ${userId}@${ipAddress} "touch ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
-        fi
+        ssh ${userId}@${ipAddress} "touch ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
     fi
 else
     picket-function-prepare --inputDir "${project_root_directory}" -s "${siteId}" --siteNickname "${siteNickname}" $argument_value_incremental $argument_value_debug
@@ -265,7 +254,7 @@ else
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store
-        ensure_directory_exists_for_file server/dummy.txt
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt $argument_value_debug
         echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
