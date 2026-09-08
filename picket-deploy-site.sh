@@ -102,8 +102,8 @@ install_listed_files () {
     app=""
     if [[ -n "$2" ]] ; then
         app="$2"
-        path_to_file_in_site_staging_directory="$SITE_STAGING_DIR_SITE/apps/$app"
-        path_to_file_in_site_live_directory="$siteHypertextDirectory/apps/$app"
+        path_to_file_in_site_staging_directory="$SITE_STAGING_DIR_SITE/apps/$app/app"
+        path_to_file_in_site_live_directory="$siteHypertextDirectory/apps/$app/app"
     fi
 
     echo
@@ -120,20 +120,16 @@ install_listed_files () {
         ssh_install_command=""
         for filename in "${file_array[@]}" ; do
             # ensure_directory_exists_for_file site/"${requested_filename}"
-            if [[ $DEBUG -eq 0 ]] ; then
-                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
-            else
-                echo installing "$filename"
-            fi
+            ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
         done
+
+        if [[ $DEBUG -eq 0 ]] ; then
+            ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+        else
+            echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+        fi
     else
         echo "the list of files $file_listing_files_to_install does not exist"
-    fi
-
-    if [[ $DEBUG -eq 0 ]] ; then
-        ssh -t ${userId}@${ipAddress} "$ssh_install_command"
-    else
-        echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
     fi
 
     echo ... done
@@ -164,16 +160,26 @@ clean_install_site_custom_files() {
     install_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 }
 
+clean_install_app_files() {
+    app="$1"
+    install_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files ${app}
+}
+
 delete_files_uploaded_marker() {
     if [[ -f "${SITE_STAGING_DIR_ROOT}"/all_files_uploaded ]] ; then
         rm "${SITE_STAGING_DIR_ROOT}"/all_files_uploaded
     fi
 }
 
+apps=()
+apps+="cv"
 if [[ $incremental -eq 0 ]] ; then
     clean_install_site_canonical_files
 	clean_install_site_custom_files
 	delete_files_uploaded_marker
+    for app in "${apps[@]}" ; do
+        clean_install_app_files "$app"
+    done
 elif [[ $incremental -eq 1 ]] ; then
     clean_install_site_canonical_files
 	incremental_install_site_custom_content

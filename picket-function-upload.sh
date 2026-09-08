@@ -121,7 +121,7 @@ upload_listed_files() {
     app=""
     if [[ -n "$2" ]] ; then
         app="$2"
-        remote_destination_directory="$DESTINATION_DIR_WITH_USER_AND_IP_SITE/apps/$app"
+        remote_destination_directory="$DESTINATION_DIR_WITH_USER_AND_IP_SITE/apps/$app/app"
     fi
 
     echo
@@ -247,6 +247,8 @@ if [[ $DEBUG -eq 0 ]] ; then
     apps=()
     apps+="cv"
     for app in "${apps[@]}" ; do
+        ensure_directory_exists_for_file "site/apps/${app}/${app}-custom-source-code-files"
+        scp "${project_root_directory}"/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${app}/"
         upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files "${app}"
     done
 
@@ -288,6 +290,7 @@ else
     apps=()
     apps+="cv"
     for app in "${apps[@]}" ; do
+        echo "scp ${project_root_directory}/${app}-custom-source-code-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${app}/"
         upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files ${app}
     done
 fi
