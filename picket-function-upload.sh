@@ -151,11 +151,15 @@ upload_listed_files() {
                 fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
-                echo $upload_count files added to upload command $upload_count_in_set files added in set
+                if [[ $DEBUG -eq 1 ]] ; then
+                    echo $upload_count files added to upload command $upload_count_in_set files added in set
+                fi
                 if [[ $upload_count_in_set -gt $max_upload_count_before_throttle ]] ; then
                     # once max number of files is reached, saves the current scp_upload_command in an array scp_command_array, and starts a new one
                     scp_upload_command+=" ${remote_destination_directory}/"
-                    echo "adding command $scp_upload_command to array"
+                    if [[ $DEBUG -eq 1 ]] ; then
+                        echo "adding command $scp_upload_command to array"
+                    fi
                     scp_command_array+=("$scp_upload_command")
                     scp_upload_command="scp "
                     upload_count_in_set=0
@@ -167,11 +171,15 @@ upload_listed_files() {
 
         # adds the last upload command if there is one
         scp_upload_command+=" ${remote_destination_directory}/"
-        echo "adding command $scp_upload_command to array"
+        if [[ $DEBUG -eq 1 ]] ; then
+            echo "adding command $scp_upload_command to array"
+        fi
         scp_command_array+=("$scp_upload_command")
 
         # loops through the scp upload commands
-        echo "running all upload commands"
+        if [[ $DEBUG -eq 1 ]] ; then
+            echo "running all upload commands"
+        fi
         for scp_upload_command in "${scp_command_array[@]}" ; do
             if [[ $DEBUG -eq 0 ]] ; then
                 eval "$scp_upload_command"
