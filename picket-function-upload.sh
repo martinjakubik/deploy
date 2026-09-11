@@ -1,9 +1,10 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteNickname siteNickname -u|--userId userId --ip ipAddress -c|--incremental -d|--debug"
+USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteNickname siteNickname -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug"
 
 # sets up defaults
 DEBUG=0
+THROTTLE=0
 project_root_directory=~/project_root_directory
 siteId=abcd
 siteNickname=abcdhome
@@ -24,6 +25,8 @@ do
         (--ip) ipAddress="$2"; shift;;
         (-c) incremental=1;;
         (--incremental) incremental=1;;
+        (-t) THROTTLE=1;;
+        (--throttle) THROTTLE=1;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
         (-*) echo >&2 ${USAGE}
