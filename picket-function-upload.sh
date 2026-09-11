@@ -10,6 +10,8 @@ siteId=abcd
 siteNickname=abcdhome
 destinationDir=~/destinationDir
 incremental=0
+max_upload_count_before_throttle=4
+throttle_sleep_time_between_uploads=10s
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -110,8 +112,6 @@ ensure_directory_exists_for_file() {
 }
 
 upload_listed_files() {
-    max_upload_count_before_throttle=4
-    throttle_sleep_time_between_uploads=45s
     file_listing_files_to_upload="$1"
     remote_destination_directory="$DESTINATION_DIR_WITH_USER_AND_IP_SITE"
     app=""
@@ -250,9 +250,16 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     # uploads the canonical files
     upload_listed_files "${site_canonical_source_code_file_list}"
+    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+
     upload_listed_files "${site_canonical_binary_file_list}"
+    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
+    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
 
     apps=()
     if [[ $siteId = "stitle" ]] ; then
@@ -262,6 +269,7 @@ if [[ $DEBUG -eq 0 ]] ; then
         ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}/${app}"-custom-source-code-files
         scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
         upload_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
+        if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
     done
 
     if [[ ${incremental} -eq 0 ]] ; then
