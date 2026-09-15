@@ -22,6 +22,60 @@ else
     echo
 fi
 
+test_case="command login, no arguments"
+echo case $test_case
+input="login"
+expected="You did not provide a user ID. Use ''picket login --userId your_name'' to log in permanently."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
+test_case="command logout, no arguments; no user logged in"
+echo case $test_case
+input="logout"
+expected="There is no user logged in."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
+test_case="command logout, no arguments; user logged in"
+echo case $test_case
+input="logout"
+expected="Logging out."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 test_case="command deploy, no arguments"
 echo case $test_case
 input="deploy"

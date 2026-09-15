@@ -63,6 +63,7 @@ fi
 
 case "${picket_command}" in
     (login)
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
         picket-login --userId "$userId" $argument_value_debug
     ;;
     (logout)
@@ -79,31 +80,35 @@ case "${picket_command}" in
     ;;
     (deploy)
         picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
-        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-or-stored-userid "${userId}" || exit 1
+        if [[ ! -n "${userId}" ]] ; then read -r < ~/.picket/user ; userId="$REPLY" ; fi
         picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-deploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_debug
     ;;
     (undeploy)
         picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
-        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-or-stored-userid "${userId}" || exit 1
+        if [[ ! -n "${userId}" ]] ; then read -r < ~/.picket/user ; userId="$REPLY" ; fi
         picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (stage)
         picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
-        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-or-stored-userid "${userId}" || exit 1
+        if [[ ! -n "${userId}" ]] ; then read -r < ~/.picket/user ; userId="$REPLY" ; fi
         picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-stage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_throttle $argument_value_debug
     ;;
     (unstage)
         picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
-        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-or-stored-userid "${userId}" || exit 1
+        if [[ ! -n "${userId}" ]] ; then read -r < ~/.picket/user ; userId="$REPLY" ; fi
         picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (delete)
         picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
-        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-or-stored-userid "${userId}" || exit 1
         picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-delete-site --siteId "${siteId}" $argument_value_debug
     ;;

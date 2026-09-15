@@ -17,8 +17,11 @@ do
 		shift
 done
 
-echo "logging out"
 if [[ -f $HOME/.picket/user ]] ; then
+    echo "logging out"
     rm $HOME/.picket/user
+else
+    echo "There is no user logged in."
+    exit 1
 fi
 exit 0
