@@ -94,6 +94,60 @@ else
     echo
 fi
 
+test_case="command stage, no arguments"
+echo case $test_case
+input="stage"
+expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
+test_case="command unstage, no arguments"
+echo case $test_case
+input="unstage"
+expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
+test_case="command delete, no arguments"
+echo case $test_case
+input="delete"
+expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 test_case="incorrect command"
 echo case $test_case
 input="think"

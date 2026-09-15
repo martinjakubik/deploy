@@ -90,12 +90,21 @@ case "${picket_command}" in
         picket-undeploy-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (stage)
+        picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-stage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_throttle $argument_value_debug
     ;;
     (unstage)
+        picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-unstage-site --siteId "${siteId}" --userId "${userId}" --ip $ipAddress $argument_value_debug
     ;;
     (delete)
+        picket-function-check-if-argument-provided-siteid "${siteId}" || exit 1
+        picket-function-check-if-argument-provided-userid "${userId}" || exit 1
+        picket-function-check-if-argument-provided-ip "${ipAddress}" || exit 1
         picket-delete-site --siteId "${siteId}" $argument_value_debug
     ;;
     (help)
