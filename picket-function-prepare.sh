@@ -79,13 +79,15 @@ build_listed_files() {
 
         for filename in "${file_array[@]}" ; do
             requested_filename="${project_root_directory}"/"${parent_dir}"/"$filename"
-            if [[ -e "$requested_filename" ]] ; then
+            if [[ -f "$requested_filename" ]] ; then
                 if [[ ! -d "${site_distribution_directory}" ]] ; then
                     mkdir "${site_distribution_directory}"
                 fi
                 cp "${requested_filename}" "${site_distribution_directory}"/
             else
-                echo the file: "$requested_filename" does not exist
+                if [[ ! -d "$requested_filename" ]] ; then
+                    echo the file: "$requested_filename" does not exist
+                fi
             fi
         done
     else
