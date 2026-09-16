@@ -66,6 +66,11 @@ build_listed_files() {
         exit 1
     fi
 
+    canonical_or_custom="canonical"
+    if [[ "$3" = "custom" ]] ; then
+        canonical_or_custom="custom"
+    fi
+
     echo
     echo "building files listed in $file_listing_files_to_build"
     if [[ -e "$file_listing_files_to_build" ]] ; then
@@ -84,6 +89,18 @@ build_listed_files() {
                     mkdir "${site_distribution_directory}"
                 fi
                 cp "${requested_filename}" "${site_distribution_directory}"/
+            elif [[ ! -f "$requested_filename" && "$canonical_or_custom" = "canonical" ]] ; then
+                requested_filename=/etc/picket/"$filename"
+                if [[ -f "$requested_filename" ]] ; then
+                    if [[ ! -d "${site_distribution_directory}" ]] ; then
+                        mkdir "${site_distribution_directory}"
+                    fi
+                    cp "${requested_filename}" "${site_distribution_directory}"/
+                else
+                    if [[ ! -d "$requested_filename" ]] ; then
+                        echo the file: "$requested_filename" does not exist
+                    fi
+                fi
             else
                 if [[ ! -d "$requested_filename" ]] ; then
                     echo the file: "$requested_filename" does not exist
@@ -105,7 +122,7 @@ build_listed_binary_files() {
     build_listed_files "$1" "binary_resource"
 }
 
-build_listed_source_code_files "${site_canonical_source_code_file_list}"
-build_listed_binary_files "${site_canonical_binary_file_list}"
-build_listed_source_code_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-build_listed_binary_files "${project_root_directory}"/"${siteId}"-custom-binary-files
+build_listed_source_code_files "${site_canonical_source_code_file_list}" "$source_code" "$canonical"
+build_listed_binary_files "${site_canonical_binary_file_list}" "$binary_resource" "$canonical"
+build_listed_source_code_files "${project_root_directory}"/"${siteId}"-custom-source-code-files "$source_code"
+build_listed_binary_files "${project_root_directory}"/"${siteId}"-custom-binary-files "$binary_resource"

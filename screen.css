@@ -1,0 +1,120 @@
+body {
+    background-image: url('background-tile.png');
+    background-repeat: repeat;
+}
+
+img.title {
+    width: 100%;
+    max-width: 24em;
+}
+
+button {
+    padding: 0.2em 0.2em 0 0.2em;
+    border-color: var(--bg-0-color);
+}
+
+button {
+    background-color: var(--bg-0-color);
+    color: var(--text-0-fg-color);
+    border-style: solid;
+    font-family: var(--font-0-family);
+    font-size: 1em;
+}
+
+button:hover {
+    color: var(--text-0-inverted-fg-color);
+    box-shadow: 0.1em 0.1em 0.6em var(--bg-0-color);
+}
+
+button:disabled {
+    color: var(--text-1-inverted-fg-color);
+    border: 1px solid var(--bg-2-color);
+}
+
+div.navigation {
+    display: flex;
+    flex-flow: wrap;
+}
+
+div#container {
+    background-color: var(--bg-0-color);
+    border-radius: 1em 1em 1em 1em;
+    border-style: solid;
+    border-width: 3em;
+    border-color: var(--bg-0-color);
+}
+
+div#footer {
+    background-color: var(--bg-0-color);
+    color: var(--text-0-fg-color);
+    margin: 1em 0 1em 0;
+    font-family: var(--font-0-family);
+}
+
+div#footer > a {
+    color: var(--text-0-inverted-fg-color);
+    text-decoration: none;
+}
+
+@media (width <= 480px), screen and (orientation: portrait) {
+    body {
+        margin: 0 0 0 0;
+    }
+
+    button {
+        padding: 0 0.2em 0 0.2em;
+        margin: 0 0.2em 0.2em 0.2em;
+        font-size: 16pt;
+    }
+
+    label {
+        font-size: 14pt;
+    }
+
+    div#container {
+        border: 0.2em solid var(--bg-1-color);
+        border-radius: none;
+        box-shadow: none;
+    }
+
+    div#footer {
+        color: var(--text-0-fg-color);
+    }
+}
+
+:root {
+    --bg-0-color: rgb(255, 255, 255);
+    --bg-0-inverted-color: rgba(57, 66, 237, 0.815);
+    --bg-1-color: rgb(237, 237, 237);
+    --bg-2-color: rgba(169, 123, 7, 0.815);
+    --bg-3-color: rgba(204, 141, 5, 0.55);
+    --text-0-fg-color: rgb(170, 228, 234);
+    --text-1-fg-color: rgb(255, 255, 255);
+    --text-0-inverted-fg-color: rgb(169, 123, 7);
+    --text-1-inverted-fg-color: rgb(255, 219, 157);
+    --text-2-fg-color: rgb(71, 133, 49);
+    --semantic-negative-bg-0-color: rgb(207, 0, 0);
+    --semantic-negative-bg-0-inverted-color: rgb(116, 0, 0);
+    --semantic-positive-bg-0-color: rgb(71, 133, 0);
+    --semantic-positive-bg-0-inverted-color: rgb(124, 233, 86);
+    --font-0-family:
+        normal helvetica-w01-roman, helvetica-w02-roman, helvetica-lt-w10-roman,
+        sans-serif;
+    --copy-column-width: 520px;
+    --gradient1-g0-color: rgb(170, 228, 234);
+    --gradient1-g1-color: rgb(159, 213, 219);
+    --gradient1-g2-color: rgb(148, 199, 204);
+    --gradient1-g3-color: rgb(137, 185, 189);
+    --gradient1-g4-color: rgb(127, 171, 175);
+    --gradient1-g5-color: rgb(116, 156, 160);
+    --gradient1-g6-color: rgb(106, 142, 146);
+    --gradient1-g7-color: rgb(95, 128, 131);
+    --gradient1-g8-color: rgb(85, 114, 117);
+    --gradient1-g9-color: rgb(74, 99, 102);
+    --gradient1-g10-color: rgb(63, 85, 87);
+    --gradient1-g11-color: rgb(52, 71, 72);
+    --gradient1-g12-color: rgb(42, 57, 58);
+    --gradient1-g13-color: rgb(31, 42, 43);
+    --gradient1-g14-color: rgb(21, 28, 29);
+    --gradient1-g15-color: rgb(10, 14, 14);
+}

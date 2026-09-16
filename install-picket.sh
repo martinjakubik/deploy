@@ -24,3 +24,9 @@ cp $local_configuration_file_to_install $HOME/.picket/
 set local_configuration_file_to_install $project_parent_path/config.picket
 cp $local_configuration_file_to_install /etc/picket/
 cp $local_configuration_file_to_install $HOME/.picket/
+
+set local_template_files_to_install background.png favicon.png index.html logo.png screen.css robots.txt title.png
+for local_template_file_to_install in $local_template_files_to_install
+    cp $project_parent_path/build/$local_template_file_to_install /etc/picket/
+    cp $project_parent_path/build/$local_template_file_to_install $HOME/.picket/
+end
