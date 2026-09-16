@@ -17,7 +17,7 @@ do
 		shift
 done
 
-if [[ -f $HOME/.picket/user ]] ; then
+if [[ -f $HOME/.picket/user && $(wc -c < ~/.picket/user) -gt 0 ]] ; then
     echo "logging out"
     rm $HOME/.picket/user
 else
