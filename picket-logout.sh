@@ -18,7 +18,7 @@ do
 done
 
 if [[ -f $HOME/.picket/user && $(wc -c < ~/.picket/user) -gt 0 ]] ; then
-    echo "logging out"
+    echo "Logging out."
     rm $HOME/.picket/user
 else
     echo "There is no user logged in."

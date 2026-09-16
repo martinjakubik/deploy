@@ -14,9 +14,14 @@ command_logout__no_arguments__no_user_logged_in() {
     echo -n > ~/.picket/user
 }
 
+command_logout__no_arguments__user_logged_in() {
+    echo -n "test_user_id" > ~/.picket/user
+}
+
 case "$test_case" in
     ("command stage, valid site argument; user file too big") command_stage__no_arguments__user_file_too_big;;
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
+    ("command logout, no arguments; user logged in") command_logout__no_arguments__user_logged_in;;
 esac
 
 exit 0
