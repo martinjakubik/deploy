@@ -5,7 +5,7 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input=""
 expected="logging out"
 actual=$(./picket-logout.sh $input 2>&1)

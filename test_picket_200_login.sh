@@ -5,7 +5,7 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input=""
 expected="usage: ./picket-login.sh --userId userId -d|--debug"
 actual=$(./picket-login.sh $input 2>&1)
@@ -23,7 +23,7 @@ else
 fi
 
 test_case="valid username"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="--userId your_name"
 expected="logging in"
 actual=$(./picket-login.sh $input 2>&1)
@@ -41,7 +41,7 @@ else
 fi
 
 test_case="invalid username: plus character"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="--userId +"
 expected="The user name is invalid. Use only letters without accents, arabic digits and start with a letter."
 actual=$(./picket-login.sh $input 2>&1)

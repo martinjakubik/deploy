@@ -5,7 +5,7 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input=""
 expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
 actual=$(./picket.sh $input 2>&1)
@@ -23,7 +23,7 @@ else
 fi
 
 test_case="command login, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="login"
 expected="You did not provide a user ID. Use ''picket login --userId your_name'' to log in permanently."
 actual=$(./picket.sh $input 2>&1)
@@ -41,7 +41,7 @@ else
 fi
 
 test_case="command logout, no arguments; no user logged in"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="logout"
 expected="There is no user logged in."
 actual=$(./picket.sh $input 2>&1)
@@ -59,7 +59,7 @@ else
 fi
 
 test_case="command logout, no arguments; user logged in"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="logout"
 expected="Logging out."
 actual=$(./picket.sh $input 2>&1)
@@ -77,7 +77,7 @@ else
 fi
 
 test_case="command deploy, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="deploy"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
@@ -95,7 +95,7 @@ else
 fi
 
 test_case="command deploy, user not logged in, valid site argument"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="deploy --siteId wxyz -d"
 expected="You did not provide a user ID. Use ''picket <command> --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
 actual=$(./picket.sh $input 2>&1)
@@ -113,7 +113,7 @@ else
 fi
 
 test_case="command deploy, user logged in, valid site argument but site does not exist"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
 expected="Trying to deploy site ''wxyz''. Site does not exist. Stopping."
 actual=$(./picket.sh $input 2>&1)
@@ -131,7 +131,7 @@ else
 fi
 
 test_case="command undeploy, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="undeploy"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
@@ -149,7 +149,7 @@ else
 fi
 
 test_case="command stage, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="stage"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
@@ -166,7 +166,7 @@ else
     echo
 fi
 
-test_case="command stage, valids site argument; user file too big"
+test_case="command stage, valid site argument; user file too big"
 ./setup_test_case.sh "$test_case"
 input="stage --siteId wxyz"
 expected="There is a problem with the user record. Use ''picket login --userId your_name'' to log in again."
@@ -185,7 +185,7 @@ else
 fi
 
 test_case="command unstage, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="unstage"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
@@ -203,7 +203,7 @@ else
 fi
 
 test_case="command delete, no arguments"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="delete"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
 actual=$(./picket.sh $input 2>&1)
@@ -221,7 +221,7 @@ else
 fi
 
 test_case="incorrect command"
-echo case $test_case
+./setup_test_case.sh "$test_case"
 input="think"
 expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
 actual=$(./picket.sh $input 2>&1)
