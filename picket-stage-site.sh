@@ -42,6 +42,12 @@ all_project_root=~/code/gitwork
 siteNickname="$(picket-function-get-site-nickname-from-id $siteId)"
 project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
+does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
+if [[ $does_site_exist_in_database -eq 0 ]] ; then
+    echo "Site does not exist. Stopping."
+    exit 1
+fi
+
 echo
 echo staging site \"${siteId}\"
 picket-function-upload --inputDir "$project_root_directory" --siteId "$siteId" --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_throttle $argument_value_debug
