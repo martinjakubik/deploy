@@ -6,8 +6,8 @@ set local_binary_files_to_install picket-create-site picket picket-deploy-site p
 
 for local_executable_file_to_install in $local_binary_files_to_install
     if test -f $local_binary_files_to_install_source_parent_path/$local_executable_file_to_install
-        sudo cp $local_binary_files_to_install_source_parent_path/$local_executable_file_to_install /usr/local/bin/
-        sudo chmod +x /usr/local/bin/$local_executable_file_to_install
+        cp $local_binary_files_to_install_source_parent_path/$local_executable_file_to_install /usr/local/bin/
+        chmod +x /usr/local/bin/$local_executable_file_to_install
     end
 end
 
@@ -16,11 +16,11 @@ if test ! -d $HOME/.picket
 end
 
 set local_configuration_file_to_install $project_parent_path/site-canonical-source-code-files
-sudo cp $local_configuration_file_to_install $HOME/.picket/
+cp $local_configuration_file_to_install $HOME/.picket/
 
 set local_configuration_file_to_install $project_parent_path/site-canonical-binary-files
-sudo cp $local_configuration_file_to_install $HOME/.picket/
+cp $local_configuration_file_to_install $HOME/.picket/
 
 set local_configuration_file_to_install $project_parent_path/config.picket
-sudo cp $local_configuration_file_to_install /etc/picket/
-sudo cp $local_configuration_file_to_install $HOME/.picket/
+cp $local_configuration_file_to_install /etc/picket/
+cp $local_configuration_file_to_install $HOME/.picket/
