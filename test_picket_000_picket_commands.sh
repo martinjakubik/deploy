@@ -166,6 +166,24 @@ else
     echo
 fi
 
+test_case="command stage, valids site argument; user file too big"
+./setup_test_case.sh "$test_case"
+input="stage --siteId wxyz"
+expected="There is a problem with the user record. Use ''picket login --userId your_name'' to log in again."
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 test_case="command unstage, no arguments"
 echo case $test_case
 input="unstage"
