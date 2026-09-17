@@ -29,8 +29,8 @@ if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
     exit 1
 fi
 
-sudo touch "${file_listing_sites}".without_site
-sudo chmod a+w "${file_listing_sites}".without_site
+sudo touch "${file_listing_sites}".without_deleted_site
+sudo chmod a+w "${file_listing_sites}".without_deleted_site
 
 existing_site_array=()
 finished_reading_file=false
@@ -54,17 +54,17 @@ else
 		if [[ ! "$REPLY" =~ ^"${siteId}"$ && ! "$REPLY" =~ ^" *"$ ]] ; then
 			echo "$REPLY"
 		fi
-	done < "${file_listing_sites}" > "${file_listing_sites}".without_site
+	done < "${file_listing_sites}" > "${file_listing_sites}".without_deleted_site
 
 	echo "Really delete the site \'${siteId}\'?"
 	select strictreply in "Yes" "No"; do
 		relaxedreply=${strictreply:-$REPLY}
 		case $relaxedreply in
-			(Yes | yes | Y | y) echo "deleting site"; sudo mv "${file_listing_sites}".without_site "${file_listing_sites}"; break;;
-			(No  | no  | N | n) echo "site was not deleted"; sudo rm "${file_listing_sites}".without_site; exit 0;;
+			(Yes | yes | Y | y) echo "deleting site"; sudo mv "${file_listing_sites}".without_deleted_site "${file_listing_sites}"; break;;
+			(No  | no  | N | n) echo "site was not deleted"; sudo rm "${file_listing_sites}".without_deleted_site; exit 0;;
 		esac
 	done
-	
+
 fi
 
 exit 0
