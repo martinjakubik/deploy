@@ -64,7 +64,6 @@ else
 			(No  | no  | N | n) echo "app was not deleted"; sudo rm "${file_listing_apps}".without_deleted_app; exit 0;;
 		esac
 	done
-
 fi
 
 exit 0
