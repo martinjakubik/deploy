@@ -14,16 +14,34 @@ do
 		shift
 done
 
+is_list_for_single_site=0
 file_listing_apps=$HOME/.picket/apps.db/apps
+if [[ -n "${siteId}" ]] ; then
+    file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+    is_list_for_single_site=1
+fi
 parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
 
+if [[ $is_list_for_single_site -eq 1 ]] ; then
+    does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
+    if [[ $does_site_exist_in_database -eq 0 ]] ; then
+        echo "Site does not exist. Stopping."
+        exit 1
+    fi
+fi
+
+
 if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then
-    echo "no app database was found; check if $HOME/.picket/apps.db exists"
+    echo "no app database was found; check if $file_listing_apps exists"
     exit 1
 fi
 
 echo
-echo listing apps
+if [[ $is_list_for_single_site -eq 0 ]] ; then
+    echo "listing apps"
+else
+    echo "listing apps for site \"${siteId}\""
+fi
 echo
 
 existing_app_array=()
