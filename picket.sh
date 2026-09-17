@@ -15,7 +15,7 @@ case "$1" in
     (add-app) picket_command=add-app;;
     (activate-app) picket_command=activate-app;;
     (create-app) picket_command=create-app;;
-    (remove-app) picket_command=remove-app;;
+    (delete-app) picket_command=delete-app;;
 	(create-site) picket_command=create-site;;
 	(delete-site) picket_command=delete-site;;
 	(list-sites) picket_command=list-sites;;
@@ -84,8 +84,8 @@ case "${picket_command}" in
     (create-app)
         picket-create-app --appId "${appId}" $argument_value_debug
     ;;
-    (remove-app)
-        picket-remove-app --appId "${appId}" $argument_value_debug
+    (delete-app)
+        picket-delete-app --appId "${appId}" $argument_value_debug
     ;;
     (create-site)
         picket-create-site --siteId "${siteId}" $argument_value_debug
