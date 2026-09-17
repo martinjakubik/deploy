@@ -16,6 +16,7 @@ case "$1" in
     (activate-app) picket_command=activate-app;;
     (create-app) picket_command=create-app;;
     (delete-app) picket_command=delete-app;;
+    (list-apps) picket_command=list-apps;;
 	(create-site) picket_command=create-site;;
 	(delete-site) picket_command=delete-site;;
 	(list-sites) picket_command=list-sites;;
@@ -92,6 +93,9 @@ case "${picket_command}" in
     ;;
     (delete-site)
         picket-delete-site --siteId "${siteId}" $argument_value_debug
+    ;;
+    (list-apps)
+        picket-list-apps --siteId "${siteId}" $argument_value_debug
     ;;
     (list-sites)
         picket-list-sites $argument_value_debug
