@@ -12,6 +12,10 @@ picket_command=help
 case "$1" in
     (login) picket_command=login;;
     (logout) picket_command=logout;;
+    (add-app) picket_command=add-app;;
+    (activate-app) picket_command=activate-app;;
+    (create-app) picket_command=create-app;;
+    (remove-app) picket_command=remove-app;;
 	(create-site) picket_command=create-site;;
 	(delete-site) picket_command=delete-site;;
 	(list-sites) picket_command=list-sites;;
@@ -29,6 +33,8 @@ shift
 while [ $# -gt 0 ]
 do
     case "$1" in
+        (-a) appId="$2"; shift;;
+        (--appId) appId="$2"; shift;;
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
         (-u) userId="$2"; shift;;
@@ -68,6 +74,18 @@ case "${picket_command}" in
     ;;
     (logout)
         picket-logout $argument_value_debug
+    ;;
+    (activate-app)
+        picket-activate-app --siteId "${siteId}" --appId "${appId}" $argument_value_debug
+    ;;
+    (add-app)
+        picket-add-app --siteId "${siteId}" --appId "${appId}" $argument_value_debug
+    ;;
+    (create-app)
+        picket-create-app --appId "${appId}" $argument_value_debug
+    ;;
+    (remove-app)
+        picket-remove-app --appId "${appId}" $argument_value_debug
     ;;
     (create-site)
         picket-create-site --siteId "${siteId}" $argument_value_debug
