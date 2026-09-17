@@ -6,8 +6,6 @@ USAGE="usage: $0 -s|--siteId siteId"
 while [ $# -gt 0 ]
 do
 	case "$1" in
-        (-i) argument_value_project_root_directory="${2%\/}"; shift;;
-        (--inputDir) argument_value_project_root_directory="${2%\/}"; shift;;
 		(-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
         (--siteNickname) argument_value_siteNickname="$2"; shift;;
@@ -23,11 +21,6 @@ is_valid_site_id=false
 if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     echo site id is not valid, exiting
     exit 1
-fi
-
-project_root_directory="${siteId}"
-if [[ "${argument_value_project_root_directory}" ]] ; then
-    project_root_directory="${argument_value_project_root_directory}"
 fi
 
 siteNickname="${siteId}"
