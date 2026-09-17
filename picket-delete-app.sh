@@ -48,22 +48,35 @@ fi
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "app does not exist"
 else
-	finished_reading_file=false
-	until $finished_reading_file; do
-		read -r || finished_reading_file=true
-		if [[ ! "$REPLY" =~ ^"${appId}"$ && ! "$REPLY" =~ ^" *"$ ]] ; then
-			echo "$REPLY"
-		fi
-	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app
+    list_sites_hosting_app=()
+    while read entry; do
+        echo "entry: \"$entry\""
+        list_sites_hosting_app+="${entry}"
+    done < <(picket-function-list-sites-hosting-app --appId "${appId}")
 
-	echo "Really delete the app \'${appId}\'?"
-	select strictreply in "Yes" "No"; do
-		relaxedreply=${strictreply:-$REPLY}
-		case $relaxedreply in
-			(Yes | yes | Y | y) echo "deleting app"; sudo mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
-			(No  | no  | N | n) echo "app was not deleted"; sudo rm "${file_listing_apps}".without_deleted_app; exit 0;;
-		esac
-	done
+    echo "number of sites hosting app: \"${#list_sites_hosting_app[@]}\""
+
+    if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
+    	finished_reading_file=false
+    	until $finished_reading_file; do
+    		read -r || finished_reading_file=true
+    		if [[ ! "$REPLY" =~ ^"${appId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
+    			echo "$REPLY"
+    		fi
+    	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app
+
+    	echo "Really delete the app \'${appId}\'?"
+    	select strictreply in "Yes" "No"; do
+    		relaxedreply=${strictreply:-$REPLY}
+    		case $relaxedreply in
+    			(Yes | yes | Y | y) echo "deleting app"; sudo mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
+    			(No  | no  | N | n) echo "app was not deleted"; sudo rm "${file_listing_apps}".without_deleted_app; exit 0;;
+    		esac
+    	done
+    else
+         echo "Some sites still host this app. Use ''picket delete-app --siteId your_site'' to remove the app from those sites first."
+         exit 1
+    fi
 fi
 
 exit 0
