@@ -52,6 +52,7 @@ if [[ $does_app_exist_in_database -eq 0 ]] ; then
 else
     read -a list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
     if [[ $DEBUG -eq 1 ]] ; then echo "number of sites hosting app: \"${#list_sites_hosting_app[@]}\"" ; fi
+    echo $list_sites_hosting_app
 
     if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
     	finished_reading_file=false
