@@ -42,7 +42,7 @@ if [[ $does_site_exist_in_database -eq 0 ]] ; then
     exit 1
 fi
 
-echo adding app \"${appId}\" to site \"${siteId}\"
+echo "Adding app \"${appId}\" to site \"${siteId}\"."
 
 file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
 parent_path_to_file_listing_apps_in_site=$(dirname "${file_listing_apps_in_site}")

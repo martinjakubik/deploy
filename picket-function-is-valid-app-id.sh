@@ -22,7 +22,7 @@ do
 done
 
 if [[ ! "${appId}" ]] ; then
-    echo >&2 ${USAGE}
+    echo "app ID cannot be empty; exiting"
     exit 1
 fi
 

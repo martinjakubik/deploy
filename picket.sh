@@ -86,7 +86,11 @@ case "${picket_command}" in
         picket-create-app --appId "${appId}" $argument_value_debug
     ;;
     (delete-app)
-        picket-delete-app --appId "${appId}" $argument_value_debug
+        if [[ -n "${siteId}" ]] ; then
+            picket-delete-app --appId "${appId}" --siteId "${siteId}" $argument_value_debug
+        else
+            picket-delete-app --appId "${appId}" $argument_value_debug
+        fi
     ;;
     (create-site)
         picket-create-site --siteId "${siteId}" $argument_value_debug

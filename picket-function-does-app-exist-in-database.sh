@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -a|--appId appId"
+USAGE="usage: $0 -a|--appId appId -s|--siteId siteId -d|--debug"
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -8,6 +8,8 @@ do
 	case "$1" in
 		(-a) appId="$2"; shift;;
         (--appId) appId="$2"; shift;;
+        (-s) siteId="$2"; shift;;
+        (--siteId) siteId="$2"; shift;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
@@ -16,8 +18,17 @@ do
 		shift
 done
 
-file_listing_apps=$HOME/.picket/apps.db/apps
-parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
+is_site_selected=0
+if [[ -n "${siteId}" ]] ; then
+    is_site_selected=1
+fi
+
+file_listing_apps="$HOME/.picket/apps.db/apps"
+if [[ $is_site_selected -eq 1 ]] ; then
+    file_listing_apps="$HOME/.picket/sites.db/${siteId}"
+else
+    file_listing_apps="$HOME/.picket/apps.db/apps"
+fi
 
 existing_app_array=()
 finished_reading_file=false
