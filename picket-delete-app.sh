@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -a|--appId appId"
+USAGE="usage: $0 -a|--appId appId -d|--debug"
 
 unset appId
 
@@ -10,6 +10,8 @@ do
 	case "$1" in
 		(-a) appId="$2"; shift;;
         (--appId) appId="$2"; shift;;
+        (-d) DEBUG=1;;
+        (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
 		exit 1;;
 	esac
@@ -48,13 +50,8 @@ fi
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "app does not exist"
 else
-    list_sites_hosting_app=()
-    while read entry; do
-        echo "entry: \"$entry\""
-        list_sites_hosting_app+="${entry}"
-    done < <(picket-function-list-sites-hosting-app --appId "${appId}")
-
-    echo "number of sites hosting app: \"${#list_sites_hosting_app[@]}\""
+    read -a list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
+    if [[ $DEBUG -eq 1 ]] ; then echo "number of sites hosting app: \"${#list_sites_hosting_app[@]}\"" ; fi
 
     if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
     	finished_reading_file=false

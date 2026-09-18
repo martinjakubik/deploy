@@ -70,7 +70,7 @@ if [[ $does_app_exist_in_database -eq 1 ]] ; then
 else
     existing_app_in_site_array+="${appId}"
     echo -n > "${file_listing_apps_in_site}"
-    for existingAppId in $existing_app_in_site_array ; do
+    for existingAppId in ${existing_app_in_site_array[@]} ; do
         echo "${existingAppId}" >> "${file_listing_apps_in_site}"
     done
 fi
