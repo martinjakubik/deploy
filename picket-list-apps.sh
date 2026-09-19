@@ -32,15 +32,20 @@ fi
 
 
 if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then
-    echo "no app database was found; check if $file_listing_apps exists"
+    echo "No app database was found; check if $file_listing_apps exists."
     exit 1
 fi
 
 echo
 if [[ $is_list_for_single_site -eq 0 ]] ; then
-    echo "listing apps"
+    echo "Listing apps."
 else
-    echo "listing apps for site \"${siteId}\""
+    if [[ -f "${file_listing_apps}" ]] ; then
+        echo "Listing apps for site \"${siteId}\"."
+    else
+        echo "... 0 apps found."
+        exit 0
+    fi
 fi
 echo
 
@@ -68,9 +73,9 @@ done
 if [[ $app_count -gt 0 ]] ; then
     echo
     if [[ $app_count -eq 1 ]] ; then
-        echo "... 1 app found"
+        echo "... 1 app found."
     else
-        echo "... $app_count apps found"
+        echo "... $app_count apps found."
     fi
 fi
 
