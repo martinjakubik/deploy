@@ -20,13 +20,13 @@ done
 
 is_valid_app_id=false
 if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
-    echo app id is not valid, exiting
+    echo "App id is not valid, exiting."
     exit 1
 fi
 
 is_valid_site_id=false
 if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
-    echo site id is not valid, exiting
+    echo "Site id is not valid, exiting."
     exit 1
 fi
 
