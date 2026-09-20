@@ -44,6 +44,26 @@ fi
 
 echo "Adding app \"${appId}\" to site \"${siteId}\"."
 
+ensure_directory_exists_for_file() {
+    full_path_to_filename_to_check="$1"
+
+    targetDirectory=$(dirname "${full_path_to_filename_to_check}")
+    if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${targetDirectory}" ; then
+        is_directory_found=1
+    else
+        is_directory_found=0
+    fi
+
+    if [[ ! $is_directory_found -eq 1 ]]; then
+        if [[ $DEBUG -eq 0 ]] ; then
+            if [[ ! -d "${targetDirectory}" ]] ; then mkdir -p "${targetDirectory}" ; fi
+        elif [[ $DEBUG -eq 1 ]] ; then
+            if [[ ! -d "${targetDirectory}" ]] ; then echo "creating directory ${targetDirectory}" ; fi
+        fi
+        existing_directory_array+=("$targetDirectory")
+    fi
+}
+
 file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
 
 if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
@@ -84,7 +104,8 @@ else
     fi
     for app_file in "${app_file_array[@]}" ; do
         if [[ -n "${app_file}" ]] ; then
-            cp "${app_file}" "${site_project_root}/site/apps/${appId}/app/"
+            ensure_directory_exists_for_file "${app_file}"
+            cp "${app_project_root_directory}/app/${app_file}" "${site_project_root}/site/apps/${appId}/app/"
         fi
     done
     existing_app_in_site_array+=" ${appId}"
