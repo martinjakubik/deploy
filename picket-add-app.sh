@@ -104,7 +104,7 @@ else
     fi
     for app_file in "${app_file_array[@]}" ; do
         if [[ -n "${app_file}" ]] ; then
-            ensure_directory_exists_for_file "${app_file}"
+            ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app/${app_file}"
             cp "${app_project_root_directory}/app/${app_file}" "${site_project_root}/site/apps/${appId}/app/"
         fi
     done
