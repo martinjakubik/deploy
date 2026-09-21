@@ -126,6 +126,7 @@ else
             copy_file_from_source_to_destination "${app_file}" "${app_project_root_directory}/app/" "${site_project_root}/site/apps/${appId}/app/"
         fi
     done
+
     existing_app_in_site_array+=" ${appId}"
     echo -n > "${file_listing_apps_in_site}"
     for existingAppId in ${existing_app_in_site_array[@]} ; do
