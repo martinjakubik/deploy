@@ -45,6 +45,7 @@ fi
 echo "Adding app \"${appId}\" to site \"${siteId}\"."
 
 all_project_root=~/code/gitwork
+site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
 
 ensure_directory_exists_for_file() {
     full_path_to_filename_to_check="$1"
@@ -93,7 +94,6 @@ copy_app_files_to_site() {
         app_file_array+=("${REPLY/\\n/}")
     done < "$file_listing_files_to_add"
 
-    site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
     if [[ ! -d "${site_project_root}/site/apps/${appId}/app" ]] ; then
         mkdir -p "${site_project_root}/site/apps/${appId}/app"
     fi
@@ -130,6 +130,9 @@ if [[ $does_app_exist_in_database -eq 1 ]] ; then
 else
     app_project_root_directory="${all_project_root}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
 
+    ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app"
+    cp "${app_project_root_directory}/${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/"
+    cp "${app_project_root_directory}/${appId}-custom-binary-files" "${site_project_root}/site/apps/${appId}/"
     copy_app_files_to_site  ~/.picket/app-canonical-source-code-files
     copy_app_files_to_site  ~/.picket/app-canonical-binary-files
     copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-source-code-files
