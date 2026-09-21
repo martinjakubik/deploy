@@ -64,6 +64,24 @@ ensure_directory_exists_for_file() {
     fi
 }
 
+copy_file_from_source_to_destination() {
+    path_of_file="$1"
+    source_directory="$2"
+    destination_directory="$3"
+    can_copy=1
+    if [[ ! -f "${app_project_root_directory}/app/${path_of_file}" ]] ; then
+        echo >&2 "While copying app file, there is no file to copy at \"${app_project_root_directory}/app/${path_of_file}\"."
+        can_copy=0
+    fi
+    if [[ ! -d "${site_project_root}/site/apps/${appId}/app/" ]] ; then
+        echo >&2 "While copying app file, there is no destination directory at \"${site_project_root}/site/apps/${appId}/app/\"."
+        can_copy=0
+    fi
+    if [[ $can_copy -eq 1 ]] ; then
+        cp "${app_project_root_directory}/app/${path_of_file}" "${site_project_root}/site/apps/${appId}/app/${path_of_file}"
+    fi
+}
+
 file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
 
 if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
@@ -105,7 +123,7 @@ else
     for app_file in "${app_file_array[@]}" ; do
         if [[ -n "${app_file}" ]] ; then
             ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app/${app_file}"
-            cp "${app_project_root_directory}/app/${app_file}" "${site_project_root}/site/apps/${appId}/app/"
+            copy_file_from_source_to_destination "${app_file}" "${app_project_root_directory}/app/" "${site_project_root}/site/apps/${appId}/app/"
         fi
     done
     existing_app_in_site_array+=" ${appId}"
