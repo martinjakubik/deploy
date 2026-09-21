@@ -261,14 +261,22 @@ if [[ $DEBUG -eq 0 ]] ; then
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
     if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
 
-    apps=()
-    if [[ $siteId = "stitle" ]] ; then
-        apps+="cv"
-    fi
-    for app in "${apps[@]}" ; do
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}/${app}"-custom-source-code-files
-        scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
-        upload_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
+    file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+    existing_app_array=()
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        if [[ -n "$REPLY" ]] ; then
+            existing_app_array+=("$REPLY")
+        fi
+    done < "${file_listing_apps}"
+
+    for appId in "${existing_app_array[@]}" ; do
+        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${appId}/${appId}"-custom-source-code-files
+        scp "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
+        scp "${project_root_directory}"/site/apps/"${appId}"/"${app}"-custom-binary-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
+        upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
+        upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${appId}"
         if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
     done
 
@@ -303,10 +311,20 @@ else
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
-    apps=()
-    apps+="cv"
-    for app in "${apps[@]}" ; do
-        echo "scp ${project_root_directory}/${app}-custom-source-code-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${app}/"
-        upload_listed_files "${project_root_directory}"/"${app}"-custom-source-code-files ${app}
+    file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+    existing_app_array=()
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        if [[ -n "$REPLY" ]] ; then
+            existing_app_array+=("$REPLY")
+        fi
+    done < "${file_listing_apps}"
+
+    for appId in "${existing_app_array[@]}" ; do
+        echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-source-code-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}/"
+        echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-binary-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}"
+        upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files ${appId}
+        upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files ${appId}
     done
 fi
