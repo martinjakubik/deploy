@@ -21,6 +21,12 @@ cp $local_configuration_file_to_install $HOME/.picket/
 set local_configuration_file_to_install $project_parent_path/site-canonical-binary-files
 cp $local_configuration_file_to_install $HOME/.picket/
 
+set local_configuration_file_to_install $project_parent_path/app-canonical-source-code-files
+cp $local_configuration_file_to_install $HOME/.picket/
+
+set local_configuration_file_to_install $project_parent_path/app-canonical-binary-files
+cp $local_configuration_file_to_install $HOME/.picket/
+
 set local_configuration_file_to_install $project_parent_path/config.picket
 cp $local_configuration_file_to_install /etc/picket/
 cp $local_configuration_file_to_install $HOME/.picket/

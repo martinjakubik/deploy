@@ -44,6 +44,8 @@ fi
 
 echo "Adding app \"${appId}\" to site \"${siteId}\"."
 
+all_project_root=~/code/gitwork
+
 ensure_directory_exists_for_file() {
     full_path_to_filename_to_check="$1"
 
@@ -82,6 +84,27 @@ copy_file_from_source_to_destination() {
     fi
 }
 
+copy_app_files_to_site() {
+    file_listing_files_to_add="$1"
+    app_file_array=()
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        app_file_array+=("${REPLY/\\n/}")
+    done < "$file_listing_files_to_add"
+
+    site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
+    if [[ ! -d "${site_project_root}/site/apps/${appId}/app" ]] ; then
+        mkdir -p "${site_project_root}/site/apps/${appId}/app"
+    fi
+    for app_file in "${app_file_array[@]}" ; do
+        if [[ -n "${app_file}" ]] ; then
+            ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app/${app_file}"
+            copy_file_from_source_to_destination "${app_file}" "${app_project_root_directory}/app/" "${site_project_root}/site/apps/${appId}/app/"
+        fi
+    done
+}
+
 file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
 
 if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
@@ -105,27 +128,12 @@ if [[ $does_app_exist_in_database -eq 1 ]] ; then
     echo "App already exists in site. Stopping."
     exit 1
 else
-    all_project_root=~/code/gitwork
     app_project_root_directory="${all_project_root}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
-    file_listing_files_to_add="${app_project_root_directory}"/"${appId}"-custom-source-code-files
 
-    app_file_array=()
-    finished_reading_file=false
-    until $finished_reading_file; do
-        read -r || finished_reading_file=true
-        app_file_array+=("${REPLY/\\n/}")
-    done < "$file_listing_files_to_add"
-
-    site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
-    if [[ ! -d "${site_project_root}/site/apps/${appId}/app" ]] ; then
-        mkdir -p "${site_project_root}/site/apps/${appId}/app"
-    fi
-    for app_file in "${app_file_array[@]}" ; do
-        if [[ -n "${app_file}" ]] ; then
-            ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app/${app_file}"
-            copy_file_from_source_to_destination "${app_file}" "${app_project_root_directory}/app/" "${site_project_root}/site/apps/${appId}/app/"
-        fi
-    done
+    copy_app_files_to_site  ~/.picket/app-canonical-source-code-files
+    copy_app_files_to_site  ~/.picket/app-canonical-binary-files
+    copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-source-code-files
+    copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-binary-files
 
     existing_app_in_site_array+=" ${appId}"
     echo -n > "${file_listing_apps_in_site}"

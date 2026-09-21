@@ -15,6 +15,8 @@ end
 
 cp "$project_parent_path"/site-canonical-source-code-files "$project_parent_path"/build/
 cp "$project_parent_path"/site-canonical-binary-files "$project_parent_path"/build/
+cp "$project_parent_path"/app-canonical-source-code-files "$project_parent_path"/build/
+cp "$project_parent_path"/app-canonical-binary-files "$project_parent_path"/build/
 
 set local_template_files_to_build background.png favicon.png index.html logo.png screen.css robots.txt title.png
 for local_template_file_to_build in $local_template_files_to_build
