@@ -145,20 +145,20 @@ upload_listed_files() {
                 remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
             fi
             if [[ -f "$local_filename" ]] ; then
+                if [[ $DEBUG -eq 1 ]] ; then echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename" ;  fi
+
                 ensure_directory_exists_for_file "${remote_full_path_to_file}"
                 scp_upload_command+=" $local_filename"
-                if [[ $DEBUG -eq 1 ]] ; then echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename" ;  fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
-                if [[ $DEBUG -eq 1 ]] ; then
-                    echo $upload_count files added to upload command $upload_count_in_set files added in set
-                fi
+
+                if [[ $DEBUG -eq 1 ]] ; then echo $upload_count files added to upload command $upload_count_in_set files added in set ; fi
+
+                # once max number of files is reached, saves the current scp_upload_command in an array scp_command_array, and starts a new one
                 if [[ $upload_count_in_set -gt $max_upload_count_before_throttle ]] ; then
-                    # once max number of files is reached, saves the current scp_upload_command in an array scp_command_array, and starts a new one
                     scp_upload_command+=" ${remote_destination_directory}/"
-                    if [[ $DEBUG -eq 1 ]] ; then
-                        echo "adding command $scp_upload_command to array"
-                    fi
+                    if [[ $DEBUG -eq 1 ]] ; then echo "adding command $scp_upload_command to array" ; fi
+
                     scp_command_array+=("$scp_upload_command")
                     scp_upload_command="scp "
                     upload_count_in_set=0
