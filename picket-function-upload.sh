@@ -140,12 +140,13 @@ upload_listed_files() {
         for filename in "${file_array[@]}" ; do
             local_filename="${site_distribution_dir}"/"$filename"
             remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/"${filename}"
-            path_to_current_file="$(dirname $filename)"
+            path_to_current_file=""
             if [[ -n "$app" ]] ; then
                 local_filename="${site_distribution_dir}/apps/${app}/app/${filename}"
                 remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
             fi
-            if [[ -f "$local_filename" ]] ; then
+            if [[ -n "${filename}" && -f "$local_filename" ]] ; then
+                path_to_current_file="$(dirname $filename)"
                 if [[ $DEBUG -eq 1 ]] ; then echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename" ;  fi
 
                 ensure_directory_exists_for_file "${remote_full_path_to_file}"
@@ -175,7 +176,7 @@ upload_listed_files() {
                     upload_count_in_set=1
                 fi
             else
-                echo the file: "$local_filename" does not exist
+                echo the file: \""$filename"\" does not exist
             fi
             path_to_previous_file="${path_to_current_file}"
         done
@@ -189,15 +190,19 @@ upload_listed_files() {
 
         # loops through the scp upload commands
         if [[ $DEBUG -eq 1 ]] ; then echo "running all upload commands" ; fi
-        for scp_upload_command in "${scp_command_array[@]}" ; do
-            if [[ $DEBUG -eq 1 ]] ; then
-                echo "$scp_upload_command"
-            else
-                eval "$scp_upload_command"
-            fi
-        done
+        if [[ "${#scp_command_array[@]}" -gt 0 ]] ; then
+            for scp_upload_command in "${scp_command_array[@]}" ; do
+                if [[ $DEBUG -eq 1 ]] ; then
+                    echo "$scp_upload_command"
+                else
+                    eval "$scp_upload_command"
+                fi
+            done
+        else
+            echo "... There were no upload commands to run."
+        fi
     else
-        echo "the list of files $file_listing_files_to_upload does not exist"
+        echo "The list of files \"$file_listing_files_to_upload\" does not exist."
     fi
     echo "--------------------------------------------------------------------------------"
     echo ... done
