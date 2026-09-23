@@ -144,14 +144,10 @@ upload_listed_files() {
                 local_filename="${site_distribution_dir}/apps/${app}/app/${filename}"
                 remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
             fi
-            if [[ -e "$local_filename" && -f "$local_filename" ]] ; then
+            if [[ -f "$local_filename" ]] ; then
                 ensure_directory_exists_for_file "${remote_full_path_to_file}"
-                if [[ $DEBUG -eq 0 ]] ; then
-                    scp_upload_command+=" $local_filename"
-                else
-                    echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename"
-                    scp_upload_command+=" $local_filename"
-                fi
+                scp_upload_command+=" $local_filename"
+                if [[ $DEBUG -eq 1 ]] ; then echo adding upload command for "$local_filename" to "${remote_destination_directory}"/"$filename" ;  fi
                 upload_count=$(( upload_count+1 ))
                 upload_count_in_set=$(( upload_count_in_set+1 ))
                 if [[ $DEBUG -eq 1 ]] ; then
@@ -174,20 +170,16 @@ upload_listed_files() {
 
         # adds the last upload command if there is one
         scp_upload_command+=" ${remote_destination_directory}/"
-        if [[ $DEBUG -eq 1 ]] ; then
-            echo "adding command $scp_upload_command to array"
-        fi
+        if [[ $DEBUG -eq 1 ]] ; then echo "adding command $scp_upload_command to array" ; fi
         scp_command_array+=("$scp_upload_command")
 
         # loops through the scp upload commands
-        if [[ $DEBUG -eq 1 ]] ; then
-            echo "running all upload commands"
-        fi
+        if [[ $DEBUG -eq 1 ]] ; then echo "running all upload commands" ; fi
         for scp_upload_command in "${scp_command_array[@]}" ; do
-            if [[ $DEBUG -eq 0 ]] ; then
-                eval "$scp_upload_command"
-            else
+            if [[ $DEBUG -eq 1 ]] ; then
                 echo "$scp_upload_command"
+            else
+                eval "$scp_upload_command"
             fi
         done
     else
