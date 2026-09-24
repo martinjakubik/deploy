@@ -10,7 +10,7 @@ siteId=abcd
 siteNickname=abcdhome
 destinationDir=~/destinationDir
 incremental=0
-max_upload_count_before_throttle=4
+max_upload_count_before_throttle=5
 throttle_sleep_time_between_uploads=10s
 
 # parses and reads command line arguments
