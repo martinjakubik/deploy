@@ -56,7 +56,7 @@ else
     DESTINATION_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${SITE_STAGING_DIR_ROOT}"
 fi
 DESTINATION_DIR_WITH_USER_AND_IP_SITE="${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/site
-site_distribution_dir="${project_root_directory%/}"/site
+local_site_distribution_directory="${project_root_directory%/}"/site
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list="${project_root_directory%\/}"/site-canonical-source-code-files
@@ -80,7 +80,7 @@ echo ---------------------------------------------------------------------------
 echo script: $0
 echo you entered values
 echo   "From project root dir       : ${project_root_directory}"
-echo   "and site distribution dir   : ${site_distribution_dir}"
+echo   "and site distribution dir   : ${local_site_distribution_directory}"
 echo   "To                          : ${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"
 echo   "site ID                     : ${siteId}"
 echo   "site nickname               : ${siteNickname}"
@@ -112,8 +112,8 @@ ensure_directory_exists_for_file() {
 }
 
 add_file_to_current_scp_command() {
-    ensure_directory_exists_for_file "${remote_full_path_to_file}"
-    scp_upload_command+=" $local_filename"
+    ensure_directory_exists_for_file "${full_path_to_remote_file}"
+    scp_upload_command+=" $full_path_to_local_file"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=$(( upload_count_in_set+1 ))
     if [[ $DEBUG -eq 1 ]] ; then echo $upload_count files added to upload command $upload_count_in_set files added in set ; fi
@@ -128,8 +128,8 @@ finish_scp_command_and_add_file_to_new_scp_command() {
         elif [[ $DEBUG -eq 1 ]] ; then echo "adding previous command $scp_upload_command to array" ; fi
         scp_command_array+=("$scp_upload_command")
     fi
-    ensure_directory_exists_for_file "${remote_full_path_to_file}"
-    scp_upload_command="scp ${local_filename}"
+    ensure_directory_exists_for_file "${full_path_to_remote_file}"
+    scp_upload_command="scp ${full_path_to_local_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=1
     if [[ $DEBUG -eq 1 ]] ; then echo $upload_count files added to upload command $upload_count_in_set files added in set ; fi
@@ -162,17 +162,17 @@ upload_listed_files() {
         scp_command_array=()
         scp_upload_command="scp "
         path_to_previous_file=""
-        for filename in "${file_array[@]}" ; do
-            local_filename="${site_distribution_dir}"/"$filename"
-            remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/"${filename}"
+        for short_path_to_file in "${file_array[@]}" ; do
+            full_path_to_local_file="${local_site_distribution_directory}"/"${short_path_to_file}"
+            full_path_to_remote_file="${SITE_STAGING_DIR_ROOT}"/site/"${short_path_to_file}"
             path_to_current_file=""
             if [[ -n "$app" ]] ; then
-                local_filename="${site_distribution_dir}/apps/${app}/app/${filename}"
-                remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${filename}"
+                full_path_to_local_file="${local_site_distribution_directory}/apps/${app}/app/${short_path_to_file}"
+                full_path_to_remote_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${short_path_to_file}"
             fi
-            if [[ -n "${filename}" && -f "$local_filename" ]] ; then
-                path_to_current_file="$(dirname $filename)"
-                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "adding upload command for \""${filename}"\"" ; echo ; fi
+            if [[ -n "${short_path_to_file}" && -f "$full_path_to_local_file" ]] ; then
+                path_to_current_file="$(dirname $short_path_to_file)"
+                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "adding upload command for \""${short_path_to_file}"\"" ; echo ; fi
 
                 if [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
                     add_file_to_current_scp_command;
@@ -184,7 +184,7 @@ upload_listed_files() {
                     finish_scp_command_and_add_file_to_new_scp_command "directory_changed" ;
                 fi
             else
-                echo the file: \""$filename"\" does not exist
+                echo the file: \""$short_path_to_file"\" does not exist
             fi
             path_to_previous_file="${path_to_current_file}"
         done
@@ -246,12 +246,12 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # uploads content to the library directory
-    if [[ -d "${site_distribution_dir}"/lib ]] ; then
-        find "${site_distribution_dir}"/lib -name .DS_Store -delete
+    if [[ -d "${local_site_distribution_directory}"/lib ]] ; then
+        find "${local_site_distribution_directory}"/lib -name .DS_Store -delete
         echo
         echo "uploading site library files"
         echo "--------------------------------------------------------------------------------"
-        scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+        scp -r "${local_site_distribution_directory}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
         echo "--------------------------------------------------------------------------------"
         echo ... done
         echo
@@ -317,9 +317,9 @@ else
     fi
 
     # debugs upload of the library directory
-    if [[ -d "${site_distribution_dir}"/lib ]] ; then
-        find "${site_distribution_dir}"/lib -name .DS_Store
-        echo scp -r "${site_distribution_dir}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
+    if [[ -d "${local_site_distribution_directory}"/lib ]] ; then
+        find "${local_site_distribution_directory}"/lib -name .DS_Store
+        echo scp -r "${local_site_distribution_directory}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # debugs upload of the project's npm package description

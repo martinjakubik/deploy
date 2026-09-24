@@ -123,9 +123,9 @@ if [[ $DEBUG -eq 0 ]] ; then
     fi
 
     # deletes content from the library directory
-    if [[ -d "${site_distribution_dir}"/lib ]] ; then
-        find "${site_distribution_dir}"/lib -name .DS_Store -delete
-        # scp -r "${site_distribution_dir}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
+    if [[ -d "${local_site_distribution_directory}"/lib ]] ; then
+        find "${local_site_distribution_directory}"/lib -name .DS_Store -delete
+        # scp -r "${local_site_distribution_directory}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # deletes the project's npm package description
@@ -155,9 +155,9 @@ if [[ $DEBUG -eq 0 ]] ; then
     ssh ${userId}@${ipAddress} "rm ${SITE_STAGING_DIR_ROOT}/all_files_uploaded"
 else
     # debugs delete of the library directory
-    if [[ -d "${site_distribution_dir}"/lib ]] ; then
-        find "${site_distribution_dir}"/lib -name .DS_Store
-        echo scp -r "${site_distribution_dir}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
+    if [[ -d "${local_site_distribution_directory}"/lib ]] ; then
+        find "${local_site_distribution_directory}"/lib -name .DS_Store
+        echo scp -r "${local_site_distribution_directory}"/lib "${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 
     # debugs delete of the project's npm package description

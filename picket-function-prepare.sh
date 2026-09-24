@@ -25,7 +25,7 @@ do
   shift
 done
 
-site_distribution_directory="${project_root_directory%\/}"/site
+local_site_distribution_directory="${project_root_directory%\/}"/site
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list="${project_root_directory%\/}"/site-canonical-source-code-files
@@ -85,17 +85,17 @@ build_listed_files() {
         for filename in "${file_array[@]}" ; do
             requested_filename="${project_root_directory}"/"${parent_dir}"/"$filename"
             if [[ -f "$requested_filename" ]] ; then
-                if [[ ! -d "${site_distribution_directory}" ]] ; then
-                    mkdir "${site_distribution_directory}"
+                if [[ ! -d "${local_site_distribution_directory}" ]] ; then
+                    mkdir "${local_site_distribution_directory}"
                 fi
-                cp "${requested_filename}" "${site_distribution_directory}"/
+                cp "${requested_filename}" "${local_site_distribution_directory}"/
             elif [[ ! -f "$requested_filename" && "$canonical_or_custom" = "canonical" ]] ; then
                 requested_filename=/etc/picket/"$filename"
                 if [[ -f "$requested_filename" ]] ; then
-                    if [[ ! -d "${site_distribution_directory}" ]] ; then
-                        mkdir "${site_distribution_directory}"
+                    if [[ ! -d "${local_site_distribution_directory}" ]] ; then
+                        mkdir "${local_site_distribution_directory}"
                     fi
-                    cp "${requested_filename}" "${site_distribution_directory}"/
+                    cp "${requested_filename}" "${local_site_distribution_directory}"/
                 else
                     if [[ ! -d "$requested_filename" ]] ; then
                         echo the file: "$requested_filename" does not exist
