@@ -4,7 +4,7 @@ USAGE="usage: $0 -i|--inputDir project_root_directory -s|--siteId siteId --siteN
 
 # sets up defaults
 DEBUG=0
-THROTTLE=0
+THROTTLE=1
 project_root_directory=~/project_root_directory
 siteId=abcd
 siteNickname=abcdhome
