@@ -124,7 +124,8 @@ finish_scp_command_and_add_file_to_new_scp_command() {
         scp_upload_command+=" ${remote_destination_directory}/"
         if [[ -n "${path_to_previous_file}" ]] ; then echo "appending path to previous file \"${path_to_previous_file}\" to command" ; scp_upload_command+="${path_to_previous_file}/" ; fi
         if [[ $DEBUG -eq 1 && "$1" = "max_count_reached" ]] ; then echo "maximum count reached; adding previous command $scp_upload_command to array" ;
-        elif [[ $DEBUG -eq 1 && "$1" = "directory_changed" ]] ; then echo "directory changed; adding previous command $scp_upload_command to array" ; fi
+        elif [[ $DEBUG -eq 1 && "$1" = "directory_changed" ]] ; then echo "directory changed; adding previous command $scp_upload_command to array" ;
+        elif [[ $DEBUG -eq 1 ]] ; then echo "adding previous command $scp_upload_command to array" ; fi
         scp_command_array+=("$scp_upload_command")
     fi
     ensure_directory_exists_for_file "${remote_full_path_to_file}"
