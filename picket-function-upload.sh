@@ -137,6 +137,7 @@ upload_listed_files() {
         # constructs upload commands for all of the files listed in the file
         scp_command_array=()
         scp_upload_command="scp "
+        path_to_previous_file=""
         for filename in "${file_array[@]}" ; do
             local_filename="${site_distribution_dir}"/"$filename"
             remote_full_path_to_file="${SITE_STAGING_DIR_ROOT}"/site/"${filename}"
@@ -191,12 +192,16 @@ upload_listed_files() {
         # loops through the scp upload commands
         if [[ $DEBUG -eq 1 ]] ; then echo "running all upload commands" ; fi
         if [[ "${#scp_command_array[@]}" -gt 0 ]] ; then
+            upload_run_count=0
             for scp_upload_command in "${scp_command_array[@]}" ; do
                 if [[ $DEBUG -eq 1 ]] ; then
                     echo "$scp_upload_command"
+                    if [[ $THROTTLE -eq 1 && upload_run_count -gt $max_upload_count_before_throttle ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; upload_run_count=0 ; fi
                 else
                     eval "$scp_upload_command"
+                    if [[ $THROTTLE -eq 1 && upload_run_count -gt $max_upload_count_before_throttle ]] ; then sleep $throttle_sleep_time_between_uploads ; upload_run_count=0 ; fi
                 fi
+                upload_run_count=$(( upload_run_count+1 ))
             done
         else
             echo "... There were no upload commands to run."
