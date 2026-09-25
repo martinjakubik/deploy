@@ -5,6 +5,7 @@ USAGE="usage: $0 -s|--siteId siteId -u|--userId userId --ip ipAddress -c|--incre
 # set up defaults
 incremental=0
 DEBUG=0
+max_install_count_before_throttle=20
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -106,14 +107,34 @@ ensure_directory_exists_for_file() {
 }
 
 print_command_to_move_single_file_from_staging_to_live () {
-    single_file="$1"
+    short_path_to_file="$1"
     staging_directory="${SITE_STAGING_DIR_SITE}"
     live_directory="${site_hypertext_directory}"
+    path_to_current_file="$(dirname $short_path_to_file)"
     if [[ -n "$2" && -n "$3" ]] ; then
         staging_directory="$2"
         live_directory="$3"
     fi
-    echo "cp ${staging_directory}/${single_file} ${live_directory}/ ; rm ${staging_directory}/${single_file} ;"
+    echo "cp ${staging_directory}/${short_path_to_file} ${live_directory}/${path_to_current_file} ; rm ${staging_directory}/${short_path_to_file} ;"
+}
+
+add_file_to_current_scp_command() {
+    ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${short_path_to_file} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
+    install_count=$(( install_count+1 ))
+    install_count_in_set=$(( install_count_in_set+1 ))
+}
+
+run_scp_command_and_add_file_to_new_scp_command() {
+    if [[ $install_count -gt 0 ]] ; then
+        if [[ $DEBUG -eq 0 ]] ; then
+            ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+        else
+            echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+        fi
+    fi
+    ssh_install_command=""
+    install_count=$(( install_count+1 ))
+    install_count_in_set=1
 }
 
 install_listed_files () {
@@ -130,6 +151,8 @@ install_listed_files () {
     echo
     echo "installing files listed in $file_listing_files_to_install"
     echo "--------------------------------------------------------------------------------"
+    install_count=0
+    install_count_in_set=0
     if [[ -e "$file_listing_files_to_install" ]] ; then
         file_array=()
 
@@ -140,17 +163,21 @@ install_listed_files () {
         done < "$file_listing_files_to_install"
 
         ssh_install_command=""
-        for filename in "${file_array[@]}" ; do
-            if [[ -n "${filename}" ]] ; then
-                ensure_directory_exists_for_file "${path_to_file_in_site_live_directory}"/"${filename}"
-                ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${filename} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
+        for short_path_to_file in "${file_array[@]}" ; do
+            if [[ -n "${short_path_to_file}" ]] ; then
+                ensure_directory_exists_for_file "${path_to_file_in_site_live_directory}"/"${short_path_to_file}"
+                if [[ $upload_count_in_set -lt $max_install_count_before_throttle ]] ; then
+                    add_file_to_current_scp_command;
+                elif [[ $upload_count_in_set -ge $max_install_count_before_throttle ]] ; then
+                    run_scp_command_and_add_file_to_new_scp_command "max_count_reached" ;
+                fi
             fi
         done
 
-        if [[ $DEBUG -eq 0 ]] ; then
-            ssh -t ${userId}@${ipAddress} "$ssh_install_command"
-        else
-            echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
+        # adds the last install command if there is one
+        if [[ install_count_in_set -gt 0 ]] ; then
+            if [[ $DEBUG -eq 1 ]] ; then echo "running leftover command $scp_install_command" ; fi
+            run_scp_command_and_add_file_to_new_scp_command "leftover" ;
         fi
     else
         echo "the list of files $file_listing_files_to_install does not exist"
