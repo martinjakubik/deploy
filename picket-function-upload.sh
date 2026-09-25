@@ -76,6 +76,18 @@ elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
+does_app_canonical_source_code_file_list_exist=0
+if [[ -f $HOME/.picket/app-canonical-source-code-files ]] ; then
+    does_app_canonical_source_code_file_list_exist=1
+    app_canonical_source_code_file_list=$HOME/.picket/app-canonical-source-code-files
+fi
+
+does_app_canonical_binary_file_list_exist=0
+if [[ -f $HOME/.picket/app-canonical-binary-files ]] ; then
+    does_app_canonical_binary_file_list_exist=1
+    app_canonical_binary_file_list=$HOME/.picket/app-canonical-binary-files
+fi
+
 echo --------------------------------------------------------------------------------
 echo script: $0
 echo you entered values
@@ -347,6 +359,8 @@ else
     for appId in "${existing_app_array[@]}" ; do
         echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-source-code-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}/"
         echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-binary-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}"
+        upload_listed_files "${app_canonical_source_code_file_list}" ${appId}
+        upload_listed_files "${app_canonical_binary_file_list}" ${appId}
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files ${appId}
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files ${appId}
     done
