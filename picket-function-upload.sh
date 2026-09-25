@@ -58,21 +58,21 @@ fi
 DESTINATION_DIR_WITH_USER_AND_IP_SITE="${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/site
 local_site_distribution_directory="${project_root_directory%/}"/site
 
-does_canonical_source_code_file_list_exist=0
+does_site_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list="${project_root_directory%\/}"/site-canonical-source-code-files
 if [[ -f "${site_canonical_source_code_file_list}" ]] ; then
-    does_canonical_source_code_file_list_exist=1
+    does_site_canonical_source_code_file_list_exist=1
 elif [[ -f $HOME/.picket/site-canonical-source-code-files ]] ; then
-    does_canonical_source_code_file_list_exist=1
+    does_site_canonical_source_code_file_list_exist=1
     site_canonical_source_code_file_list=$HOME/.picket/site-canonical-source-code-files
 fi
 
-does_canonical_binary_file_list_exist=0
+does_site_canonical_binary_file_list_exist=0
 site_canonical_binary_file_list="${project_root_directory%\/}"/site-canonical-binary-files
 if [[ -f "${site_canonical_binary_file_list}" ]] ; then
-    does_canonical_binary_file_list_exist=1
+    does_site_canonical_binary_file_list_exist=1
 elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
-    does_canonical_binary_file_list_exist=1
+    does_site_canonical_binary_file_list_exist=1
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
