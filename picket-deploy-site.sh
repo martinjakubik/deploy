@@ -66,7 +66,7 @@ project_root_directory="${all_project_root}"/"$(picket-function-get-site-project
 
 LIVE_DIR=/var/www
 sitePackageRootDirectory="${LIVE_DIR}"/"${siteName}"
-siteHypertextDirectory="${sitePackageRootDirectory}"/htdocs
+site_hypertext_directory="${sitePackageRootDirectory}"/htdocs
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files
@@ -108,7 +108,7 @@ ensure_directory_exists_for_file() {
 print_command_to_move_single_file_from_staging_to_live () {
     single_file="$1"
     staging_directory="${SITE_STAGING_DIR_SITE}"
-    live_directory="${siteHypertextDirectory}"
+    live_directory="${site_hypertext_directory}"
     if [[ -n "$2" && -n "$3" ]] ; then
         staging_directory="$2"
         live_directory="$3"
@@ -119,12 +119,12 @@ print_command_to_move_single_file_from_staging_to_live () {
 install_listed_files () {
     file_listing_files_to_install="$1"
     path_to_file_in_site_staging_directory="${SITE_STAGING_DIR_SITE}"
-    path_to_file_in_site_live_directory="${siteHypertextDirectory}"
+    path_to_file_in_site_live_directory="${site_hypertext_directory}"
     app=""
     if [[ -n "$2" ]] ; then
         app="$2"
         path_to_file_in_site_staging_directory="$SITE_STAGING_DIR_SITE/apps/$app/app"
-        path_to_file_in_site_live_directory="$siteHypertextDirectory/apps/$app/app"
+        path_to_file_in_site_live_directory="$site_hypertext_directory/apps/$app/app"
     fi
 
     echo
@@ -167,9 +167,9 @@ clean_install_site_canonical_files () {
 		ssh_make_directory_command="sudo mkdir ${sitePackageRootDirectory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command
-	if [[ ! -d "${siteHypertextDirectory}" ]] ; then
-		echo "${siteHypertextDirectory} does not exist; creating it."
-		ssh_make_directory_command="sudo mkdir ${siteHypertextDirectory}"
+	if [[ ! -d "${site_hypertext_directory}" ]] ; then
+		echo "${site_hypertext_directory} does not exist; creating it."
+		ssh_make_directory_command="sudo mkdir ${site_hypertext_directory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command
 	install_listed_files "${site_canonical_source_code_file_list}"
@@ -186,8 +186,9 @@ clean_install_site_custom_files() {
 }
 
 clean_install_app_files() {
-    app="$1"
-    install_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files ${app}
+    appId="$1"
+    install_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
+    install_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${appId}"
 }
 
 delete_files_uploaded_marker() {
@@ -196,19 +197,22 @@ delete_files_uploaded_marker() {
     fi
 }
 
-apps=()
-apps+="cv"
-if [[ $incremental -eq 0 ]] ; then
-    clean_install_site_canonical_files
-	clean_install_site_custom_files
-	delete_files_uploaded_marker
-    for app in "${apps[@]}" ; do
-        clean_install_app_files "$app"
-    done
-elif [[ $incremental -eq 1 ]] ; then
-    clean_install_site_canonical_files
-	incremental_install_site_custom_content
-	delete_files_uploaded_marker
-fi
+file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+existing_app_array=()
+finished_reading_file=false
+until $finished_reading_file; do
+    read -r || finished_reading_file=true
+    if [[ -n "$REPLY" ]] ; then
+        existing_app_array+=("$REPLY")
+    fi
+done < "${file_listing_apps}"
+
+clean_install_site_canonical_files
+clean_install_site_custom_files
+delete_files_uploaded_marker
+
+for appId in "${existing_app_array[@]}" ; do
+    clean_install_app_files "${appId}"
+done
 
 exit 0
