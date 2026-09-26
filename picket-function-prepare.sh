@@ -86,27 +86,27 @@ build_listed_files() {
             if [[ -z "${short_path_to_file}" ]] ; then
                 continue
             fi
-            requested_filename="${project_root_directory}"/"${parent_dir}"/"${short_path_to_file}"
-            if [[ -f "$requested_filename" ]] ; then
+            full_path_to_local_file="${project_root_directory}"/"${parent_dir}"/"${short_path_to_file}"
+            if [[ -f "$full_path_to_local_file" ]] ; then
                 if [[ ! -d "${local_site_distribution_directory}" ]] ; then
                     mkdir "${local_site_distribution_directory}"
                 fi
-                cp "${requested_filename}" "${local_site_distribution_directory}"/
-            elif [[ ! -f "$requested_filename" && "$canonical_or_custom" = "canonical" ]] ; then
-                requested_filename=/etc/picket/"${short_path_to_file}"
-                if [[ -f "$requested_filename" ]] ; then
+                cp "${full_path_to_local_file}" "${local_site_distribution_directory}"/
+            elif [[ ! -f "$full_path_to_local_file" && "$canonical_or_custom" = "canonical" ]] ; then
+                full_path_to_local_file=/etc/picket/"${short_path_to_file}"
+                if [[ -f "$full_path_to_local_file" ]] ; then
                     if [[ ! -d "${local_site_distribution_directory}" ]] ; then
                         mkdir "${local_site_distribution_directory}"
                     fi
-                    cp "${requested_filename}" "${local_site_distribution_directory}"/
+                    cp "${full_path_to_local_file}" "${local_site_distribution_directory}"/
                 else
-                    if [[ ! -d "$requested_filename" ]] ; then
-                        echo the file: "$requested_filename" does not exist
+                    if [[ ! -d "$full_path_to_local_file" ]] ; then
+                        echo the file: "$full_path_to_local_file" does not exist
                     fi
                 fi
             else
-                if [[ ! -d "$requested_filename" ]] ; then
-                    echo the file: "$requested_filename" does not exist
+                if [[ ! -d "$full_path_to_local_file" ]] ; then
+                    echo the file: "$full_path_to_local_file" does not exist
                 fi
             fi
         done
