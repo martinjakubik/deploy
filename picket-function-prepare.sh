@@ -83,6 +83,9 @@ build_listed_files() {
         done < "$file_listing_files_to_build"
 
         for filename in "${file_array[@]}" ; do
+            if [[ -z "${filename}" ]] ; then
+                continue
+            fi
             requested_filename="${project_root_directory}"/"${parent_dir}"/"$filename"
             if [[ -f "$requested_filename" ]] ; then
                 if [[ ! -d "${local_site_distribution_directory}" ]] ; then

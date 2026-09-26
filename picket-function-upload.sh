@@ -175,6 +175,9 @@ upload_listed_files() {
         scp_upload_command="scp "
         path_to_previous_file=""
         for short_path_to_file in "${file_array[@]}" ; do
+            if [[ -z "${short_path_to_file}" ]] ; then
+                continue
+            fi
             full_path_to_local_file="${local_site_distribution_directory}"/"${short_path_to_file}"
             full_path_to_remote_file="${SITE_STAGING_DIR_ROOT}"/site/"${short_path_to_file}"
             path_to_current_file=""
