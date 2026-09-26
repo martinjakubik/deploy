@@ -82,18 +82,18 @@ build_listed_files() {
             file_array+=("$REPLY")
         done < "$file_listing_files_to_build"
 
-        for filename in "${file_array[@]}" ; do
-            if [[ -z "${filename}" ]] ; then
+        for short_path_to_file in "${file_array[@]}" ; do
+            if [[ -z "${short_path_to_file}" ]] ; then
                 continue
             fi
-            requested_filename="${project_root_directory}"/"${parent_dir}"/"$filename"
+            requested_filename="${project_root_directory}"/"${parent_dir}"/"${short_path_to_file}"
             if [[ -f "$requested_filename" ]] ; then
                 if [[ ! -d "${local_site_distribution_directory}" ]] ; then
                     mkdir "${local_site_distribution_directory}"
                 fi
                 cp "${requested_filename}" "${local_site_distribution_directory}"/
             elif [[ ! -f "$requested_filename" && "$canonical_or_custom" = "canonical" ]] ; then
-                requested_filename=/etc/picket/"$filename"
+                requested_filename=/etc/picket/"${short_path_to_file}"
                 if [[ -f "$requested_filename" ]] ; then
                     if [[ ! -d "${local_site_distribution_directory}" ]] ; then
                         mkdir "${local_site_distribution_directory}"
