@@ -310,9 +310,14 @@ if [[ $DEBUG -eq 0 ]] ; then
     done < "${file_listing_apps}"
 
     for appId in "${existing_app_array[@]}" ; do
+        if [[ -z "${appId}" ]] ; then
+            continue
+        fi
         ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${appId}/${appId}"-custom-source-code-files
         scp "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
         scp "${project_root_directory}"/site/apps/"${appId}"/"${app}"-custom-binary-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
+        upload_listed_files "${app_canonical_source_code_file_list}" "${appId}"
+        upload_listed_files "${app_canonical_binary_file_list}" "${appId}"
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${appId}"
         if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
@@ -360,6 +365,9 @@ else
     done < "${file_listing_apps}"
 
     for appId in "${existing_app_array[@]}" ; do
+        if [[ -z "${appId}" ]] ; then
+            continue
+        fi
         echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-source-code-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}/"
         echo "scp ${project_root_directory}/site/apps/${appId}/${appId}-custom-binary-files ${DESTINATION_DIR_WITH_USER_AND_IP_SITE}/apps/${appId}"
         upload_listed_files "${app_canonical_source_code_file_list}" ${appId}

@@ -87,6 +87,9 @@ build_listed_files() {
                 continue
             fi
             full_path_to_local_file="${project_root_directory}"/"${parent_dir}"/"${short_path_to_file}"
+            if [[ -n "$app" ]] ; then
+                full_path_to_local_file="${local_site_distribution_directory}/apps/${app}/app/${short_path_to_file}"
+            fi
             if [[ -f "$full_path_to_local_file" ]] ; then
                 if [[ ! -d "${local_site_distribution_directory}" ]] ; then
                     mkdir "${local_site_distribution_directory}"
