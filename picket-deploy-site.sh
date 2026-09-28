@@ -5,7 +5,7 @@ USAGE="usage: $0 -s|--siteId siteId -u|--userId userId --ip ipAddress -c|--incre
 # set up defaults
 incremental=0
 DEBUG=0
-max_install_count_before_throttle=20
+max_install_count_before_throttle=5
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -85,6 +85,17 @@ elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     does_canonical_binary_file_list_exist=1
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
+does_app_canonical_source_code_file_list_exist=0
+if [[ -f $HOME/.picket/app-canonical-source-code-files ]] ; then
+    does_app_canonical_source_code_file_list_exist=1
+    app_canonical_source_code_file_list=$HOME/.picket/app-canonical-source-code-files
+fi
+does_app_canonical_binary_file_list_exist=0
+if [[ -f $HOME/.picket/app-canonical-binary-files ]] ; then
+    does_app_canonical_binary_file_list_exist=1
+    app_canonical_binary_file_list=$HOME/.picket/app-canonical-binary-files
+fi
+
 
 ensure_directory_exists_for_file() {
     full_path_to_filename_to_check="$1"
@@ -132,7 +143,7 @@ run_scp_command_and_add_file_to_new_scp_command() {
             echo ssh -t ${userId}@${ipAddress} "$ssh_install_command"
         fi
     fi
-    ssh_install_command=""
+    ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${short_path_to_file} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
     install_count=$(( install_count+1 ))
     install_count_in_set=1
 }
@@ -166,9 +177,9 @@ install_listed_files () {
         for short_path_to_file in "${file_array[@]}" ; do
             if [[ -n "${short_path_to_file}" ]] ; then
                 ensure_directory_exists_for_file "${path_to_file_in_site_live_directory}"/"${short_path_to_file}"
-                if [[ $upload_count_in_set -lt $max_install_count_before_throttle ]] ; then
+                if [[ $install_count_in_set -lt $max_install_count_before_throttle ]] ; then
                     add_file_to_current_scp_command;
-                elif [[ $upload_count_in_set -ge $max_install_count_before_throttle ]] ; then
+                elif [[ $install_count_in_set -ge $max_install_count_before_throttle ]] ; then
                     run_scp_command_and_add_file_to_new_scp_command "max_count_reached" ;
                 fi
             fi
@@ -214,6 +225,8 @@ clean_install_site_custom_files() {
 
 clean_install_app_files() {
     appId="$1"
+    install_listed_files "${app_canonical_source_code_file_list}" "${appId}"
+    install_listed_files "${app_canonical_binary_file_list}" "${appId}"
     install_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
     install_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${appId}"
 }
