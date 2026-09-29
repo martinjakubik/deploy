@@ -133,7 +133,7 @@ add_file_to_current_scp_command() {
     scp_upload_command+=" ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=$(( upload_count_in_set+1 ))
-    if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ ${upload_count} files added to upload command ${upload_count_in_set} files added in set ]" ; echo ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo ; echo -n "[ " ; if [[ ${upload_count} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count} files " ; fi ; echo -n "added to upload command; " ; if [[ ${upload_count_in_set} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count_in_set} files " ; fi ; echo -n "added in set. ]" ; echo ; fi
 }
 
 finish_scp_command_and_add_file_to_new_scp_command() {
@@ -152,7 +152,7 @@ finish_scp_command_and_add_file_to_new_scp_command() {
     scp_upload_command="scp ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=1
-    if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ ${upload_count} files added to upload command ${upload_count_in_set} files added in set ]" ; echo ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo ; echo -n "[ " ; if [[ ${upload_count} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count} files " ; fi ; echo -n "added to upload command; " ; if [[ ${upload_count_in_set} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count_in_set} files " ; fi ; echo -n "added in set. ]" ; echo ; fi
 }
 
 upload_listed_files() {
