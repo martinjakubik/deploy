@@ -51,7 +51,7 @@ else
 	finished_reading_file=false
 	until $finished_reading_file; do
 		read -r || finished_reading_file=true
-		if [[ ! "$REPLY" =~ ^"${siteId}"$ && ! "$REPLY" =~ ^" *"$ ]] ; then
+		if [[ ! "$REPLY" =~ ^"${siteId}"$ && ! "$REPLY" =~ ^\" *\"$ ]] ; then
 			echo "$REPLY"
 		fi
 	done < "${file_listing_sites}" > "${file_listing_sites}".without_deleted_site
@@ -60,8 +60,8 @@ else
 	select strictreply in "Yes" "No"; do
 		relaxedreply=${strictreply:-$REPLY}
 		case $relaxedreply in
-			(Yes | yes | Y | y) echo "deleting site"; sudo mv "${file_listing_sites}".without_deleted_site "${file_listing_sites}"; break;;
-			(No  | no  | N | n) echo "site was not deleted"; sudo rm "${file_listing_sites}".without_deleted_site; exit 0;;
+			(Yes | yes | Y | y) echo "[ Deleting site. ]"; sudo mv "${file_listing_sites}".without_deleted_site "${file_listing_sites}"; break;;
+			(No  | no  | N | n) echo "[ Site was not deleted. ]"; sudo rm "${file_listing_sites}".without_deleted_site; exit 0;;
 		esac
 	done
 

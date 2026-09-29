@@ -24,7 +24,7 @@ if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
 fi
 
 echo
-echo listing sites
+echo "[ Listing sites. ]"
 echo
 
 existing_site_array=()
@@ -51,9 +51,9 @@ done
 if [[ $site_count -gt 0 ]] ; then
     echo
     if [[ $site_count -eq 1 ]] ; then
-        echo "... 1 site found"
+        echo "[ ... 1 site found. ]"
     else
-        echo "... $site_count sites found"
+        echo "[ ... $site_count sites found. ]"
     fi
 fi
 

@@ -56,9 +56,9 @@ if [[ ${is_site_selected} -eq 1 && ${does_app_exist_in_site_database} -eq 0 ]] ;
 fi
 
 if [[ ${is_site_selected} -eq 1 ]] ; then
-    echo "Deleting app \"${appId}\" from site \"${siteId}\"."
+    echo "[ Deleting app \"${appId}\" from site \"${siteId}\". ]"
 else
-    echo "Deleting app \"${appId}\"."
+    echo "[ Deleting app \"${appId}\". ]"
 fi
 
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
@@ -101,8 +101,8 @@ elif [[ ${is_site_selected} -eq 1 ]] ; then
    	select strictreply in "Yes" "No"; do
   		relaxedreply=${strictreply:-$REPLY}
   		case $relaxedreply in
- 			(Yes | yes | Y | y) echo "deleting app"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
- 			(No  | no  | N | n) echo "app was not deleted"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
+ 			(Yes | yes | Y | y) echo "[ Deleting app. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
+ 			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
   		esac
    	done
 else
@@ -131,7 +131,7 @@ else
     fi
 
     read -a list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
-    if [[ $DEBUG -eq 1 ]] ; then echo "number of sites hosting app: \"${#list_sites_hosting_app[@]}\"" ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo "[ Number of sites hosting app: \"${#list_sites_hosting_app[@]}\". ]" ; fi
     echo $list_sites_hosting_app
 
     if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
@@ -147,8 +147,8 @@ else
     	select strictreply in "Yes" "No"; do
     		relaxedreply=${strictreply:-$REPLY}
     		case $relaxedreply in
-    			(Yes | yes | Y | y) echo "deleting app"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
-    			(No  | no  | N | n) echo "app was not deleted"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
+    			(Yes | yes | Y | y) echo "[ Deleting app. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
+    			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
     		esac
     	done
     else

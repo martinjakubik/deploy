@@ -61,7 +61,7 @@ fi
 test_case="command logout, no arguments; user logged in"
 ./setup_test_case.sh "$test_case"
 input="logout"
-expected="Logging out."
+expected="[ Logging out. ]"
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
@@ -115,7 +115,7 @@ fi
 test_case="command deploy, user logged in, valid site argument but site does not exist"
 ./setup_test_case.sh "$test_case"
 input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
-expected="Trying to deploy site ''wxyz''. Site does not exist. Stopping."
+expected="[ Trying to deploy site ''wxyz''. ]\nSite does not exist. Stopping."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then

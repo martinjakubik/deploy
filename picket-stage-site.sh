@@ -49,7 +49,7 @@ if [[ $does_site_exist_in_database -eq 0 ]] ; then
 fi
 
 echo
-echo staging site \"${siteId}\"
+echo "[ Staging site \"${siteId}\. ]"
 picket-function-upload --inputDir "$project_root_directory" --siteId "$siteId" --siteNickname "$siteNickname" --userId "${userId}" --ip $ipAddress $argument_value_incremental $argument_value_throttle $argument_value_debug
 echo
 

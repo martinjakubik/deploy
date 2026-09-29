@@ -32,7 +32,7 @@ fi
 is_valid_user_id=$(picket-function-is-valid-user-id "${userId}")
 
 if [[ $is_valid_user_id -eq 1 ]] ; then
-    echo "logging in"
+    echo "[ Logging in. ]"
     echo $userId > $HOME/.picket/user
 else
     echo "The user name is invalid. Use only letters without accents, arabic digits and start with a letter."

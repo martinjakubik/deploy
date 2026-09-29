@@ -25,7 +25,7 @@ fi
 test_case="valid username"
 ./setup_test_case.sh "$test_case"
 input="--userId your_name"
-expected="logging in"
+expected="\[ Logging in. \]"
 actual=$(./picket-login.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then

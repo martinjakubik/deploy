@@ -15,7 +15,7 @@ do
 done
 
 echo
-echo undeploying site \"${siteId}\"
+echo "[ Undeploying site \"${siteId}\". ]"
 echo ...done
 echo
 

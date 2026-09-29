@@ -25,9 +25,9 @@ if [[ $DEBUG -eq 1 ]] ; then
 fi
 
 echo
-echo unstaging site \"${siteId}\"
+echo "[ Unstaging site \"${siteId}\". ]"
 picket-function-delete-stage --siteId "$siteId" --userId "${userId}" --ip $ipAddress $argument_value_debug
 echo ... done
-echo 
+echo
 
 exit 0

@@ -22,7 +22,7 @@ if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
     exit 1
 fi
 
-echo creating app \"${appId}\"
+echo " [ Creating app \"${appId}\. ]"
 
 file_listing_apps=$HOME/.picket/apps.db/apps
 parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")

@@ -60,14 +60,14 @@ elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo script: $0
 echo you entered values
 echo   "site dir                    : ${SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT}"
 echo   "site ID                     : ${siteId}"
 echo   "user                        : ${userId}"
 echo   "IP address                  : ${ipAddress}"
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo
 
 existing_directory_array=()
@@ -82,8 +82,8 @@ delete_listed_files() {
     fi
 
     echo
-    echo "deleting files listed in $file_listing_files_in_site_stage"
-    echo "--------------------------------------------------------------------------------"
+    echo "[ Deleting files listed in ${file_listing_files_in_site_stage}. ]"
+    echo "[ ---------------------------------------------------------------------------- ]"
     if [[ -e "$file_listing_files_in_site_stage" ]] ; then
         file_array=()
 

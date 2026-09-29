@@ -28,7 +28,7 @@ if [[ "${argument_value_siteNickname}" ]] ; then
     siteNickname="${argument_value_siteNickname}"
 fi
 
-echo creating site \"${siteId}\"
+echo "[ Creating site \"${siteId}\. ]"
 
 file_listing_sites=$HOME/.picket/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")

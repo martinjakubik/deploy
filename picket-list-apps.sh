@@ -38,9 +38,9 @@ fi
 
 echo
 if [[ $is_list_for_single_site -eq 0 ]] ; then
-    echo "Listing apps."
+    echo "[ Listing apps. ]"
 else
-    echo "Listing apps for site \"${siteId}\"."
+    echo "[ Listing apps for site \"${siteId}\". ]"
     if [[ ! -f "${file_listing_apps}" ]] ; then
         echo
         echo "... 0 apps found."
@@ -72,9 +72,9 @@ done
 if [[ $app_count -ge 0 ]] ; then
     echo
     if [[ $app_count -eq 1 ]] ; then
-        echo "... 1 app found."
+        echo "[ ... 1 app found. ]"
     else
-        echo "... $app_count apps found."
+        echo "[ ... $app_count apps found. ]"
     fi
 fi
 
