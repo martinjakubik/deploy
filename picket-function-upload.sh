@@ -127,18 +127,20 @@ ensure_directory_exists_for_file() {
 }
 
 add_file_to_current_scp_command() {
-    path_to_remote_file_in_staging_directory="$1"
-    short_path_to_file="$2"
+    short_path_to_file="$1"
+    parent_path_of_local_file="$2"
+    path_to_remote_file_in_staging_directory="$3"
     ensure_directory_exists_for_file "${short_path_to_file}" "${path_to_remote_file_in_staging_directory}"
-    scp_upload_command+=" ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
+    scp_upload_command+=" ${parent_path_of_local_file}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=$(( upload_count_in_set+1 ))
     if [[ $DEBUG -eq 1 ]] ; then echo ; echo -n "[ " ; if [[ ${upload_count} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count} files " ; fi ; echo -n "added to upload command; " ; if [[ ${upload_count_in_set} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count_in_set} files " ; fi ; echo -n "added in set. ]" ; echo ; fi
 }
 
 finish_scp_command_and_add_file_to_new_scp_command() {
-    path_to_remote_file_in_staging_directory="$1"
-    short_path_to_file="$2"
+    short_path_to_file="$1"
+    parent_path_of_local_file="$2"
+    path_to_remote_file_in_staging_directory="$3"
     reason_to_finish_scp_command="$3"
     if [[ $upload_count -gt 0 ]] ; then
         scp_upload_command+=" ${remote_destination_directory}/"
@@ -149,7 +151,7 @@ finish_scp_command_and_add_file_to_new_scp_command() {
         scp_command_array+=("$scp_upload_command")
     fi
     ensure_directory_exists_for_file "${short_path_to_file}" "${path_to_remote_file_in_staging_directory}"
-    scp_upload_command="scp ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
+    scp_upload_command="scp ${parent_path_of_local_file}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=1
     if [[ $DEBUG -eq 1 ]] ; then echo ; echo -n "[ " ; if [[ ${upload_count} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count} files " ; fi ; echo -n "added to upload command; " ; if [[ ${upload_count_in_set} -eq 1 ]] ; then echo -n "1 file " ; else echo -n "${upload_count_in_set} files " ; fi ; echo -n "added in set. ]" ; echo ; fi
@@ -186,25 +188,25 @@ upload_listed_files() {
             if [[ -z "${short_path_to_file}" ]] ; then
                 continue
             fi
-            full_path_to_local_file="${local_site_distribution_directory}"/"${short_path_to_file}"
+            parent_path_of_local_file="${local_site_distribution_directory}"
             path_to_remote_file_in_staging_directory="${SITE_STAGING_DIR_ROOT}"/site
             path_to_current_file=""
             if [[ -n "$app" ]] ; then
-                full_path_to_local_file="${local_site_distribution_directory}/apps/${app}/app/${short_path_to_file}"
+                parent_path_of_local_file="${local_site_distribution_directory}/apps/${app}/app"
                 path_to_remote_file_in_staging_directory="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app
             fi
-            if [[ -n "${short_path_to_file}" && -f "$full_path_to_local_file" ]] ; then
+            if [[ -n "${short_path_to_file}" && -f "${parent_path_of_local_file}"/"${short_path_to_file}" ]] ; then
                 path_to_current_file="$(dirname $short_path_to_file)"
                 if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding upload command for \""${short_path_to_file}"\" ]" ; echo ; fi
 
                 if [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
-                    add_file_to_current_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}";
+                    add_file_to_current_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}"
                 elif [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -ge $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "max_count_reached" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}" "max_count_reached"
                 elif [[ "$path_to_current_file" != "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "directory_changed" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}" "directory_changed"
                 elif [[ "$path_to_current_file" != "${path_to_previous_file}" && $upload_count_in_set -ge $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "directory_changed" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}" "directory_changed"
                 fi
             else
                 echo the file: \""$short_path_to_file"\" does not exist
