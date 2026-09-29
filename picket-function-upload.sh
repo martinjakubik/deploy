@@ -104,7 +104,9 @@ echo
 existing_directory_array=()
 
 ensure_directory_exists_for_file() {
-    full_path_to_filename_to_check="$1"
+    short_path_to_file="$1"
+    path_to_file_in_site_staging_directory="$2"
+    full_path_to_filename_to_check="${path_to_file_in_site_staging_directory}"/"${short_path_to_file}"
 
     remoteTargetDirectory=$(dirname "${full_path_to_filename_to_check}")
     if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${remoteTargetDirectory}" ; then
@@ -117,6 +119,7 @@ ensure_directory_exists_for_file() {
         if [[ $DEBUG -eq 0 ]] ; then
             ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then  mkdir -p $remoteTargetDirectory ; fi"
         elif [[ $DEBUG -eq 1 ]] ; then
+            echo ; echo "[ creating directory for $short_path_to_file ]" ; echo
             echo ssh -t ${userId}@${ipAddress} "if [[ ! -d $remoteTargetDirectory ]] ; then echo creating remote directory $remoteTargetDirectory ; mkdir -p $remoteTargetDirectory ; fi"
         fi
         existing_directory_array+=("$remoteTargetDirectory")
@@ -124,27 +127,32 @@ ensure_directory_exists_for_file() {
 }
 
 add_file_to_current_scp_command() {
-    ensure_directory_exists_for_file "${full_path_to_remote_file}"
-    scp_upload_command+=" $full_path_to_local_file"
+    path_to_remote_file_in_staging_directory="$1"
+    short_path_to_file="$2"
+    ensure_directory_exists_for_file "${short_path_to_file}" "${path_to_remote_file_in_staging_directory}"
+    scp_upload_command+=" ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=$(( upload_count_in_set+1 ))
-    if [[ $DEBUG -eq 1 ]] ; then echo $upload_count files added to upload command $upload_count_in_set files added in set ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ ${upload_count} files added to upload command ${upload_count_in_set} files added in set ]" ; echo ; fi
 }
 
 finish_scp_command_and_add_file_to_new_scp_command() {
+    path_to_remote_file_in_staging_directory="$1"
+    short_path_to_file="$2"
+    reason_to_finish_scp_command="$3"
     if [[ $upload_count -gt 0 ]] ; then
         scp_upload_command+=" ${remote_destination_directory}/"
-        if [[ -n "${path_to_previous_file}" ]] ; then echo "appending path to previous file \"${path_to_previous_file}\" to command" ; scp_upload_command+="${path_to_previous_file}/" ; fi
-        if [[ $DEBUG -eq 1 && "$1" = "max_count_reached" ]] ; then echo "maximum count reached; adding previous command $scp_upload_command to array" ;
-        elif [[ $DEBUG -eq 1 && "$1" = "directory_changed" ]] ; then echo "directory changed; adding previous command $scp_upload_command to array" ;
-        elif [[ $DEBUG -eq 1 ]] ; then echo "adding previous command $scp_upload_command to array" ; fi
+        if [[ -n "${path_to_previous_file}" ]] ; then echo ; echo "[ appending path to previous file \"${path_to_previous_file}\" to command ]" ; echo ; scp_upload_command+="${path_to_previous_file}/" ; fi
+        if [[ $DEBUG -eq 1 && "$reason_to_finish_scp_command" = "max_count_reached" ]] ; then echo ; echo "[ maximum count reached; adding previous command $scp_upload_command to array ]" ; echo ;
+        elif [[ $DEBUG -eq 1 && "$reason_to_finish_scp_command" = "directory_changed" ]] ; then echo ; echo "[ directory changed; adding previous command $scp_upload_command to array ]" ; echo ;
+        elif [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding previous command $scp_upload_command to array ]" ; echo ; fi
         scp_command_array+=("$scp_upload_command")
     fi
-    ensure_directory_exists_for_file "${full_path_to_remote_file}"
-    scp_upload_command="scp ${full_path_to_local_file}"
+    ensure_directory_exists_for_file "${short_path_to_file}" "${path_to_remote_file_in_staging_directory}"
+    scp_upload_command="scp ${path_to_remote_file_in_staging_directory}/${short_path_to_file}"
     upload_count=$(( upload_count+1 ))
     upload_count_in_set=1
-    if [[ $DEBUG -eq 1 ]] ; then echo $upload_count files added to upload command $upload_count_in_set files added in set ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ ${upload_count} files added to upload command ${upload_count_in_set} files added in set ]" ; echo ; fi
 }
 
 upload_listed_files() {
@@ -157,8 +165,8 @@ upload_listed_files() {
     fi
 
     echo
-    echo "uploading files listed in $file_listing_files_to_upload"
-    echo "--------------------------------------------------------------------------------"
+    echo "[ uploading files listed in ${file_listing_files_to_upload} ]"
+    echo "[ ---------------------------------------------------------------------------- ]"
     upload_count=0
     upload_count_in_set=0
     if [[ -e "$file_listing_files_to_upload" ]] ; then
@@ -179,24 +187,24 @@ upload_listed_files() {
                 continue
             fi
             full_path_to_local_file="${local_site_distribution_directory}"/"${short_path_to_file}"
-            full_path_to_remote_file="${SITE_STAGING_DIR_ROOT}"/site/"${short_path_to_file}"
+            path_to_remote_file_in_staging_directory="${SITE_STAGING_DIR_ROOT}"/site
             path_to_current_file=""
             if [[ -n "$app" ]] ; then
                 full_path_to_local_file="${local_site_distribution_directory}/apps/${app}/app/${short_path_to_file}"
-                full_path_to_remote_file="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app/"${short_path_to_file}"
+                path_to_remote_file_in_staging_directory="${SITE_STAGING_DIR_ROOT}"/site/apps/"${app}"/app
             fi
             if [[ -n "${short_path_to_file}" && -f "$full_path_to_local_file" ]] ; then
                 path_to_current_file="$(dirname $short_path_to_file)"
-                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "adding upload command for \""${short_path_to_file}"\"" ; echo ; fi
+                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding upload command for \""${short_path_to_file}"\" ]" ; echo ; fi
 
                 if [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
-                    add_file_to_current_scp_command;
+                    add_file_to_current_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}";
                 elif [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -ge $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "max_count_reached" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "max_count_reached" ;
                 elif [[ "$path_to_current_file" != "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "directory_changed" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "directory_changed" ;
                 elif [[ "$path_to_current_file" != "${path_to_previous_file}" && $upload_count_in_set -ge $max_upload_count_before_throttle ]] ; then
-                    finish_scp_command_and_add_file_to_new_scp_command "directory_changed" ;
+                    finish_scp_command_and_add_file_to_new_scp_command "${path_to_remote_file_in_staging_directory}" "${short_path_to_file}" "directory_changed" ;
                 fi
             else
                 echo the file: \""$short_path_to_file"\" does not exist
@@ -207,12 +215,12 @@ upload_listed_files() {
         # adds the last upload command if there is one
         if [[ upload_count_in_set -gt 0 ]] ; then
             scp_upload_command+=" ${remote_destination_directory}/"
-            if [[ $DEBUG -eq 1 ]] ; then echo "adding leftover command $scp_upload_command to array" ; fi
+            if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding leftover command $scp_upload_command to array ]" ; echo ; fi
             scp_command_array+=("$scp_upload_command")
         fi
 
         # loops through the scp upload commands
-        if [[ $DEBUG -eq 1 ]] ; then echo ; echo "running all upload commands" ; echo ; fi
+        if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ running all upload commands ]" ; echo ; fi
         if [[ "${#scp_command_array[@]}" -gt 0 ]] ; then
             upload_run_count=0
             for scp_upload_command in "${scp_command_array[@]}" ; do
@@ -231,7 +239,7 @@ upload_listed_files() {
     else
         echo "The list of files \"$file_listing_files_to_upload\" does not exist."
     fi
-    echo "--------------------------------------------------------------------------------"
+    echo "[ ---------------------------------------------------------------------------- ]"
     echo ... done
     echo
 }
@@ -250,12 +258,12 @@ if [[ $DEBUG -eq 0 ]] ; then
     # uploads content to the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store -delete
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt
+        ensure_directory_exists_for_file dummy.txt "${SITE_STAGING_DIR_ROOT}"/server
         echo
-        echo "uploading server files"
-        echo "--------------------------------------------------------------------------------"
+        echo "[ uploading server files ]"
+        echo "[ ---------------------------------------------------------------------------- ]"
         scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
-        echo "--------------------------------------------------------------------------------"
+        echo "[ ---------------------------------------------------------------------------- ]"
         echo ... done
         echo
     fi
@@ -264,10 +272,10 @@ if [[ $DEBUG -eq 0 ]] ; then
     if [[ -d "${local_site_distribution_directory}"/lib ]] ; then
         find "${local_site_distribution_directory}"/lib -name .DS_Store -delete
         echo
-        echo "uploading site library files"
-        echo "--------------------------------------------------------------------------------"
+        echo "[ uploading site library files ]"
+        echo "[ ---------------------------------------------------------------------------- ]"
         scp -r "${local_site_distribution_directory}"/lib "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
-        echo "--------------------------------------------------------------------------------"
+        echo "[ ---------------------------------------------------------------------------- ]"
         echo ... done
         echo
     fi
@@ -278,26 +286,26 @@ if [[ $DEBUG -eq 0 ]] ; then
 
     # uploads the project files
     echo
-    echo "uploading project files"
-    echo "--------------------------------------------------------------------------------"
+    echo "[ uploading project files ]"
+    echo "[ ---------------------------------------------------------------------------- ]"
     scp "${project_root_directory}"/package.json "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     scp "${site_canonical_source_code_file_list}" "${site_canonical_binary_file_list}" "${project_root_directory}"/"${siteId}"-custom-source-code-files "${project_root_directory}"/"${siteId}"-custom-binary-files "${project_root_directory}"/"${siteId}"-apps "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
-    echo "--------------------------------------------------------------------------------"
+    echo "[ ---------------------------------------------------------------------------- ]"
     echo ... done
     echo
 
     # uploads the canonical files
     upload_listed_files "${site_canonical_source_code_file_list}"
-    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+    if [[ $THROTTLE -eq 1 ]] ; then echo "[ sleeping $throttle_sleep_time_between_uploads ]" ; sleep $throttle_sleep_time_between_uploads ; fi
 
     upload_listed_files "${site_canonical_binary_file_list}"
-    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+    if [[ $THROTTLE -eq 1 ]] ; then echo "[ sleeping $throttle_sleep_time_between_uploads ]" ; sleep $throttle_sleep_time_between_uploads ; fi
 
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
-    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+    if [[ $THROTTLE -eq 1 ]] ; then echo "[ sleeping $throttle_sleep_time_between_uploads ]" ; sleep $throttle_sleep_time_between_uploads ; fi
 
     upload_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
-    if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+    if [[ $THROTTLE -eq 1 ]] ; then echo "[ sleeping $throttle_sleep_time_between_uploads ]" ; sleep $throttle_sleep_time_between_uploads ; fi
 
     file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
     existing_app_array=()
@@ -313,14 +321,14 @@ if [[ $DEBUG -eq 0 ]] ; then
         if [[ -z "${appId}" ]] ; then
             continue
         fi
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/site/apps/"${appId}/${appId}"-custom-source-code-files
+        ensure_directory_exists_for_file "${appId}"-custom-source-code-files "${SITE_STAGING_DIR_ROOT}"/site/apps/"${appId}"
         scp "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
         scp "${project_root_directory}"/site/apps/"${appId}"/"${app}"-custom-binary-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
         upload_listed_files "${app_canonical_source_code_file_list}" "${appId}"
         upload_listed_files "${app_canonical_binary_file_list}" "${appId}"
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${appId}"
-        if [[ $THROTTLE -eq 1 ]] ; then echo "sleeping $throttle_sleep_time_between_uploads" ; sleep $throttle_sleep_time_between_uploads ; fi
+        if [[ $THROTTLE -eq 1 ]] ; then echo "[ sleeping $throttle_sleep_time_between_uploads ]" ; sleep $throttle_sleep_time_between_uploads ; fi
     done
 
     if [[ ${incremental} -eq 0 ]] ; then
@@ -332,7 +340,7 @@ else
     # debugs upload of the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
         find "${project_root_directory}"/server -name .DS_Store
-        ensure_directory_exists_for_file "${SITE_STAGING_DIR_ROOT}"/server/dummy.txt
+        ensure_directory_exists_for_file dummy.txt "${SITE_STAGING_DIR_ROOT}"/server
         echo scp -r "${project_root_directory}"/server "${DESTINATION_DIR_WITH_USER_AND_IP_ROOT}"/
     fi
 

@@ -42,7 +42,7 @@ if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     exit 1
 fi
 
-echo -n "Trying to deploy site ''${siteId}''. "
+echo -n "[ Trying to deploy site ''${siteId}''. ]"
 
 does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
@@ -96,8 +96,9 @@ if [[ -f $HOME/.picket/app-canonical-binary-files ]] ; then
     app_canonical_binary_file_list=$HOME/.picket/app-canonical-binary-files
 fi
 
-
 ensure_directory_exists_for_file() {
+    short_path_to_file="$1"
+    path_to_file_in_site_live_directory="$2"
     full_path_to_filename_to_check="${path_to_file_in_site_live_directory}"/"${short_path_to_file}"
 
     remoteTargetDirectory=$(dirname "${full_path_to_filename_to_check}")
@@ -120,24 +121,29 @@ ensure_directory_exists_for_file() {
 
 print_command_to_move_single_file_from_staging_to_live () {
     short_path_to_file="$1"
-    staging_directory="${SITE_STAGING_DIR_SITE}"
-    live_directory="${site_hypertext_directory}"
-    path_to_current_file="$(dirname $short_path_to_file)"
+    path_to_file_in_site_staging_directory="$2"
+    path_to_file_in_site_live_directory="$3"
     if [[ -n "$2" && -n "$3" ]] ; then
         staging_directory="$2"
         live_directory="$3"
     fi
     if [[ $DEBUG -eq 1 ]] ; then echo ; echo ; echo "[ adding move command for ${short_path_to_file} ]" ; echo ; fi
-    echo "cp ${staging_directory}/${short_path_to_file} ${live_directory}/${path_to_current_file} ; rm ${staging_directory}/${short_path_to_file} ;"
+    echo "cp ${path_to_file_in_site_staging_directory}/${short_path_to_file} ${path_to_file_in_site_live_directory}/${short_path_to_file} ; rm ${staging_directory}/${short_path_to_file} ;"
 }
 
 add_file_to_current_scp_command() {
+    short_path_to_file="$1"
+    path_to_file_in_site_staging_directory="$2"
+    path_to_file_in_site_live_directory="$3"
     ssh_install_command+=" $(print_command_to_move_single_file_from_staging_to_live ${short_path_to_file} ${path_to_file_in_site_staging_directory} ${path_to_file_in_site_live_directory})"
     install_count=$(( install_count+1 ))
     install_count_in_set=$(( install_count_in_set+1 ))
 }
 
 run_scp_command_and_add_file_to_new_scp_command() {
+    short_path_to_file="$1"
+    path_to_file_in_site_staging_directory="$2"
+    path_to_file_in_site_live_directory="$3"
     if [[ $install_count -gt 0 ]] ; then
         if [[ $DEBUG -eq 0 ]] ; then
             ssh -t ${userId}@${ipAddress} "$ssh_install_command"
@@ -163,8 +169,8 @@ install_listed_files () {
     fi
 
     echo
-    echo "installing files listed in $file_listing_files_to_install"
-    echo "--------------------------------------------------------------------------------"
+    echo "[ installing files listed in ${file_listing_files_to_install} ]"
+    echo "[ ---------------------------------------------------------------------------- ]"
     install_count=0
     install_count_in_set=0
     if [[ -e "$file_listing_files_to_install" ]] ; then
@@ -179,11 +185,11 @@ install_listed_files () {
         ssh_install_command=""
         for short_path_to_file in "${file_array[@]}" ; do
             if [[ -n "${short_path_to_file}" ]] ; then
-                ensure_directory_exists_for_file "${path_to_file_in_site_live_directory}" "${short_path_to_file}"
+                ensure_directory_exists_for_file "${short_path_to_file}" "${path_to_file_in_site_live_directory}"
                 if [[ $install_count_in_set -lt $max_install_count_before_throttle ]] ; then
-                    add_file_to_current_scp_command;
+                    add_file_to_current_scp_command "${short_path_to_file}" "${path_to_file_in_site_staging_directory}" "${path_to_file_in_site_live_directory}"
                 elif [[ $install_count_in_set -ge $max_install_count_before_throttle ]] ; then
-                    run_scp_command_and_add_file_to_new_scp_command "max_count_reached" ;
+                    run_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${path_to_file_in_site_staging_directory}" "${path_to_file_in_site_live_directory}"
                 fi
             fi
         done
@@ -191,25 +197,25 @@ install_listed_files () {
         # adds the last install command if there is one
         if [[ install_count_in_set -gt 0 ]] ; then
             if [[ $DEBUG -eq 1 ]] ; then echo "running leftover command $scp_install_command" ; fi
-            run_scp_command_and_add_file_to_new_scp_command "leftover" ;
+            run_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${path_to_file_in_site_staging_directory}" "${path_to_file_in_site_live_directory}"
         fi
     else
         echo "the list of files $file_listing_files_to_install does not exist"
     fi
 
-    echo "--------------------------------------------------------------------------------"
+    echo "[ ---------------------------------------------------------------------------- ]"
     echo ... done
     echo
 }
 
 clean_install_site_canonical_files () {
 	if [[ ! -d "${sitePackageRootDirectory}" ]] ; then
-		echo "${sitePackageRootDirectory} does not exist; creating it."
+		echo "[ ${sitePackageRootDirectory} does not exist; creating it. ]"
 		ssh_make_directory_command="sudo mkdir ${sitePackageRootDirectory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command
 	if [[ ! -d "${site_hypertext_directory}" ]] ; then
-		echo "${site_hypertext_directory} does not exist; creating it."
+		echo "[ ${site_hypertext_directory} does not exist; creating it. ]"
 		ssh_make_directory_command="sudo mkdir ${site_hypertext_directory}"
 	fi
 	echo ssh -t ${userId}@${ipAddress} $ssh_make_directory_command

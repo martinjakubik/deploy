@@ -42,13 +42,15 @@ if [[ $does_site_exist_in_database -eq 0 ]] ; then
     exit 1
 fi
 
-echo "Adding app \"${appId}\" to site \"${siteId}\"."
+echo "[ Adding app \"${appId}\" to site \"${siteId}\". ]"
 
 all_project_root=~/code/gitwork
 site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
 
 ensure_directory_exists_for_file() {
-    full_path_to_filename_to_check="$1"
+    short_path_to_file="$1"
+    path_to_file_in_site_project_root="$2"
+    full_path_to_filename_to_check="${path_to_file_in_site_project_root}"/"${short_path_to_file}"
 
     targetDirectory=$(dirname "${full_path_to_filename_to_check}")
     if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${targetDirectory}" ; then
@@ -61,6 +63,7 @@ ensure_directory_exists_for_file() {
         if [[ $DEBUG -eq 0 ]] ; then
             if [[ ! -d "${targetDirectory}" ]] ; then mkdir -p "${targetDirectory}" ; fi
         elif [[ $DEBUG -eq 1 ]] ; then
+            echo ; echo "[ creating directory for $short_path_to_file ]" ; echo
             if [[ ! -d "${targetDirectory}" ]] ; then echo "creating directory ${targetDirectory}" ; fi
         fi
         existing_directory_array+=("$targetDirectory")
@@ -68,20 +71,20 @@ ensure_directory_exists_for_file() {
 }
 
 copy_file_from_source_to_destination() {
-    path_of_file="$1"
+    short_path_to_file="$1"
     source_directory="$2"
     destination_directory="$3"
     can_copy=1
-    if [[ ! -f "${app_project_root_directory}/app/${path_of_file}" ]] ; then
-        echo >&2 "While copying app file, there is no file to copy at \"${app_project_root_directory}/app/${path_of_file}\"."
+    if [[ ! -f "${source_directory}/${short_path_to_file}" ]] ; then
+        echo >&2 "While copying app file, there is no file to copy at \"${source_directory}/${short_path_to_file}\"."
         can_copy=0
     fi
-    if [[ ! -d "${site_project_root}/site/apps/${appId}/app/" ]] ; then
-        echo >&2 "While copying app file, there is no destination directory at \"${site_project_root}/site/apps/${appId}/app/\"."
+    if [[ ! -d "${destination_directory}" ]] ; then
+        echo >&2 "While copying app file, there is no destination directory at \"${destination_directory}\"."
         can_copy=0
     fi
     if [[ $can_copy -eq 1 ]] ; then
-        cp "${app_project_root_directory}/app/${path_of_file}" "${site_project_root}/site/apps/${appId}/app/${path_of_file}"
+        cp "${source_directory}/${short_path_to_file}" "${destination_directory}/${short_path_to_file}"
     fi
 }
 
@@ -97,10 +100,10 @@ copy_app_files_to_site() {
     if [[ ! -d "${site_project_root}/site/apps/${appId}/app" ]] ; then
         mkdir -p "${site_project_root}/site/apps/${appId}/app"
     fi
-    for app_file in "${app_file_array[@]}" ; do
-        if [[ -n "${app_file}" ]] ; then
-            ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app/${app_file}"
-            copy_file_from_source_to_destination "${app_file}" "${app_project_root_directory}/app/" "${site_project_root}/site/apps/${appId}/app/"
+    for short_path_to_file in "${app_file_array[@]}" ; do
+        if [[ -n "${short_path_to_file}" ]] ; then
+            ensure_directory_exists_for_file "${short_path_to_file}" "${site_project_root}/site/apps/${appId}/app"
+            copy_file_from_source_to_destination "${short_path_to_file}" "${app_project_root_directory}/app" "${site_project_root}/site/apps/${appId}/app"
         fi
     done
 }
@@ -130,7 +133,7 @@ if [[ $does_app_exist_in_database -eq 1 ]] ; then
 else
     app_project_root_directory="${all_project_root}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
 
-    ensure_directory_exists_for_file "${site_project_root}/site/apps/${appId}/app"
+    ensure_directory_exists_for_file "${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/app"
     cp "${app_project_root_directory}/${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/"
     cp "${app_project_root_directory}/${appId}-custom-binary-files" "${site_project_root}/site/apps/${appId}/"
     copy_app_files_to_site  ~/.picket/app-canonical-source-code-files
