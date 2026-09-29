@@ -88,7 +88,7 @@ if [[ -f $HOME/.picket/app-canonical-binary-files ]] ; then
     app_canonical_binary_file_list=$HOME/.picket/app-canonical-binary-files
 fi
 
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo script: $0
 echo you entered values
 echo   "From project root dir       : ${project_root_directory}"
@@ -98,7 +98,7 @@ echo   "site ID                     : ${siteId}"
 echo   "site nickname               : ${siteNickname}"
 echo   "user                        : ${userId}"
 echo   "IP address                  : ${ipAddress}"
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo
 
 existing_directory_array=()

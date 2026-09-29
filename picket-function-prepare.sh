@@ -45,13 +45,13 @@ elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
     site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
 fi
 
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo script: $0
 echo you entered values
 echo   "From project root dir       : ${project_root_directory}"
 echo   "site nickname               : ${siteNickname}"
 echo   "site ID                     : ${siteId}"
-echo --------------------------------------------------------------------------------
+echo "[ ---------------------------------------------------------------------------- ]"
 echo
 
 build_listed_files() {
@@ -72,7 +72,7 @@ build_listed_files() {
     fi
 
     echo
-    echo "building files listed in $file_listing_files_to_build"
+    echo "[ Building files listed in ${file_listing_files_to_build}. ]"
     if [[ -e "$file_listing_files_to_build" ]] ; then
         file_array=()
 
