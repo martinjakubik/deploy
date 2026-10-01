@@ -240,8 +240,8 @@ fi
 
 test_case="create site"
 ./setup_test_case.sh "$test_case"
-input="create-site --siteId site0"
-expected="[ Site \"site0\" created. ]"
+input="create-site --siteId site0 ; ls $PICKET_USER_HOME/sites.db/site0"
+expected="[ Site \"site0\" created. ]\n$PICKET_USER_HOME/sites.db/site0"
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
