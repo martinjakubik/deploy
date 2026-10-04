@@ -90,10 +90,18 @@ read_picket_configuration() {
 
     # reads values from config
     path_to_site_database=""
+    path_to_picket_database=""
     for entry in "${configuration_array[@]}"; do
-      case "$entry" in
-        (path_to_site_database=*) path_to_site_database="${entry#path_to_site_database=}" ;;
-      esac
+        case "$entry" in
+            (path_to_picket_database=*)
+                path_to_picket_database_value="${entry#path_to_picket_database=}"
+                path_to_picket_database="${path_to_picket_database_value/\$HOME/$HOME}"
+                export path_to_picket_database ;;
+            (path_to_site_database=*)
+                path_to_site_database_value="${entry#path_to_site_database=}"
+                path_to_site_database="${path_to_site_database/\$HOME/$HOME}"
+                export path_to_site_database ;;
+        esac
     done
 }
 

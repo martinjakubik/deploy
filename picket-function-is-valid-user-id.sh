@@ -35,7 +35,7 @@ if [[ ! "${userId}" =~ [ascdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123
     echo $is_valid_user_id
     exit 2
 elif [[ "${#userId}" -gt 29 ]] ; then
-    if [[ $DEBUG -eq 1 ]] ; then echo "user id too long '${userId}'" ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo "user id is too long '${#userId}' characters" ; fi
     is_valid_user_id=0
     echo $is_valid_user_id
     exit 3

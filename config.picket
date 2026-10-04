@@ -1,3 +1,4 @@
+path_to_picket_database=$HOME/.picket
 path_to_site_database=$HOME/.picket/sites.db/sites
 path_to_canonical_source_code_file_list_file=$HOME/.picket/site-canonical-source-code-files
 path_to_canonical_binary_file_list_file=$HOME/.picket/site-canonical-binary-files

@@ -31,9 +31,25 @@ fi
 
 is_valid_user_id=$(picket-function-is-valid-user-id "${userId}")
 
+if [[ -z "${path_to_picket_database}" ]] ; then
+    echo "There is no database configured for picket. Add the line \"path_to_picket_database=$HOME/.picket\" to your \"$HOME/config/picket/config.picket\" file."
+    exit 1
+fi
+
+is_valid_picket_database=$(picket-function-is-valid-path-to-picket-database "${path_to_picket_database}")
+
+if [[ $is_valid_picket_database -eq 1 ]] ; then
+    if [[ ! -e "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+else
+    echo "The picket database path is invalid. Add the line \"path_to_picket_database=$HOME/.picket\" to your \"$HOME/config/picket/config.picket\" file."
+    exit 1
+fi
+
 if [[ $is_valid_user_id -eq 1 ]] ; then
     echo "[ Logging in. ]"
-    echo $userId > $HOME/.picket/user
+    echo $userId > "${path_to_picket_database}"/user
 else
     echo "The user name is invalid. Use only letters without accents, arabic digits and start with a letter."
     exit 1
