@@ -5,7 +5,7 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input=""
 expected="usage: ./picket-function-is-valid-site-id.sh -d|--debug"
 actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
@@ -23,7 +23,7 @@ else
 fi
 
 test_case="valid site id"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="abcd"
 expected="1"
 actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
@@ -41,7 +41,7 @@ else
 fi
 
 test_case="valid site id: maximum length"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="124566789x123456789x123456789"
 expected="1"
 actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
@@ -59,7 +59,7 @@ else
 fi
 
 test_case="invalid site id: is 1-space blank"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input_with_blank=' '
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh "$input_with_blank" 2>&1)
@@ -77,7 +77,7 @@ else
 fi
 
 test_case="invalid site id: is 3-space blank"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input_with_blank='   '
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh "$input_with_blank" 2>&1)
@@ -95,7 +95,7 @@ else
 fi
 
 test_case="invalid site id: starts with blank"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input_with_blank=" a"
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh "$input_with_blank" 2>&1)
@@ -113,7 +113,7 @@ else
 fi
 
 test_case="invalid site id: ends with blank"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input_with_blank="a "
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh "$input_with_blank" 2>&1)
@@ -131,7 +131,7 @@ else
 fi
 
 test_case="invalid site id: has blank"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input_with_blank="a a"
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh "$input_with_blank" 2>&1)
@@ -149,7 +149,7 @@ else
 fi
 
 test_case="invalid site id: too long"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="123456789x123456789x123456789x"
 expected="0"
 actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)

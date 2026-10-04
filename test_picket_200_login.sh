@@ -5,10 +5,10 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input=""
 expected="usage: ./picket-login.sh --userId userId -d|--debug"
-actual=$(./picket-login.sh $input 2>&1)
+actual=$(./picket-login.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -23,10 +23,10 @@ else
 fi
 
 test_case="valid username"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="--userId your_name"
 expected="\[ Logging in. \]"
-actual=$(./picket-login.sh $input 2>&1)
+actual=$(./picket-login.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -41,10 +41,10 @@ else
 fi
 
 test_case="invalid username: plus character"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="--userId +"
 expected="The user name is invalid. Use only letters without accents, arabic digits and start with a letter."
-actual=$(./picket-login.sh $input 2>&1)
+actual=$(./picket-login.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))

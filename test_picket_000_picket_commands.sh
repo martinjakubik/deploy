@@ -5,10 +5,10 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input=""
 expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -23,10 +23,10 @@ else
 fi
 
 test_case="command login, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="login"
 expected="You did not provide a user ID. Use ''picket login --userId your_name'' to log in permanently."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -41,10 +41,10 @@ else
 fi
 
 test_case="command logout, no arguments; no user logged in"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="logout"
 expected="There is no user logged in."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -59,10 +59,10 @@ else
 fi
 
 test_case="command logout, no arguments; user logged in"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="logout"
 expected="[ Logging out. ]"
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh -$input -configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -77,10 +77,10 @@ else
 fi
 
 test_case="command deploy, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="deploy"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -95,10 +95,10 @@ else
 fi
 
 test_case="command deploy, user not logged in, valid site argument"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="deploy --siteId wxyz -d"
 expected="You did not provide a user ID. Use ''picket <command> --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -113,10 +113,10 @@ else
 fi
 
 test_case="command deploy, user logged in, valid site argument but site does not exist"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
 expected="[ Trying to deploy site ''wxyz''. ]\nSite does not exist. Stopping."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -131,10 +131,10 @@ else
 fi
 
 test_case="command undeploy, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="undeploy"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -149,10 +149,10 @@ else
 fi
 
 test_case="command stage, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="stage"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -167,10 +167,10 @@ else
 fi
 
 test_case="command stage, valid site argument; user file too big"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="stage --siteId wxyz"
 expected="There is a problem with the user record. Use ''picket login --userId your_name'' to log in again."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -185,10 +185,10 @@ else
 fi
 
 test_case="command unstage, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="unstage"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -203,10 +203,10 @@ else
 fi
 
 test_case="command delete, no arguments"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="delete"
 expected="You did not select a site. Use ''picket <command> --siteId wxyz'' to choose a site to work with."
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -221,10 +221,10 @@ else
 fi
 
 test_case="incorrect command"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="think"
 expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -239,10 +239,10 @@ else
 fi
 
 test_case="create site"
-./setup_test_case.sh "$test_case"
+./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
 input="create-site --siteId site0 ; ls $PICKET_USER_HOME/sites.db/site0"
 expected="[ Site \"site0\" created. ]\n$PICKET_USER_HOME/sites.db/site0"
-actual=$(./picket.sh $input 2>&1)
+actual=$(./picket.sh $input --configuration-file testing-config.picket 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
