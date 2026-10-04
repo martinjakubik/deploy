@@ -17,9 +17,20 @@ do
 		shift
 done
 
-if [[ -f $HOME/.picket/user && $(wc -c < ~/.picket/user) -gt 0 ]] ; then
+is_valid_picket_database=$(picket-function-is-valid-path-to-picket-database "${path_to_picket_database}")
+
+if [[ $is_valid_picket_database -eq 1 ]] ; then
+    if [[ ! -e "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+else
+    echo "The picket database path is invalid. Add the line \"path_to_picket_database=$HOME/.picket\" to your \"$HOME/config/picket/config.picket\" file."
+    exit 1
+fi
+
+if [[ -f "${path_to_picket_database}"/user && $(wc -c < "${path_to_picket_database}"/user) -gt 0 ]] ; then
     echo "[ Logging out. ]"
-    rm $HOME/.picket/user
+    rm "${path_to_picket_database}"/user
 else
     echo "There is no user logged in."
     exit 1
