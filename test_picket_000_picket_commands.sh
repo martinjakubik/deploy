@@ -65,7 +65,7 @@ test_case="command logout, no arguments; user logged in"
 ./setup_test_case.sh "$test_case"
 input="logout"
 expected="[ Logging out. ]"
-actual=$(./picket.sh -$input 2>&1)
+actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
