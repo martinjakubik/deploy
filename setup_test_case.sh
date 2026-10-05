@@ -11,6 +11,9 @@ picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/config/picket/config.picket"
 fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
 if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
     picket_configuration_file="${configuration_file_argument}"
 fi
@@ -60,6 +63,9 @@ read_picket_configuration() {
 read_picket_configuration
 
 command_stage__no_arguments__user_file_too_big() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
     echo -n > "${path_to_picket_database}"/user
     for (( i=0 ; i < 128 ; i=i+1 )) ; do
         echo -n 0 >> "${path_to_picket_database}"/user
@@ -67,10 +73,16 @@ command_stage__no_arguments__user_file_too_big() {
 }
 
 command_logout__no_arguments__no_user_logged_in() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
     echo -n > "${path_to_picket_database}"/user
 }
 
 command_logout__no_arguments__user_logged_in() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
     echo -n "test_user_id" > "${path_to_picket_database}"/user
 }
 

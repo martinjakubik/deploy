@@ -59,6 +59,9 @@ picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/config/picket/config.picket"
 fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
 if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
     picket_configuration_file="${configuration_file_argument}"
 fi
