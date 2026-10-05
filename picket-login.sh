@@ -24,7 +24,6 @@ done
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
-    echo "in login got default config: \"${picket_configuration_file}\""
 fi
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
     picket_configuration_file="${picket_path_to_configuration_file}"
