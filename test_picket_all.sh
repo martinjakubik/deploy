@@ -1,8 +1,5 @@
 #!/bin/bash
 
-saved_picket_path_to_configuration_file="${picket_path_to_configuration_file}"
-export picket_path_to_configuration_file=./testing-config.picket
-
 # runs all test files and aggregates results
 
 # initializes counters
@@ -41,8 +38,6 @@ for test_file in "${test_files[@]}"; do
   total_success=$((total_success + success_count))
   total_failures=$((total_failures + failure_count))
 done
-
-picket_path_to_configuration_file="${saved_picket_path_to_configuration_file}"
 
 # prints aggregated results
 echo "========================================"

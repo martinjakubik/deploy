@@ -1,5 +1,8 @@
 #!/bin/bash
 
+saved_picket_path_to_configuration_file="${picket_path_to_configuration_file}"
+export picket_path_to_configuration_file=./testing-config.picket
+
 run_count=0
 success_count=0
 fail_count=0
@@ -61,3 +64,5 @@ fi
 echo "number of tests:  " $run_count
 echo "succeeded:        " $success_count
 echo "failed:           " $fail_count
+
+picket_path_to_configuration_file="${saved_picket_path_to_configuration_file}"
