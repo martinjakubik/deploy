@@ -24,6 +24,16 @@ do
     shift
 done
 
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
+
 argument_value_debug=""
 if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
@@ -41,16 +51,6 @@ if [[ ! -d "$project_root_directory" ]] ; then
     echo the directory "$project_root_directory" does not exist
     exit 1
 fi
-
-picket_configuration_file="/etc/picket/config.picket"
-if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
-    picket_configuration_file="$HOME/.config/picket/config.picket"
-fi
-if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
-    picket_configuration_file="${picket_path_to_configuration_file}"
-fi
-
-source picket-function-read-configuration "${picket_configuration_file}"
 
 does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files

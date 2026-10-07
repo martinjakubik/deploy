@@ -16,6 +16,11 @@ do
 		shift
 done
 
+if [[ -z "${siteId}" ]] ; then
+	echo "site ID cannot be empty; exiting"
+	exit 1
+fi
+
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
@@ -25,11 +30,6 @@ if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configur
 fi
 
 source picket-function-read-configuration "${picket_configuration_file}"
-
-if [[ -z "${siteId}" ]] ; then
-	echo "site ID cannot be empty; exiting"
-	exit 1
-fi
 
 file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")

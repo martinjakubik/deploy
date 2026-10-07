@@ -20,6 +20,11 @@ do
 		shift
 done
 
+if [[ ! "${userId}" ]] ; then
+    echo >&2 ${USAGE}
+    exit 1
+fi
+
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
@@ -33,11 +38,6 @@ source picket-function-read-configuration "${picket_configuration_file}"
 argument_value_debug=""
 if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
-fi
-
-if [[ ! "${userId}" ]] ; then
-    echo >&2 ${USAGE}
-    exit 1
 fi
 
 is_valid_user_id=$(picket-function-is-valid-user-id "${userId}")

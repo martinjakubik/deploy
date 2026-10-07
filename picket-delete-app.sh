@@ -20,16 +20,6 @@ do
 		shift
 done
 
-picket_configuration_file="/etc/picket/config.picket"
-if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
-    picket_configuration_file="$HOME/.config/picket/config.picket"
-fi
-if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
-    picket_configuration_file="${picket_path_to_configuration_file}"
-fi
-
-source picket-function-read-configuration "${picket_configuration_file}"
-
 is_site_selected=0
 if [[ -n "${siteId}" ]] ; then
     is_site_selected=1
@@ -46,6 +36,16 @@ if [[ ${is_site_selected} -eq 1 && ! $(picket-function-is-valid-site-id "${siteI
     echo "Site id is not valid. Exiting."
     exit 1
 fi
+
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
 
 does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
 if [[ $does_app_exist_in_database -eq 0 ]] ; then

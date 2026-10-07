@@ -26,6 +26,12 @@ do
 		shift
 done
 
+is_valid_site_id=false
+if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
+    echo site id is not valid, exiting
+    exit 1
+fi
+
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
@@ -44,12 +50,6 @@ fi
 argument_value_debug=""
 if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
-fi
-
-is_valid_site_id=false
-if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
-    echo site id is not valid, exiting
-    exit 1
 fi
 
 echo "[ Trying to deploy site ''${siteId}''. ]"

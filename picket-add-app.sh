@@ -18,16 +18,6 @@ do
 		shift
 done
 
-picket_configuration_file="/etc/picket/config.picket"
-if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
-    picket_configuration_file="$HOME/.config/picket/config.picket"
-fi
-if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
-    picket_configuration_file="${picket_path_to_configuration_file}"
-fi
-
-source picket-function-read-configuration "${picket_configuration_file}"
-
 is_valid_app_id=false
 if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
     echo "App id is not valid, exiting."
@@ -39,6 +29,16 @@ if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     echo "Site id is not valid, exiting."
     exit 1
 fi
+
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
 
 does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
 if [[ $does_app_exist_in_database -eq 0 ]] ; then

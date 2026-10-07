@@ -16,6 +16,12 @@ do
 		shift
 done
 
+is_valid_app_id=false
+if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
+    echo app id is not valid, exiting
+    exit 1
+fi
+
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
@@ -25,12 +31,6 @@ if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configur
 fi
 
 source picket-function-read-configuration "${picket_configuration_file}"
-
-is_valid_app_id=false
-if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
-    echo app id is not valid, exiting
-    exit 1
-fi
 
 echo " [ Creating app \"${appId}\. ]"
 
