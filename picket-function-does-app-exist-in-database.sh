@@ -23,11 +23,21 @@ if [[ -n "${siteId}" ]] ; then
     is_site_selected=1
 fi
 
-file_listing_apps=""${path_to_picket_database}"/apps.db/apps"
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
+
+file_listing_apps="${path_to_picket_database}"/apps.db/apps
 if [[ $is_site_selected -eq 1 ]] ; then
-    file_listing_apps=""${path_to_picket_database}"/sites.db/${siteId}"
+    file_listing_apps="${path_to_picket_database}"/sites.db/${siteId}
 else
-    file_listing_apps=""${path_to_picket_database}"/apps.db/apps"
+    file_listing_apps="${path_to_picket_database}"/apps.db/apps
 fi
 
 existing_app_array=()
