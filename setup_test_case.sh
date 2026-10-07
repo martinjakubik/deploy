@@ -42,6 +42,9 @@ command_deploy__user_not_logged_in__valid_site_argument() {
 }
 
 create_site() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}"/sites.db/sites
+    fi
     if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
         rm "${path_to_picket_database}"/sites.db/site0
     fi
