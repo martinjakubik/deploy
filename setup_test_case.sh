@@ -3,22 +3,12 @@
 test_case="$1"
 echo case "$test_case"
 
-if [[ "$2" = "--configuration-file" ]] ; then
-    configuration_file_argument="$3"
-fi
-
-picket_configuration_file="/etc/picket/config.picket"
-if [[ -f "$HOME/config/picket/config.picket" ]] ; then
-    picket_configuration_file="$HOME/config/picket/config.picket"
-fi
+picket_configuration_file="testing-config.0.picket"
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
     picket_configuration_file="${picket_path_to_configuration_file}"
 fi
-if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
-    picket_configuration_file="${configuration_file_argument}"
-fi
 
-picket-function-read-configuration "${picket_configuration_file}"
+source picket-function-read-configuration "${picket_configuration_file}"
 
 command_stage__no_arguments__user_file_too_big() {
     if [[ ! -d "${path_to_picket_database}" ]] ; then
