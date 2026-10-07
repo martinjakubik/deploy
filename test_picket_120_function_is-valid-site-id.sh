@@ -1,7 +1,7 @@
 #!/bin/bash
 
 saved_picket_path_to_configuration_file="${picket_path_to_configuration_file}"
-export picket_path_to_configuration_file=./testing-config.picket
+export picket_path_to_configuration_file=./testing-config.0.picket
 
 run_count=0
 success_count=0
