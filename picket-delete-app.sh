@@ -75,7 +75,7 @@ if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "App does not exist."
     exit 1
 elif [[ ${is_site_selected} -eq 1 ]] ; then
-    file_listing_apps=""${path_to_picket_database}"/sites.db/${siteId}"
+    file_listing_apps="${path_to_picket_database}"/sites.db/${siteId}
     parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
 
     if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then

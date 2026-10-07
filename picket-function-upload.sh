@@ -207,7 +207,7 @@ upload_listed_files() {
             fi
             if [[ -n "${short_path_to_file}" && -f "${parent_path_of_local_file}"/"${short_path_to_file}" ]] ; then
                 path_to_current_file="$(dirname $short_path_to_file)"
-                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding upload command for \""${short_path_to_file}"\" ]" ; echo ; fi
+                if [[ $DEBUG -eq 1 ]] ; then echo ; echo "[ adding upload command for \"${short_path_to_file}\" ]" ; echo ; fi
 
                 if [[ "$path_to_current_file" == "${path_to_previous_file}" && $upload_count_in_set -lt $max_upload_count_before_throttle ]] ; then
                     add_file_to_current_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}"
@@ -219,7 +219,7 @@ upload_listed_files() {
                     finish_scp_command_and_add_file_to_new_scp_command "${short_path_to_file}" "${parent_path_of_local_file}" "${path_to_remote_file_in_staging_directory}" "directory_changed"
                 fi
             else
-                echo the file: \""$short_path_to_file"\" does not exist
+                echo "The file: \"$short_path_to_file\" does not exist."
             fi
             path_to_previous_file="${path_to_current_file}"
         done
