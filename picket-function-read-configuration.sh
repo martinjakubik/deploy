@@ -23,3 +23,19 @@ until $finished_reading_file; do
         configuration_array+=("$key=$value")
     fi
 done < "${picket_configuration_file}"
+
+# reads values from config
+path_to_site_database=""
+path_to_picket_database=""
+for entry in "${configuration_array[@]}"; do
+    case "$entry" in
+        (path_to_picket_database=*)
+            path_to_picket_database_value="${entry#path_to_picket_database=}"
+            path_to_picket_database="${path_to_picket_database_value/\$HOME/$HOME}"
+            export path_to_picket_database ;;
+        (path_to_site_database=*)
+            path_to_site_database_value="${entry#path_to_site_database=}"
+            path_to_site_database="${path_to_site_database/\$HOME/$HOME}"
+            export path_to_site_database ;;
+    esac
+done
