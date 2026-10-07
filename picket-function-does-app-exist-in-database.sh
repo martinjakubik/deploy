@@ -23,11 +23,11 @@ if [[ -n "${siteId}" ]] ; then
     is_site_selected=1
 fi
 
-file_listing_apps="$HOME/.picket/apps.db/apps"
+file_listing_apps=""${path_to_picket_database}"/apps.db/apps"
 if [[ $is_site_selected -eq 1 ]] ; then
-    file_listing_apps="$HOME/.picket/sites.db/${siteId}"
+    file_listing_apps=""${path_to_picket_database}"/sites.db/${siteId}"
 else
-    file_listing_apps="$HOME/.picket/apps.db/apps"
+    file_listing_apps=""${path_to_picket_database}"/apps.db/apps"
 fi
 
 existing_app_array=()

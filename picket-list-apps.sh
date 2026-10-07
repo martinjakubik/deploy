@@ -15,9 +15,9 @@ do
 done
 
 is_list_for_single_site=0
-file_listing_apps=$HOME/.picket/apps.db/apps
+file_listing_apps="${path_to_picket_database}"/apps.db/apps
 if [[ -n "${siteId}" ]] ; then
-    file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+    file_listing_apps="${path_to_picket_database}"/sites.db/"${siteId}"
     is_list_for_single_site=1
 fi
 parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")

@@ -16,7 +16,7 @@ do
 		shift
 done
 
-file_listing_sites=$HOME/.picket/sites.db/sites
+file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 existing_site_array=()

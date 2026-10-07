@@ -65,11 +65,11 @@ if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "App does not exist."
     exit 1
 elif [[ ${is_site_selected} -eq 1 ]] ; then
-    file_listing_apps="$HOME/.picket/sites.db/${siteId}"
+    file_listing_apps=""${path_to_picket_database}"/sites.db/${siteId}"
     parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
 
     if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then
-        echo "No app database was found for this site; check if $HOME/.picket/${siteId} exists."
+        echo "No app database was found for this site; check if "${path_to_picket_database}"/${siteId} exists."
         exit 1
     fi
 
@@ -106,11 +106,11 @@ elif [[ ${is_site_selected} -eq 1 ]] ; then
   		esac
    	done
 else
-    file_listing_apps=$HOME/.picket/apps.db/apps
+    file_listing_apps="${path_to_picket_database}"/apps.db/apps
     parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
 
     if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then
-        echo "No app database was found; check if $HOME/.picket/apps.db exists."
+        echo "No app database was found; check if "${path_to_picket_database}"/apps.db exists."
         exit 1
     fi
 

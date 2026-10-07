@@ -73,27 +73,27 @@ does_canonical_source_code_file_list_exist=0
 site_canonical_source_code_file_list=site-canonical-source-code-files
 if [[ -f "${site_canonical_source_code_file_list}" ]] ; then
     does_canonical_source_code_file_list_exist=1
-elif [[ -f $HOME/.picket/site-canonical-source-code-files ]] ; then
+elif [[ -f "${path_to_picket_database}"/site-canonical-source-code-files ]] ; then
     does_canonical_source_code_file_list_exist=1
-    site_canonical_source_code_file_list=$HOME/.picket/site-canonical-source-code-files
+    site_canonical_source_code_file_list="${path_to_picket_database}"/site-canonical-source-code-files
 fi
 does_canonical_binary_file_list_exist=0
 site_canonical_binary_file_list=site-canonical-binary-files
 if [[ -f "${site_canonical_binary_file_list}" ]] ; then
     does_canonical_binary_file_list_exist=1
-elif [[ -f $HOME/.picket/site-canonical-binary-files ]] ; then
+elif [[ -f "${path_to_picket_database}"/site-canonical-binary-files ]] ; then
     does_canonical_binary_file_list_exist=1
-    site_canonical_binary_file_list=$HOME/.picket/site-canonical-binary-files
+    site_canonical_binary_file_list="${path_to_picket_database}"/site-canonical-binary-files
 fi
 does_app_canonical_source_code_file_list_exist=0
-if [[ -f $HOME/.picket/app-canonical-source-code-files ]] ; then
+if [[ -f "${path_to_picket_database}"/app-canonical-source-code-files ]] ; then
     does_app_canonical_source_code_file_list_exist=1
-    app_canonical_source_code_file_list=$HOME/.picket/app-canonical-source-code-files
+    app_canonical_source_code_file_list="${path_to_picket_database}"/app-canonical-source-code-files
 fi
 does_app_canonical_binary_file_list_exist=0
-if [[ -f $HOME/.picket/app-canonical-binary-files ]] ; then
+if [[ -f "${path_to_picket_database}"/app-canonical-binary-files ]] ; then
     does_app_canonical_binary_file_list_exist=1
-    app_canonical_binary_file_list=$HOME/.picket/app-canonical-binary-files
+    app_canonical_binary_file_list="${path_to_picket_database}"/app-canonical-binary-files
 fi
 
 ensure_directory_exists_for_file() {
@@ -246,7 +246,7 @@ delete_files_uploaded_marker() {
     fi
 }
 
-file_listing_apps=$HOME/.picket/sites.db/"${siteId}"
+file_listing_apps="${path_to_picket_database}"/sites.db/"${siteId}"
 existing_app_array=()
 finished_reading_file=false
 until $finished_reading_file; do

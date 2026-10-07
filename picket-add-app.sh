@@ -108,7 +108,7 @@ copy_app_files_to_site() {
     done
 }
 
-file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
+file_listing_apps_in_site="${path_to_picket_database}"/sites.db/"${siteId}"
 
 if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
     touch "${file_listing_apps_in_site}"

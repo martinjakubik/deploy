@@ -24,7 +24,7 @@ fi
 
 echo " [ Creating app \"${appId}\. ]"
 
-file_listing_apps=$HOME/.picket/apps.db/apps
+file_listing_apps="${path_to_picket_database}"/apps.db/apps
 parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
 
 if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then

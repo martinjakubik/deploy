@@ -23,11 +23,11 @@ if [[ -z "${appId}" ]] ; then
 	exit 1
 fi
 
-file_listing_sites=$HOME/.picket/sites.db/sites
+file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
-    echo "no site database was found; check if $HOME/.picket/sites.db exists"
+    echo "no site database was found; check if "${path_to_picket_database}"/sites.db exists"
     exit 1
 fi
 
@@ -42,7 +42,7 @@ done < "${file_listing_sites}"
 
 sites_hosting_app=()
 for siteId in ${existing_site_array[@]} ; do
-    file_listing_apps_in_site=$HOME/.picket/sites.db/"${siteId}"
+    file_listing_apps_in_site="${path_to_picket_database}"/sites.db/"${siteId}"
     if [[ -f "${file_listing_apps_in_site}" ]] ; then
         finished_reading_file=false
         until $finished_reading_file; do
