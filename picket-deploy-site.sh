@@ -42,7 +42,7 @@ if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     exit 1
 fi
 
-echo -n "[ Trying to deploy site ''${siteId}''. ]"
+echo "[ Trying to deploy site ''${siteId}''. ]"
 
 does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
