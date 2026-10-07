@@ -1,12 +1,23 @@
 userId="${1}"
+
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
+
 if [[ ! -n "${userId}" ]] ; then
-    if [[ -f ~/.picket/user ]] ; then
-        filesize=$(wc -c < ~/.picket/user)
+    if [[ -f "${path_to_picket_database}"/user ]] ; then
+        filesize=$(wc -c < "${path_to_picket_database}"/user)
         if [[ $filesize -gt 127 ]] ; then
             echo "There is a problem with the user record. Use ''picket login --userId your_name'' to log in again."
             exit 1
         fi
-        read -r < ~/.picket/user
+        read -r < "${path_to_picket_database}"/user
         user_file_content="$REPLY"
         userId="$user_file_content"
 
