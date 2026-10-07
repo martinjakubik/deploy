@@ -38,8 +38,6 @@ if [[ "${argument_value_siteNickname}" ]] ; then
     siteNickname="${argument_value_siteNickname}"
 fi
 
-echo "[ Creating site \"${siteId}\". ]"
-
 file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
@@ -54,8 +52,8 @@ fi
 does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
-    echo "site does not exist; creating it"
     echo "${siteId}" >> "${file_listing_sites}"
+    echo "[ Site \"${siteId}\" created. ]"
 else
     echo "site already exists; not creating it"
 fi
