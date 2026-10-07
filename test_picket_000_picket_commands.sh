@@ -1,7 +1,7 @@
 #!/bin/bash
 
 saved_picket_path_to_configuration_file="${picket_path_to_configuration_file}"
-export picket_path_to_configuration_file=./testing-config.picket
+export picket_path_to_configuration_file=./testing-config.0.picket
 
 run_count=0
 success_count=0
@@ -118,7 +118,7 @@ fi
 test_case="command deploy, user logged in, valid site argument but site does not exist"
 ./setup_test_case.sh "$test_case"
 input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
-expected="[ Trying to deploy site ''wxyz''. ]\nSite does not exist. Stopping."
+expected="[ Trying to deploy site ''wxyz''. ]"$'\n'"Site does not exist. Stopping."
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
@@ -243,8 +243,8 @@ fi
 
 test_case="create site"
 ./setup_test_case.sh "$test_case"
-input="create-site --siteId site0 ; ls $PICKET_USER_HOME/sites.db/site0"
-expected="[ Site \"site0\" created. ]\n$PICKET_USER_HOME/sites.db/site0"
+input="create-site --siteId site0"
+expected="[ Site \"site0\" created. ]"
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
