@@ -46,7 +46,6 @@ do
 		(--incremental) incremental=1;;
 		(-t) THROTTLE=1;;
         (--throttle) THROTTLE=1;;
-        (--configuration-file) configuration_file_argument="$2"; shift;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
@@ -58,16 +57,12 @@ done
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
-    echo "in picket got default config: \"${picket_configuration_file}\""
 fi
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
     picket_configuration_file="${picket_path_to_configuration_file}"
 fi
-if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
-    picket_configuration_file="${configuration_file_argument}"
-fi
 
-picket-function-read-configuration "${picket_configuration_file}"
+source picket-function-read-configuration "${picket_configuration_file}"
 
 argument_value_incremental=""
 if [[ $incremental -eq 1 ]] ; then

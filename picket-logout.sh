@@ -10,7 +10,6 @@ configuration_file_argument=""
 while [ $# -gt 0 ]
 do
 	case "$1" in
-    	(--configuration-file) configuration_file_argument="$2"; shift;;
 		(-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(*) echo >&2 ${USAGE}
@@ -26,11 +25,8 @@ fi
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
     picket_configuration_file="${picket_path_to_configuration_file}"
 fi
-if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
-    picket_configuration_file="${configuration_file_argument}"
-fi
 
-picket-function-read-configuration "${picket_configuration_file}"
+source picket-function-read-configuration "${picket_configuration_file}"
 
 is_valid_picket_database=$(picket-function-is-valid-path-to-picket-database "${path_to_picket_database}")
 

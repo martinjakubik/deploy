@@ -23,5 +23,3 @@ until $finished_reading_file; do
         configuration_array+=("$key=$value")
     fi
 done < "${picket_configuration_file}"
-
-echo ${configuration_array[@]}

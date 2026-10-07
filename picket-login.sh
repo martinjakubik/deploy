@@ -12,7 +12,6 @@ do
 	case "$1" in
         (-u) userId="$2"; shift;;
         (--userId) userId="$2"; shift;;
-        (--configuration-file) configuration_file_argument="$2"; shift;;
 		(-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
@@ -28,13 +27,9 @@ fi
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
     picket_configuration_file="${picket_path_to_configuration_file}"
 fi
-if [[ -n "${configuration_file_argument}" && -f "${configuration_file_argument}" ]] ; then
-    picket_configuration_file="${configuration_file_argument}"
-fi
 
-configuration_array=$(picket-function-read-configuration "${picket_configuration_file}")
-echo "config array at pos 0: \"${configuration_array[0]}\""
-echo "config array at pos 1: \"${configuration_array[1]}\""
+source picket-function-read-configuration "${picket_configuration_file}"
+
 # reads values from config
 path_to_site_database=""
 path_to_picket_database=""
