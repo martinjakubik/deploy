@@ -8,10 +8,10 @@ success_count=0
 fail_count=0
 
 test_case="no arguments"
-./setup_test_case.sh "$test_case" --configuration-file testing-config.picket
+./setup_test_case.sh "$test_case"
 input=""
 expected="\[ Logging out. \]"
-actual=$(./picket-logout.sh $input --configuration-file testing-config.picket 2>&1)
+actual=$(./picket-logout.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! $actual = $expected ]] ; then
     fail_count=$(( fail_count+1 ))
