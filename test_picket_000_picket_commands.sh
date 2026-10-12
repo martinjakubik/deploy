@@ -259,6 +259,24 @@ else
     echo
 fi
 
+test_case="create app"
+./setup_test_case.sh "$test_case"
+input="create-app --appId app0"
+expected="[ App \"app0\" created. ]"
+actual=$(./picket.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! "$actual" = "$expected" ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 echo "number of tests:  " $run_count
 echo "succeeded:        " $success_count
 echo "failed:           " $fail_count
