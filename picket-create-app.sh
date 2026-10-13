@@ -32,7 +32,7 @@ fi
 
 source picket-function-read-configuration "${picket_configuration_file}"
 
-echo " [ Creating app \"${appId}\. ]"
+# creating app appId
 
 file_listing_apps="${path_to_picket_database}"/apps.db/apps
 parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
@@ -48,8 +48,8 @@ fi
 does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
 
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
-    echo "app does not exist; creating it"
     echo "${appId}" >> "${file_listing_apps}"
+    echo "[ App \"${appId}\" created. ]"
 else
     echo "app already exists; not creating it"
 fi

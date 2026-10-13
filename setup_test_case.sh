@@ -53,6 +53,12 @@ create_site() {
     fi
 }
 
+create_app() {
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}"/apps.db/apps
+    fi
+}
+
 update_app() {
     if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
         rm "${path_to_picket_database}"/sites.db/sites
@@ -76,6 +82,7 @@ case "$test_case" in
     ("command logout, no arguments; user logged in") command_logout__no_arguments__user_logged_in;;
     ("command deploy, user not logged in, valid site argument") command_deploy__user_not_logged_in__valid_site_argument;;
     ("create site") create_site;;
+    ("create app") create_app;;
     ("update app") update_app;;
 esac
 
