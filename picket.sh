@@ -16,6 +16,7 @@ case "$1" in
     (add-app) picket_command=add-app;;
     (activate-app) picket_command=activate-app;;
     (create-app) picket_command=create-app;;
+    (update-app) picket_command=update-app;;
     (delete-app) picket_command=delete-app;;
     (list-apps) picket_command=list-apps;;
 	(create-site) picket_command=create-site;;
@@ -95,6 +96,9 @@ case "${picket_command}" in
     ;;
     (create-app)
         picket-create-app --appId "${appId}" $argument_value_debug
+    ;;
+    (update-app)
+        picket-update-app --siteId "${siteId}" --appId "${appId}" $argument_value_debug
     ;;
     (delete-app)
         if [[ -n "${siteId}" ]] ; then

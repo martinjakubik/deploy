@@ -279,8 +279,8 @@ fi
 
 test_case="update app"
 ./setup_test_case.sh "$test_case"
-input="update-app --siteId wxyz --appId app0"
-expected="[ App \"app0\" updated in site \"wxyz\". ]"
+input="update-app --siteId site0 --appId app0"
+expected="[ App \"app0\" updated in site \"site0\". ]"
 actual=$(./picket.sh $input 2>&1)
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then

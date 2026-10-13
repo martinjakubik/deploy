@@ -53,12 +53,30 @@ create_site() {
     fi
 }
 
+update_app() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}"/sites.db/sites
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
+        rm "${path_to_picket_database}"/sites.db/site0
+    fi
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/sites.db"
+    fi
+    echo "site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "app0" > "${path_to_picket_database}/sites.db/site0"
+}
+
 case "$test_case" in
     ("command stage, valid site argument; user file too big") command_stage__no_arguments__user_file_too_big;;
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
     ("command logout, no arguments; user logged in") command_logout__no_arguments__user_logged_in;;
     ("command deploy, user not logged in, valid site argument") command_deploy__user_not_logged_in__valid_site_argument;;
     ("create site") create_site;;
+    ("update app") update_app;;
 esac
 
 exit 0

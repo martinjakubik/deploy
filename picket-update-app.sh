@@ -1,0 +1,157 @@
+#!/bin/bash
+# sets up usage
+USAGE="usage: $0 -a|--appId appId -s|--siteId siteId"
+
+# parses and reads command line arguments
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		(-a) appId="$2"; shift;;
+        (--appId) appId="$2"; shift;;
+        (-s) siteId="$2"; shift;;
+        (--siteId) siteId="$2"; shift;;
+        (-d) DEBUG=1;;
+        (--debug) DEBUG=1;;
+		(-*) echo >&2 ${USAGE}
+		exit 1;;
+	esac
+		shift
+done
+
+is_valid_app_id=false
+if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
+    echo "App id is not valid, exiting."
+    exit 1
+fi
+
+is_valid_site_id=false
+if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
+    echo "Site id is not valid, exiting."
+    exit 1
+fi
+
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
+
+does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
+if [[ $does_app_exist_in_database -eq 0 ]] ; then
+    echo "App does not exist. Stopping."
+    exit 1
+fi
+
+does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
+if [[ $does_site_exist_in_database -eq 0 ]] ; then
+    echo "Site does not exist. Stopping."
+    exit 1
+fi
+
+# updating app appId in site siteId
+
+all_project_root=~/code/gitwork
+site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
+
+ensure_directory_exists_for_file() {
+    short_path_to_file="$1"
+    path_to_file_in_site_project_root="$2"
+    full_path_to_filename_to_check="${path_to_file_in_site_project_root}"/"${short_path_to_file}"
+
+    targetDirectory=$(dirname "${full_path_to_filename_to_check}")
+    if printf '%s\0' "${existing_directory_array[@]}" | grep -Fxqz -- "${targetDirectory}" ; then
+        is_directory_found=1
+    else
+        is_directory_found=0
+    fi
+
+    if [[ ! $is_directory_found -eq 1 ]]; then
+        if [[ $DEBUG -eq 0 ]] ; then
+            if [[ ! -d "${targetDirectory}" ]] ; then mkdir -p "${targetDirectory}" ; fi
+        elif [[ $DEBUG -eq 1 ]] ; then
+            echo ; echo "[ creating directory for $short_path_to_file ]" ; echo
+            if [[ ! -d "${targetDirectory}" ]] ; then echo "creating directory ${targetDirectory}" ; fi
+        fi
+        existing_directory_array+=("$targetDirectory")
+    fi
+}
+
+copy_file_from_source_to_destination() {
+    short_path_to_file="$1"
+    source_directory="$2"
+    destination_directory="$3"
+    can_copy=1
+    if [[ ! -f "${source_directory}/${short_path_to_file}" ]] ; then
+        echo >&2 "While copying app file, there is no file to copy at \"${source_directory}/${short_path_to_file}\"."
+        can_copy=0
+    fi
+    if [[ ! -d "${destination_directory}" ]] ; then
+        echo >&2 "While copying app file, there is no destination directory at \"${destination_directory}\"."
+        can_copy=0
+    fi
+    if [[ $can_copy -eq 1 ]] ; then
+        cp "${source_directory}/${short_path_to_file}" "${destination_directory}/${short_path_to_file}"
+    fi
+}
+
+copy_app_files_to_site() {
+    file_listing_files_to_add="$1"
+    app_file_array=()
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        app_file_array+=("${REPLY/\\n/}")
+    done < "$file_listing_files_to_add"
+
+    if [[ ! -d "${site_project_root}/site/apps/${appId}/app" ]] ; then
+        mkdir -p "${site_project_root}/site/apps/${appId}/app"
+    fi
+    for short_path_to_file in "${app_file_array[@]}" ; do
+        if [[ -n "${short_path_to_file}" ]] ; then
+            ensure_directory_exists_for_file "${short_path_to_file}" "${site_project_root}/site/apps/${appId}/app"
+            copy_file_from_source_to_destination "${short_path_to_file}" "${app_project_root_directory}/app" "${site_project_root}/site/apps/${appId}/app"
+        fi
+    done
+}
+
+file_listing_apps_in_site="${path_to_picket_database}"/sites.db/"${siteId}"
+
+if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
+    touch "${file_listing_apps_in_site}"
+fi
+
+existing_app_in_site_array=()
+finished_reading_file=false
+until $finished_reading_file; do
+    read -r || finished_reading_file=true
+    existing_app_in_site_array+=("$REPLY")
+done < "${file_listing_apps_in_site}"
+
+if printf '%s\0' "${existing_app_in_site_array[@]}" | grep -Fxqz -- "${appId}" ; then
+    does_app_exist_in_database=1
+else
+    does_app_exist_in_database=0
+fi
+
+if [[ $does_app_exist_in_database -eq 0 ]] ; then
+    echo "App does not exist in site. Stopping."
+    exit 1
+else
+    app_project_root_directory="${all_project_root}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
+
+    ensure_directory_exists_for_file "${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/app"
+    cp "${app_project_root_directory}/${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/"
+    cp "${app_project_root_directory}/${appId}-custom-binary-files" "${site_project_root}/site/apps/${appId}/"
+    copy_app_files_to_site  ~/.picket/app-canonical-source-code-files
+    copy_app_files_to_site  ~/.picket/app-canonical-binary-files
+    copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-source-code-files
+    copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-binary-files
+
+    echo "[ App \"${appId}\" updated in site \"${siteId}\". ]"
+fi
+
+exit 0
