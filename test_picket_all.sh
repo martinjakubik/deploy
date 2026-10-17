@@ -14,6 +14,8 @@ test_files=(
   "test_picket_120_function_is-valid-site-id.sh"
   "test_picket_200_login.sh"
   "test_picket_210_logout.sh"
+  "test_picket_300_site.sh"
+  "test_picket_400_app.sh"
 )
 
 # runs each test file
