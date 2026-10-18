@@ -7,6 +7,24 @@ run_count=0
 success_count=0
 fail_count=0
 
+test_case="get app project root from ID"
+./setup_test_case.sh "$test_case"
+input="app1"
+expected="app1"
+actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
+run_count=$(( run_count+1 ))
+if [[ ! $actual = $expected ]] ; then
+    fail_count=$(( fail_count+1 ))
+    echo failed
+    echo "actual:   " "$actual"
+    echo "expected: " "$expected"
+    echo
+else
+    echo succeeded
+    success_count=$(( success_count+1 ))
+    echo
+fi
+
 test_case="create app no arguments"
 ./setup_test_case.sh "$test_case"
 input=""
