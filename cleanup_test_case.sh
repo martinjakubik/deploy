@@ -1,7 +1,6 @@
 #!/bin/bash
 
 test_case="$1"
-echo case "$test_case"
 
 picket_configuration_file="testing-config.0.picket"
 if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
@@ -41,9 +40,6 @@ create_site() {
     if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
         rm "${path_to_picket_database}"/sites.db/site0
     fi
-    if [[ ! -d "${path_to_picket_database}" ]] ; then
-        mkdir -p "${path_to_picket_database}"
-    fi
 }
 
 create_app() {
@@ -59,14 +55,6 @@ update_app() {
     if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
         rm "${path_to_picket_database}"/sites.db/site0
     fi
-    if [[ ! -d "${path_to_picket_database}" ]] ; then
-        mkdir -p "${path_to_picket_database}"
-    fi
-    if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
-        mkdir -p "${path_to_picket_database}/sites.db"
-    fi
-    echo "site0" > "${path_to_picket_database}/sites.db/sites"
-    echo "app0" > "${path_to_picket_database}/sites.db/site0"
 }
 
 case "$test_case" in

@@ -246,6 +246,7 @@ test_case="create site"
 input="create-site --siteId site0"
 expected="[ Site \"site0\" created. ]"
 actual=$(./picket.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
@@ -264,24 +265,15 @@ test_case="create app"
 input="create-app --appId app0"
 expected="[ App \"app0\" created. ]"
 actual=$(./picket.sh $input 2>&1)
-run_count=$(( run_count+1 ))
-if [[ ! "$actual" = "$expected" ]] ; then
-    fail_count=$(( fail_count+1 ))
-    echo failed
-    echo "actual:   " "$actual"
-    echo "expected: " "$expected"
-    echo
-else
-    echo succeeded
-    success_count=$(( success_count+1 ))
-    echo
-fi
+source ./test_picket_update_reports.sh
+./cleanup_test_case.sh "$test_case"
 
 test_case="update app"
 ./setup_test_case.sh "$test_case"
 input="update-app --siteId site0 --appId app0"
 expected="[ App \"app0\" updated in site \"site0\". ]"
 actual=$(./picket.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))

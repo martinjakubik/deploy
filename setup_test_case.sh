@@ -42,30 +42,16 @@ command_deploy__user_not_logged_in__valid_site_argument() {
 }
 
 create_site() {
-    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
-        rm "${path_to_picket_database}"/sites.db/sites
-    fi
-    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
-        rm "${path_to_picket_database}"/sites.db/site0
-    fi
     if [[ ! -d "${path_to_picket_database}" ]] ; then
         mkdir -p "${path_to_picket_database}"
     fi
 }
 
 create_app() {
-    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
-        rm "${path_to_picket_database}"/apps.db/apps
-    fi
+    :
 }
 
 update_app() {
-    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
-        rm "${path_to_picket_database}"/sites.db/sites
-    fi
-    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
-        rm "${path_to_picket_database}"/sites.db/site0
-    fi
     if [[ ! -d "${path_to_picket_database}" ]] ; then
         mkdir -p "${path_to_picket_database}"
     fi
