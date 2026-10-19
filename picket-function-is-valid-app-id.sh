@@ -34,6 +34,9 @@ if [[ "${appId}" =~ .*\ .* ]] ; then
 elif [[ "${#appId}" -gt 29 ]] ; then
     if [[ $DEBUG -eq 1 ]] ; then echo "app id too long '${appId}'" ; fi
     is_valid_app_id=0
+elif [[ ! "${appId}" =~ [ascdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][ascdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]* ]] ; then
+    if [[ $DEBUG -eq 1 ]] ; then echo "app id has an invalid character" ; fi
+    is_valid_app_id=0
 else
     is_valid_app_id=1
 fi
