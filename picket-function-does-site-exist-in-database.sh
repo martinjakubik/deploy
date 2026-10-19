@@ -30,11 +30,13 @@ file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 existing_site_array=()
-finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    existing_site_array+=("$REPLY")
-done < "${file_listing_sites}"
+if [[ -f "${file_listing_sites}" ]] ; then
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        existing_site_array+=("$REPLY")
+    done < "${file_listing_sites}"
+fi
 
 if printf '%s\0' "${existing_site_array[@]}" | grep -Fxqz -- "${siteId}" ; then
     does_site_exist_in_database=1

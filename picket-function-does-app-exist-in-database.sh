@@ -41,11 +41,13 @@ else
 fi
 
 existing_app_array=()
-finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    existing_app_array+=("$REPLY")
-done < "${file_listing_apps}"
+if [[ -f "${file_listing_apps}" ]] ; then
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        existing_app_array+=("$REPLY")
+    done < "${file_listing_apps}"
+fi
 
 if printf '%s\0' "${existing_app_array[@]}" | grep -Fxqz -- "${appId}" ; then
     does_app_exist_in_database=1
