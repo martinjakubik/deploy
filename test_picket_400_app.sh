@@ -9,8 +9,16 @@ fail_count=0
 
 test_case="get app project root from ID"
 ./setup_test_case.sh "$test_case"
-input="app1"
-expected="app1"
+input="app0"
+expected="app0"
+actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
+test_case="get app project root from ID, invalid app ID"
+./setup_test_case.sh "$test_case"
+input="invalid_app"
+expected="No app named \"invalid_app\"."
 actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
@@ -28,6 +36,14 @@ test_case="add app no arguments"
 input=""
 expected="usage: ./picket-add-app.sh --userId userId --siteId siteId --appId appId -d|--debug"
 actual=$(./picket-add-app.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
+test_case="delete unused app"
+./setup_test_case.sh "$test_case"
+input="--appId app0"
+expected="[ App \"app0\" deleted. ]"
+actual=$(./picket-delete-app.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 

@@ -62,8 +62,31 @@ update_app() {
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
     echo "site0" > "${path_to_picket_database}/sites.db/sites"
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
     echo "app0" > "${path_to_picket_database}/sites.db/site0"
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+}
+
+get_app_project_root_from_ID() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+}
+
+delete_unused_app() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
 
 case "$test_case" in
@@ -74,6 +97,8 @@ case "$test_case" in
     ("create site") create_site;;
     ("create app") create_app;;
     ("update app") update_app;;
+    ("delete unused app") delete_unused_app;;
+    ("get app project root from ID") get_app_project_root_from_ID;;
 esac
 
 exit 0
