@@ -10,7 +10,7 @@ fail_count=0
 test_case="no arguments"
 ./setup_test_case.sh "$test_case"
 input=""
-expected="\[ Logging out. \]"
+expected="[ Logging out. ]"
 actual=$(./picket-logout.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh

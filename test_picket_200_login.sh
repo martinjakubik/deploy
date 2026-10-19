@@ -18,7 +18,7 @@ source ./test_picket_update_reports.sh
 test_case="valid username"
 ./setup_test_case.sh "$test_case"
 input="--userId your_name"
-expected="\[ Logging in. \]"
+expected="[ Logging in. ]"
 actual=$(./picket-login.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
