@@ -34,6 +34,9 @@ if [[ "${siteId}" =~ .*\ .* ]] ; then
 elif [[ "${#siteId}" -gt 29 ]] ; then
     if [[ $DEBUG -eq 1 ]] ; then echo "site id too long '${siteId}'" ; fi
     is_valid_site_id=0
+elif [[ ! "${appId}" =~ [ascdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][ascdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]* ]] ; then
+    if [[ $DEBUG -eq 1 ]] ; then echo "site id has an invalid character" ; fi
+    is_valid_site_id=0
 else
     is_valid_site_id=1
 fi
