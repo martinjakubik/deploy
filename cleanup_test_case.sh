@@ -52,6 +52,9 @@ update_app() {
     if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
         rm "${path_to_picket_database}"/sites.db/sites
     fi
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}"/apps.db/apps
+    fi
     if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
         rm "${path_to_picket_database}"/sites.db/site0
     fi

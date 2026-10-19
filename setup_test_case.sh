@@ -58,7 +58,11 @@ update_app() {
     if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
         mkdir -p "${path_to_picket_database}/sites.db"
     fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
     echo "site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
     echo "app0" > "${path_to_picket_database}/sites.db/site0"
 }
 
