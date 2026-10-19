@@ -12,54 +12,24 @@ test_case="no arguments"
 input=""
 expected="usage: ./picket-login.sh --userId userId -d|--debug"
 actual=$(./picket-login.sh $input 2>&1)
-run_count=$(( run_count+1 ))
-if [[ ! $actual = $expected ]] ; then
-    fail_count=$(( fail_count+1 ))
-    echo failed
-    echo "actual:   " "$actual"
-    echo "expected: " "$expected"
-    echo
-else
-    echo succeeded
-    success_count=$(( success_count+1 ))
-    echo
-fi
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
 
 test_case="valid username"
 ./setup_test_case.sh "$test_case"
 input="--userId your_name"
 expected="\[ Logging in. \]"
 actual=$(./picket-login.sh $input 2>&1)
-run_count=$(( run_count+1 ))
-if [[ ! $actual = $expected ]] ; then
-    fail_count=$(( fail_count+1 ))
-    echo failed
-    echo "actual:   " "$actual"
-    echo "expected: " "$expected"
-    echo
-else
-    echo succeeded
-    success_count=$(( success_count+1 ))
-    echo
-fi
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
 
 test_case="invalid username: plus character"
 ./setup_test_case.sh "$test_case"
 input="--userId +"
 expected="The user name is invalid. Use only letters without accents, arabic digits and start with a letter."
 actual=$(./picket-login.sh $input 2>&1)
-run_count=$(( run_count+1 ))
-if [[ ! $actual = $expected ]] ; then
-    fail_count=$(( fail_count+1 ))
-    echo failed
-    echo "actual:   " "$actual"
-    echo "expected: " "$expected"
-    echo
-else
-    echo succeeded
-    success_count=$(( success_count+1 ))
-    echo
-fi
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
 
 echo "number of tests:  " $run_count
 echo "succeeded:        " $success_count
