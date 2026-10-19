@@ -18,7 +18,7 @@ source ./test_picket_update_reports.sh
 test_case="get app project root from ID, invalid app ID"
 ./setup_test_case.sh "$test_case"
 input="invalid_app"
-expected="No app named \"invalid_app\"."
+expected="App does not exist. Stopping."
 actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh

@@ -31,6 +31,12 @@ else
     exit 1
 fi
 
+does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
+if [[ $does_app_exist_in_database -eq 0 ]] ; then
+    echo "App does not exist. Stopping."
+    exit 1
+fi
+
 picket_app_configuration_file="${path_to_picket_database}/apps.db/${appId}"
 
 app_configuration_array=()
