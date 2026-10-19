@@ -49,7 +49,7 @@ source ./test_picket_update_reports.sh
 
 test_case="command deploy, user not logged in, valid site argument"
 ./setup_test_case.sh "$test_case"
-input="deploy --siteId wxyz -d"
+input="deploy --siteId site0 -d"
 expected="You did not provide a user ID. Use ''picket <command> --siteId ... --userId your_name --ip 192.0.2.0'', or type ''picket login your_name'' to log in permanently."
 actual=$(./picket.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
@@ -57,8 +57,8 @@ source ./test_picket_update_reports.sh
 
 test_case="command deploy, user logged in, valid site argument but site does not exist"
 ./setup_test_case.sh "$test_case"
-input="deploy --siteId wxyz --userId your_name --ip 192.0.2.0"
-expected="[ Trying to deploy site ''wxyz''. ]"$'\n'"Site does not exist. Stopping."
+input="deploy --siteId site0 --userId your_name --ip 192.0.2.0"
+expected="[ Trying to deploy site ''site0''. ]"$'\n'"Site does not exist. Stopping."
 actual=$(./picket.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
@@ -81,7 +81,7 @@ source ./test_picket_update_reports.sh
 
 test_case="command stage, valid site argument; user file too big"
 ./setup_test_case.sh "$test_case"
-input="stage --siteId wxyz"
+input="stage --siteId site0"
 expected="There is a problem with the user record. Use ''picket login --userId your_name'' to log in again."
 actual=$(./picket.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
