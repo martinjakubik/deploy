@@ -1,5 +1,10 @@
 appId="$1"
 
+if [[ $(picket-function-is-valid-app-id "${appId}") -ne 1 ]] ; then
+    echo "invalid app ID"
+    exit 1
+fi
+
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
     picket_configuration_file="$HOME/.config/picket/config.picket"
