@@ -46,9 +46,9 @@ if [[ ! -d "${parent_path_to_file_listing_apps}" ]] ; then
     exit 1
 fi
 
-echo
 if [[ $is_list_for_single_site -eq 0 ]] ; then
     echo "[ Listing apps. ]"
+    echo
 else
     echo "[ Listing apps for site \"${siteId}\". ]"
     if [[ ! -f "${file_listing_apps}" ]] ; then
