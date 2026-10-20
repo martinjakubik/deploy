@@ -34,7 +34,7 @@ source ./test_picket_update_reports.sh
 test_case="add app no arguments"
 ./setup_test_case.sh "$test_case"
 input=""
-expected="usage: ./picket-add-app.sh --userId userId --siteId siteId --appId appId -d|--debug"
+expected="App ID cannot be empty. Exiting."$'\n'"usage: ./picket-add-app.sh -a|--appId appId -s|--siteId siteId [-d|--debug]"
 actual=$(./picket-add-app.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
