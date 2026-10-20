@@ -17,6 +17,11 @@ do
 		shift
 done
 
+if [[ -z "${siteId}" ]] ; then
+	echo "Site ID cannot be empty; exiting."
+	exit 1
+fi
+
 is_valid_site_id=false
 if [[ ! $(picket-function-is-valid-site-id "${siteId}") ]] ; then
     echo site id is not valid, exiting
