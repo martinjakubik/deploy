@@ -82,6 +82,9 @@ get_app_project_root_from_ID() {
 }
 
 delete_unused_app() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}"/sites.db/sites
+    fi
     if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
         rm "${path_to_picket_database}/apps.db/apps"
     fi

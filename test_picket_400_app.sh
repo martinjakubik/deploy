@@ -41,8 +41,16 @@ source ./test_picket_update_reports.sh
 
 test_case="delete unused app"
 ./setup_test_case.sh "$test_case"
-input="--appId app0"
+input="--appId app0 --force"
 expected="[ App \"app0\" deleted. ]"
+actual=$(./picket-delete-app.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
+test_case="delete unused app, no database set up"
+./setup_test_case.sh "$test_case"
+input="--appId app0"
+expected="No site database was found; check if .testing-picket-0/sites.db exists."
 actual=$(./picket-delete-app.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
