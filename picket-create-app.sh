@@ -29,11 +29,11 @@ if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
     exit 1
 fi
 
-path="${appId}"
 if [[ -n "${path}" ]] ; then
     echo "Not implemented"
     exit 1
 fi
+path="${appId}"
 
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
@@ -62,7 +62,7 @@ does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId 
 
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "${appId}" >> "${file_listing_apps}"
-    echo "path=${path}" > "${path_to_picket_database}/${appId}"
+    echo "path=${path}" > "${path_to_picket_database}/apps.db/${appId}"
     echo "[ App \"${appId}\" created. ]"
 else
     echo "App already exists; not creating it."
