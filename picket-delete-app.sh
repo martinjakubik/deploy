@@ -1,8 +1,9 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -a|--appId appId -s|--siteId siteId -d|--debug"
+USAGE="usage: $0 -a|--appId appId -s|--siteId siteId [--force] [-d|--debug]"
 
 unset appId
+FORCE=0
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -12,6 +13,7 @@ do
         (--appId) appId="$2"; shift;;
         (-s) siteId="$2"; shift;;
         (--siteId) siteId="$2"; shift;;
+        (--force) FORCE=1;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
@@ -19,6 +21,12 @@ do
 	esac
 		shift
 done
+
+if [[ -z "${appId}" ]] ; then
+	echo "App ID cannot be empty. Exiting."
+	echo >&2 ${USAGE}
+	exit 1
+fi
 
 is_site_selected=0
 if [[ -n "${siteId}" ]] ; then
@@ -65,12 +73,6 @@ if [[ ${is_site_selected} -eq 1 && ${does_app_exist_in_site_database} -eq 0 ]] ;
     exit 1
 fi
 
-if [[ ${is_site_selected} -eq 1 ]] ; then
-    echo "[ Deleting app \"${appId}\" from site \"${siteId}\". ]"
-else
-    echo "[ Deleting app \"${appId}\". ]"
-fi
-
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "App does not exist."
     exit 1
@@ -107,14 +109,20 @@ elif [[ ${is_site_selected} -eq 1 ]] ; then
   		fi
    	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app
 
-   	echo "Really delete the app \"${appId}\" from site \"${siteId}\"?"
-   	select strictreply in "Yes" "No"; do
-  		relaxedreply=${strictreply:-$REPLY}
-  		case $relaxedreply in
- 			(Yes | yes | Y | y) echo "[ Deleting app. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
- 			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
-  		esac
-   	done
+    if [[ $FORCE -eq 0 ]] ; then
+       	echo "Really delete the app \"${appId}\" from site \"${siteId}\"?"
+       	select strictreply in "Yes" "No"; do
+      		relaxedreply=${strictreply:-$REPLY}
+      		case $relaxedreply in
+     			(Yes | yes | Y | y) echo "[ App \"${appId}\" deleted. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
+     			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
+      		esac
+       	done
+    elif [[ $FORCE -eq 1 ]] ; then
+        echo "[ App \"${appId}\" deleted. ]"
+        mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"
+        exit 0
+    fi
 else
     file_listing_apps="${path_to_picket_database}"/apps.db/apps
     parent_path_to_file_listing_apps=$(dirname "${file_listing_apps}")
@@ -142,7 +150,6 @@ else
 
     read -a list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
     if [[ $DEBUG -eq 1 ]] ; then echo "[ Number of sites hosting app: \"${#list_sites_hosting_app[@]}\". ]" ; fi
-    echo $list_sites_hosting_app
 
     if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
     	finished_reading_file=false
@@ -153,14 +160,20 @@ else
     		fi
     	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app
 
-    	echo "Really delete the app \"${appId}\"?"
-    	select strictreply in "Yes" "No"; do
-    		relaxedreply=${strictreply:-$REPLY}
-    		case $relaxedreply in
-    			(Yes | yes | Y | y) echo "[ Deleting app. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
-    			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
-    		esac
-    	done
+        if [[ $FORCE -eq 0 ]] ; then
+        	echo "Really delete the app \"${appId}\"?"
+        	select strictreply in "Yes" "No"; do
+        		relaxedreply=${strictreply:-$REPLY}
+        		case $relaxedreply in
+        			(Yes | yes | Y | y) echo "[ App \"${appId}\" deleted. ]"; mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}"; break;;
+        			(No  | no  | N | n) echo "[ App was not deleted. ]"; rm "${file_listing_apps}".without_deleted_app; exit 0;;
+        		esac
+        	done
+        elif [[ $FORCE -eq 1 ]] ; then
+            echo "[ App \"${appId}\" deleted. ]"
+            mv "${file_listing_apps}".without_deleted_app "${file_listing_apps}";
+            exit 0
+        fi
     else
          echo "Some sites still host this app. Use ''picket delete-app --siteId your_site'' to remove the app from those sites first."
          exit 1
