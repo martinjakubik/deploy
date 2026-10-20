@@ -29,7 +29,7 @@ file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
-    echo "no site database was found; check if "${path_to_picket_database}"/sites.db exists"
+    echo "No site database was found; check if "${path_to_picket_database}"/sites.db exists."
     exit 1
 fi
 
