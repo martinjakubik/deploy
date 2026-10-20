@@ -33,6 +33,15 @@ command_deploy__user_not_logged_in__valid_site_argument() {
     fi
 }
 
+valid_site_id() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}"/sites.db/sites
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
+        rm "${path_to_picket_database}"/sites.db/site0
+    fi
+}
+
 create_site() {
     if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
         rm "${path_to_picket_database}"/sites.db/sites
@@ -86,6 +95,7 @@ case "$test_case" in
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
     ("command logout, no arguments; user logged in") command_logout__no_arguments__user_logged_in;;
     ("command deploy, user not logged in, valid site argument") command_deploy__user_not_logged_in__valid_site_argument;;
+    ("valid site id") valid_site_id;;
     ("create site") create_site;;
     ("create app") create_app;;
     ("update app") update_app;;

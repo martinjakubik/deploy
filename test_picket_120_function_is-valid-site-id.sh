@@ -17,7 +17,7 @@ source ./test_picket_update_reports.sh
 
 test_case="valid site id"
 ./setup_test_case.sh "$test_case"
-input="abcd"
+input="site0"
 expected="1"
 actual=$(./picket-function-is-valid-site-id.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
