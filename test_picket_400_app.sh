@@ -55,6 +55,30 @@ actual=$(./picket-delete-app.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
+test_case="list apps, empty"
+./setup_test_case.sh "$test_case"
+input=""
+expected="[ Listing apps. ]"$'\n\n'"[ ... 0 apps found. ]"
+actual=$(./picket-list-apps.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
+test_case="list apps, one app"
+./setup_test_case.sh "$test_case"
+input=""
+expected="[ Listing apps. ]"$'\n\n'"000. app0"$'\n\n'"[ ... 1 app found. ]"
+actual=$(./picket-list-apps.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
+test_case="list apps, two apps"
+./setup_test_case.sh "$test_case"
+input=""
+expected="[ Listing apps. ]"$'\n\n'"000. app0"$'\n'"001. app1"$'\n\n'"[ ... 2 apps found. ]"
+actual=$(./picket-list-apps.sh $input 2>&1)
+./cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
 echo "number of tests:  " $run_count
 echo "succeeded:        " $success_count
 echo "failed:           " $fail_count

@@ -104,6 +104,30 @@ delete_unused_app() {
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
 
+list_apps__one_app() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+}
+
+list_apps__two_apps() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "app1" >> "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+    echo "path=app1" > "${path_to_picket_database}/apps.db/app1"
+}
+
 case "$test_case" in
     ("command stage, valid site argument; user file too big") command_stage__no_arguments__user_file_too_big;;
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
@@ -115,6 +139,8 @@ case "$test_case" in
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
     ("get app project root from ID") get_app_project_root_from_ID;;
+    ("list apps, one app") list_apps__one_app;;
+    ("list apps, two apps") list_apps__two_apps;;
 esac
 
 exit 0

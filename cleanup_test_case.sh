@@ -93,6 +93,27 @@ delete_unused_app() {
     fi
 }
 
+list_apps__one_app(){
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}/apps.db/apps"
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/app0 ]] ; then
+        rm "${path_to_picket_database}/apps.db/app0"
+    fi
+}
+
+list_apps__two_apps() {
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}/apps.db/apps"
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/app0 ]] ; then
+        rm "${path_to_picket_database}/apps.db/app0"
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/app1 ]] ; then
+        rm "${path_to_picket_database}/apps.db/app1"
+    fi
+}
+
 case "$test_case" in
     ("command stage, valid site argument; user file too big") command_stage__no_arguments__user_file_too_big;;
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
@@ -104,6 +125,8 @@ case "$test_case" in
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
     ("get app project root from ID") get_app_project_root_from_ID;;
+    ("list apps, one app") list_apps__one_app;;
+    ("list apps, two apps") list_apps__two_apps;;
 esac
 
 exit 0
