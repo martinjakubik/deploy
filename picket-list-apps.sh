@@ -48,14 +48,14 @@ fi
 
 if [[ $is_list_for_single_site -eq 0 ]] ; then
     echo "[ Listing apps. ]"
-    echo
 else
     echo "[ Listing apps for site \"${siteId}\". ]"
-    if [[ ! -f "${file_listing_apps}" ]] ; then
-        echo
-        echo "... 0 apps found."
-        exit 0
-    fi
+fi
+
+if [[ ! -f "${file_listing_apps}" ]] ; then
+    echo
+    echo "[ ... 0 apps found. ]"
+    exit 0
 fi
 
 existing_app_array=()
@@ -67,6 +67,7 @@ until $finished_reading_file; do
     fi
 done < "${file_listing_apps}"
 
+echo
 app_count=0
 for appId in "${existing_app_array[@]}" ; do
     app_count_padded=$app_count
