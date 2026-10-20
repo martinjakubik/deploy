@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 -a|--appId appId -d|--debug"
+USAGE="usage: $0 -a|--appId appId [--path path] -d|--debug"
 
 # parses and reads command line arguments
 while [ $# -gt 0 ]
@@ -8,6 +8,7 @@ do
 	case "$1" in
 		(-a) appId="$2"; shift;;
         (--appId) appId="$2"; shift;;
+        (--path) path="$2"; shift;;
         (-d) DEBUG=1;;
         (--debug) DEBUG=1;;
 		(-*) echo >&2 ${USAGE}
@@ -25,6 +26,12 @@ fi
 is_valid_app_id=false
 if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
     echo app id is not valid, exiting
+    exit 1
+fi
+
+path="${appId}"
+if [[ -n "${path}" ]] ; then
+    echo "Not implemented"
     exit 1
 fi
 
@@ -55,9 +62,10 @@ does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId 
 
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "${appId}" >> "${file_listing_apps}"
+    echo "path=${path}" > "${path_to_picket_database}/${appId}"
     echo "[ App \"${appId}\" created. ]"
 else
-    echo "app already exists; not creating it"
+    echo "App already exists; not creating it."
 fi
 
 exit 0

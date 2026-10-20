@@ -148,8 +148,16 @@ else
         does_app_exist_in_database=0
     fi
 
-    read -a list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
-    if [[ $DEBUG -eq 1 ]] ; then echo "[ Number of sites hosting app: \"${#list_sites_hosting_app[@]}\". ]" ; fi
+    read -a response_from_list_sites_hosting_app < <(picket-function-list-sites-hosting-app --appId "${appId}")
+    if [[ "${response_from_list_sites_hosting_app}" =~ "^Error" ]] ; then
+        exit 1
+    else
+        list_sites_hosting_app=("${response_from_list_sites_hosting_app[@]}")
+    fi
+
+    if [[ $DEBUG -eq 1 ]] ; then echo "Number of sites hosting app: \"${#response_from_list_sites_hosting_app[@]}\"." ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo "Number of sites hosting app: \"${#list_sites_hosting_app[@]}\"." ; fi
+    if [[ $DEBUG -eq 1 ]] ; then echo "Sites hosting app: \"${list_sites_hosting_app[@]}\"." ; fi
 
     if [[ "${#list_sites_hosting_app[@]}" -eq 0 ]] ; then
     	finished_reading_file=false

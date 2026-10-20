@@ -37,11 +37,12 @@ file_listing_sites="${path_to_picket_database}"/sites.db/sites
 parent_path_to_file_listing_sites=$(dirname "${file_listing_sites}")
 
 if [[ ! -d "${parent_path_to_file_listing_sites}" || ! -f  ${file_listing_sites} ]] ; then
-    echo "No site database was found. Check if ${path_to_picket_database}/sites.db/sites exists."
+    echo "Error: No site database was found. Check if ${path_to_picket_database}/sites.db/sites exists."
     exit 1
 fi
 
 existing_site_array=()
+if [[ $DEBUG -eq 1 ]] ; then echo "Existing site array: \"${existing_site_array[@]}\"." ; fi
 finished_reading_file=false
 until $finished_reading_file; do
     read -r || finished_reading_file=true
@@ -57,7 +58,7 @@ for siteId in ${existing_site_array[@]} ; do
         finished_reading_file=false
         until $finished_reading_file; do
             read -r || finished_reading_file=true
-            if [[ -n "$REPLY" ]] ; then
+            if [[ -n "$REPLY" && "$REPLY" = "${appId}" ]] ; then
                 sites_hosting_app+=("$siteId")
             fi
         done < "${file_listing_apps_in_site}"
