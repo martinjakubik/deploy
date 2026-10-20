@@ -26,7 +26,7 @@ source ./test_picket_update_reports.sh
 test_case="create app no arguments"
 ./setup_test_case.sh "$test_case"
 input=""
-expected="App ID cannot be empty. Exiting."$'\n'"usage: ./picket-create-app.sh -a|--appId appId -d|--debug"
+expected="App ID cannot be empty. Exiting."$'\n'"usage: ./picket-create-app.sh -a|--appId appId [--path path] -d|--debug"
 actual=$(./picket-create-app.sh $input 2>&1)
 ./cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
