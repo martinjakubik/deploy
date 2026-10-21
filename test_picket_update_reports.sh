@@ -14,7 +14,6 @@ run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
     fail_count=$(( fail_count+1 ))
     echo failed
-    # echo -e "${col1}hello${col0} ${col2}color${col0}"
     echo -e "actual:   \"${col1}$actual${col0}\""
     echo -e "expected: \"${col2}$expected${col0}\""
     echo
