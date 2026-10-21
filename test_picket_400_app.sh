@@ -8,75 +8,75 @@ success_count=0
 fail_count=0
 
 test_case="get app project root from ID"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input="app0"
 expected="app0"
 actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="get app project root from ID, invalid app ID"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input="invalid_app"
 expected="App does not exist. Stopping."
 actual=$(./picket-function-get-app-project-root-from-id.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="create app no arguments"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input=""
 expected="App ID cannot be empty. Exiting."$'\n'"usage: ./picket-create-app.sh -a|--appId appId [--path path] -d|--debug"
 actual=$(./picket-create-app.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="add app no arguments"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input=""
 expected="App ID cannot be empty. Exiting."$'\n'"usage: ./picket-add-app.sh -a|--appId appId -s|--siteId siteId [-d|--debug]"
 actual=$(./picket-add-app.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="delete unused app"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input="--appId app0 --force"
 expected="[ App \"app0\" deleted. ]"
 actual=$(./picket-delete-app.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="delete unused app, no database set up"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input="--appId app0"
 expected="App does not exist. Stopping."
 actual=$(./picket-delete-app.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="list apps, empty"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input=""
 expected="[ Listing apps. ]"$'\n\n'"[ ... 0 apps found. ]"
 actual=$(./picket-list-apps.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="list apps, one app"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input=""
 expected="[ Listing apps. ]"$'\n\n'"000. app0"$'\n\n'"[ ... 1 app found. ]"
 actual=$(./picket-list-apps.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 test_case="list apps, two apps"
-./setup_test_case.sh "$test_case"
+./test_picket_setup_test_case.sh "$test_case"
 input=""
 expected="[ Listing apps. ]"$'\n\n'"000. app0"$'\n'"001. app1"$'\n\n'"[ ... 2 apps found. ]"
 actual=$(./picket-list-apps.sh $input 2>&1)
-./cleanup_test_case.sh "$test_case"
+./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
 echo "number of tests:  " $run_count
