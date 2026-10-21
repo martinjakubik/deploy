@@ -51,6 +51,27 @@ create_site() {
     fi
 }
 
+list_sites__one_site() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}/sites.db/sites"
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
+        rm "${path_to_picket_database}/sites.db/site0"
+    fi
+}
+
+list_sites__two_sites() {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}/sites.db/sites"
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
+        rm "${path_to_picket_database}/sites.db/site0"
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site1 ]] ; then
+        rm "${path_to_picket_database}/sites.db/site1"
+    fi
+}
+
 create_app() {
     if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
         rm "${path_to_picket_database}"/apps.db/apps
@@ -121,6 +142,8 @@ case "$test_case" in
     ("command deploy, user not logged in, valid site argument") command_deploy__user_not_logged_in__valid_site_argument;;
     ("valid site id") valid_site_id;;
     ("create site") create_site;;
+    ("list sites, one site") list_sites__one_site;;
+    ("list sites, two sites") list_sites__two_sites;;
     ("create app") create_app;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
