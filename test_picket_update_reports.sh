@@ -1,7 +1,14 @@
 # sets up colors
-col0='\033[0m'
-col1='\033[0;33m'
-col2='\033[0;34m'
+col0=''
+col1=''
+col2=''
+
+# activates colors only if output is going to a terminal
+if [[ -t 1 ]] ; then
+    col0='\033[0m'
+    col1='\033[0;33m'
+    col2='\033[0;34m'
+fi
 
 run_count=$(( run_count+1 ))
 if [[ ! "$actual" = "$expected" ]] ; then
