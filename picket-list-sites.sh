@@ -33,9 +33,13 @@ if [[ ! -d "${parent_path_to_file_listing_sites}" ]] ; then
     exit 1
 fi
 
-echo
 echo "[ Listing sites. ]"
 echo
+
+if [[ ! -f "${file_listing_sites}" ]] ; then
+    echo "[ ... 0 sites found. ]"
+    exit 0
+fi
 
 existing_site_array=()
 finished_reading_file=false
