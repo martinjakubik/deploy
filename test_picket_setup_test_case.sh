@@ -97,7 +97,7 @@ update_app() {
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
     echo "site0" > "${path_to_picket_database}/sites.db/sites"
-    echo "app0" > "${path_to_picket_database}/sites.db/site0"
+    echo "appId=app0" > "${path_to_picket_database}/sites.db/site0"
     echo "app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
