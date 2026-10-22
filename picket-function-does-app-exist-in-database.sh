@@ -31,6 +31,7 @@ if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configur
     picket_configuration_file="${picket_path_to_configuration_file}"
 fi
 
+if [[ $DEBUG -eq 1 ]] ; then echo "reading configuration file: \"${picket_configuration_file}\"" ; fi
 source picket-function-read-configuration "${picket_configuration_file}"
 
 file_listing_apps="${path_to_picket_database}"/apps.db/apps
@@ -41,6 +42,7 @@ else
 fi
 
 existing_app_array=()
+if [[ $DEBUG -eq 1 ]] ; then echo "file listing apps: \"${file_listing_apps}\"" ; fi
 if [[ -f "${file_listing_apps}" ]] ; then
     finished_reading_file=false
     until $finished_reading_file; do
