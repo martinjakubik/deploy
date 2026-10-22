@@ -126,7 +126,7 @@ get_app_project_root_from_ID() {
     if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
 
@@ -141,7 +141,7 @@ delete_unused_app() {
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
     touch "${path_to_picket_database}/sites.db/sites"
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
 
@@ -152,7 +152,7 @@ list_apps__one_app() {
     if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
 }
 
@@ -163,8 +163,8 @@ list_apps__two_apps() {
     if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
-    echo "app1" >> "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app1" >> "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
     echo "path=app1" > "${path_to_picket_database}/apps.db/app1"
 }
