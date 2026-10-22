@@ -169,6 +169,26 @@ list_apps__two_apps() {
     echo "path=app1" > "${path_to_picket_database}/apps.db/app1"
 }
 
+list_apps__one_app_for_site() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/sites.db"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
+
+    echo "path=site0path" > "${path_to_picket_database}/sites.db/site0"
+    echo "appId=app0" >> "${path_to_picket_database}/sites.db/site0"
+
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
+
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+}
+
 case "$test_case" in
     ("command stage, valid site argument; user file too big") command_stage__no_arguments__user_file_too_big;;
     ("command logout, no arguments; no user logged in") command_logout__no_arguments__no_user_logged_in;;
@@ -184,6 +204,7 @@ case "$test_case" in
     ("get app project root from ID") get_app_project_root_from_ID;;
     ("list apps, one app") list_apps__one_app;;
     ("list apps, two apps") list_apps__two_apps;;
+    ("list apps, one app for site") list_apps__one_app_for_site;;
 esac
 
 exit 0
