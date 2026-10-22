@@ -48,7 +48,7 @@ valid_site_id() {
     if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
         mkdir -p "${path_to_picket_database}/sites.db"
     fi
-    echo "site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
     touch "${path_to_picket_database}/sites.db/site0"
 }
 
@@ -65,7 +65,7 @@ list_sites__one_site() {
     if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
         mkdir -p "${path_to_picket_database}/sites.db"
     fi
-    echo "site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
     echo "path=site0" > "${path_to_picket_database}/sites.db/site0"
 }
 
@@ -76,8 +76,8 @@ list_sites__two_sites() {
     if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
         mkdir -p "${path_to_picket_database}/sites.db"
     fi
-    echo "site0" > "${path_to_picket_database}/sites.db/sites"
-    echo "site1" >> "${path_to_picket_database}/sites.db/sites"
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "siteId=site1" >> "${path_to_picket_database}/sites.db/sites"
     echo "path=site0" > "${path_to_picket_database}/sites.db/site0"
     echo "path=site1" > "${path_to_picket_database}/sites.db/site1"
 }
@@ -96,10 +96,27 @@ update_app() {
     if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
-    echo "site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
     echo "appId=app0" > "${path_to_picket_database}/sites.db/site0"
-    echo "app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+    # makes the app0 source code if it does not exist
+    all_project_root=~/code/gitwork
+    if [[ ! -d "${all_project_root}/app0" ]] ; then
+        mkdir -p "${all_project_root}/app0"
+    fi
+    if [[ ! -d "${all_project_root}/app0/app" ]] ; then
+        mkdir p "${all_project_root}/app0/app"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app0-custom-source-code-files" ]] ; then
+        touch "${all_project_root}/app0/app0-custom-source-code-files"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app0-custom-binary-files" ]] ; then
+        touch "${all_project_root}/app0/app0-custom-binary-files"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app/logo.png" ]] ; then
+        touch "${all_project_root}/app0/app/logo.png"
+    fi
 }
 
 get_app_project_root_from_ID() {
