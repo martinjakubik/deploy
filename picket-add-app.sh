@@ -137,11 +137,27 @@ if [[ ! -f "${file_listing_apps_in_site}" ]] ; then
 fi
 
 existing_app_in_site_array=()
-finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    existing_app_in_site_array+=("$REPLY")
-done < "${file_listing_apps_in_site}"
+if [[ -f "${file_listing_apps_in_site}" ]] ; then
+    finished_reading_file=false
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        line="${REPLY}"
+
+        # skips comments and empty lines
+        if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+            continue
+        fi
+
+        # parses key-value pairs
+        if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            value="${BASH_REMATCH[2]}"
+
+            # trims whitespace value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            existing_app_in_site_array+=("${value}")
+        fi
+    done < "${file_listing_apps_in_site}"
+fi
 
 if printf '%s\0' "${existing_app_in_site_array[@]}" | grep -Fxqz -- "${appId}" ; then
     does_app_exist_in_database=1
@@ -163,7 +179,7 @@ else
     copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-source-code-files
     copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-binary-files
 
-    existing_app_in_site_array+=" ${appId}"
+    existing_app_in_site_array+=" appId=${appId}"
     echo -n > "${file_listing_apps_in_site}"
     for existingAppId in ${existing_app_in_site_array[@]} ; do
         echo "${existingAppId}" >> "${file_listing_apps_in_site}"

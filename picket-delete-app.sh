@@ -89,11 +89,27 @@ elif [[ ${is_site_selected} -eq 1 ]] ; then
     chmod a+w "${file_listing_apps}".without_deleted_app
 
     existing_app_array=()
-    finished_reading_file=false
-    until $finished_reading_file; do
-        read -r || finished_reading_file=true
-        existing_app_array+=("$REPLY")
-    done < "${file_listing_apps}"
+    if [[ -f "${file_listing_apps}" ]] ; then
+        finished_reading_file=false
+        until $finished_reading_file; do
+            read -r || finished_reading_file=true
+            line="${REPLY}"
+
+            # skips comments and empty lines
+            if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+                continue
+            fi
+
+            # parses key-value pairs
+            if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+                value="${BASH_REMATCH[2]}"
+
+                # trims whitespace from value
+                value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                existing_app_array+=("${value}")
+            fi
+        done < "${file_listing_apps}"
+    fi
 
     if printf '%s\0' "${existing_app_array[@]}" | grep -Fxqz -- "${appId}" ; then
         does_app_exist_in_database=1
@@ -104,7 +120,7 @@ elif [[ ${is_site_selected} -eq 1 ]] ; then
    	finished_reading_file=false
    	until $finished_reading_file; do
   		read -r || finished_reading_file=true
-  		if [[ ! "$REPLY" =~ ^"${appId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
+  		if [[ ! "$REPLY" =~ ^[^=]+="${appId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
  			echo "$REPLY"
   		fi
    	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app
@@ -139,7 +155,21 @@ else
     finished_reading_file=false
     until $finished_reading_file; do
         read -r || finished_reading_file=true
-        existing_app_array+=("$REPLY")
+        line="${REPLY}"
+
+        # skips comments and empty lines
+        if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+            continue
+        fi
+
+        # parses key-value pairs
+        if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            value="${BASH_REMATCH[2]}"
+
+            # trims whitespace from value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            existing_app_array+=("${value}")
+        fi
     done < "${file_listing_apps}"
 
     if printf '%s\0' "${existing_app_array[@]}" | grep -Fxqz -- "${appId}" ; then
@@ -163,7 +193,7 @@ else
     	finished_reading_file=false
     	until $finished_reading_file; do
     		read -r || finished_reading_file=true
-    		if [[ ! "$REPLY" =~ ^"${appId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
+    		if [[ ! "$REPLY" =~ ^[^=]+="${appId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
     			echo "$REPLY"
     		fi
     	done < "${file_listing_apps}" > "${file_listing_apps}".without_deleted_app

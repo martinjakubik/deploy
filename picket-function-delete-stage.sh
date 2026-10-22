@@ -125,6 +125,8 @@ delete_listed_files() {
     echo
 }
 
+file_listing_apps_in_site="${path_to_picket_database}"/sites.db/"${siteId}"
+
 if [[ $DEBUG -eq 0 ]] ; then
     # deletes content from the server directory
     if [[ -d "${project_root_directory}"/server ]] ; then
@@ -152,11 +154,30 @@ if [[ $DEBUG -eq 0 ]] ; then
     delete_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
     delete_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
-    apps=()
-    if [[ $siteId = "stitle" ]] ; then
-        apps+="cv"
+    existing_app_in_site_array=()
+    if [[ -f "${file_listing_apps_in_site}" ]] ; then
+        finished_reading_file=false
+        until $finished_reading_file; do
+            read -r || finished_reading_file=true
+            line="${REPLY}"
+
+            # skips comments and empty lines
+            if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+                continue
+            fi
+
+            # parses key-value pairs
+            if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+                value="${BASH_REMATCH[2]}"
+
+                # trims whitespace value
+                value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                existing_app_in_site_array+=("${value}")
+            fi
+        done < "${file_listing_apps_in_site}"
     fi
-    for app in "${apps[@]}" ; do
+
+    for app in "${existing_app_in_site_array[@]}" ; do
         # deletes the app's metadata file
         # scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
         delete_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"
@@ -180,11 +201,30 @@ else
     delete_listed_files "${project_root_directory}"/"${siteId}"-custom-source-code-files
     delete_listed_files "${project_root_directory}"/"${siteId}"-custom-binary-files
 
-    apps=()
-    if [[ $siteId = "stitle" ]] ; then
-        apps+="cv"
+    existing_app_in_site_array=()
+    if [[ -f "${file_listing_apps_in_site}" ]] ; then
+        finished_reading_file=false
+        until $finished_reading_file; do
+            read -r || finished_reading_file=true
+            line="${REPLY}"
+
+            # skips comments and empty lines
+            if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+                continue
+            fi
+
+            # parses key-value pairs
+            if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+                value="${BASH_REMATCH[2]}"
+
+                # trims whitespace value
+                value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                existing_app_in_site_array+=("${value}")
+            fi
+        done < "${file_listing_apps_in_site}"
     fi
-    for app in "${apps[@]}" ; do
+
+    for app in "${existing_app_in_site_array[@]}" ; do
         # deletes the app's metadata file
         # scp "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/
         delete_listed_files "${project_root_directory}"/site/apps/"${app}"-custom-source-code-files "${app}"

@@ -75,7 +75,7 @@ else
 	finished_reading_file=false
 	until $finished_reading_file; do
 		read -r || finished_reading_file=true
-		if [[ ! "$REPLY" =~ ^"${siteId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
+		if [[ ! "$REPLY" =~ ^[^=]+="${siteId}"$ && ! "$REPLY" =~ ^"\ *"$ ]] ; then
 			echo "$REPLY"
 		fi
 	done < "${file_listing_sites}" > "${file_listing_sites}".without_deleted_site

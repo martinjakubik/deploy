@@ -60,12 +60,26 @@ fi
 
 existing_app_array=()
 finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    if [[ -n "$REPLY" ]] ; then
-        existing_app_array+=("$REPLY")
-    fi
-done < "${file_listing_apps}"
+if [[ -f "${file_listing_apps}" ]] ; then
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        line="${REPLY}"
+
+        # skips comments and empty lines
+        if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+            continue
+        fi
+
+        # parses key-value pairs
+        if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            value="${BASH_REMATCH[2]}"
+
+            # trims whitespace from value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            existing_app_array+=("${value}")
+        fi
+    done < "${file_listing_apps}"
+fi
 
 echo
 app_count=0

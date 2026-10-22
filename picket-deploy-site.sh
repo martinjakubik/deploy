@@ -259,12 +259,26 @@ delete_files_uploaded_marker() {
 file_listing_apps="${path_to_picket_database}"/sites.db/"${siteId}"
 existing_app_array=()
 finished_reading_file=false
-until $finished_reading_file; do
-    read -r || finished_reading_file=true
-    if [[ -n "$REPLY" ]] ; then
-        existing_app_array+=("$REPLY")
-    fi
-done < "${file_listing_apps}"
+if [[ -f "${file_listing_apps}" ]] ; then
+    until $finished_reading_file; do
+        read -r || finished_reading_file=true
+        line="${REPLY}"
+
+        # skips comments and empty lines
+        if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+            continue
+        fi
+
+        # parses key-value pairs
+        if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            value="${BASH_REMATCH[2]}"
+
+            # trims whitespace from value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            existing_app_array+=("${value}")
+        fi
+    done < "${file_listing_apps}"
+fi
 
 clean_install_site_canonical_files
 clean_install_site_custom_files

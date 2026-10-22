@@ -45,7 +45,21 @@ if [[ -f "${file_listing_apps}" ]] ; then
     finished_reading_file=false
     until $finished_reading_file; do
         read -r || finished_reading_file=true
-        existing_app_array+=("$REPLY")
+        line="${REPLY}"
+
+        # skips comments and empty lines
+        if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
+            continue
+        fi
+
+        # parses key-value pairs
+        if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            value="${BASH_REMATCH[2]}"
+
+            # trims whitespace from value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            existing_app_array+=("${value}")
+        fi
     done < "${file_listing_apps}"
 fi
 
