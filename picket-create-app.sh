@@ -61,7 +61,7 @@ fi
 does_app_exist_in_database=$(picket-function-does-app-exist-in-database --appId "${appId}")
 
 if [[ $does_app_exist_in_database -eq 0 ]] ; then
-    echo "path=${appId}" >> "${file_listing_apps}"
+    echo "appId=${appId}" >> "${file_listing_apps}"
     echo "path=${path}" > "${path_to_picket_database}/apps.db/${appId}"
     echo "[ App \"${appId}\" created. ]"
 else
