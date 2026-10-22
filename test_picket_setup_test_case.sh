@@ -86,6 +86,39 @@ create_app() {
     :
 }
 
+create_app_valid_app_ID() {
+    if [[ ! -d "${path_to_picket_database}" ]] ; then
+        mkdir -p "${path_to_picket_database}"
+    fi
+    if [[ ! -d "${path_to_picket_database}/sites.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/sites.db"
+    fi
+    if [[ ! -d "${path_to_picket_database}/apps.db" ]] ; then
+        mkdir -p "${path_to_picket_database}/apps.db"
+    fi
+    echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
+    echo "appId=app0" > "${path_to_picket_database}/sites.db/site0"
+    echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
+    echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
+    # makes the app0 source code if it does not exist
+    all_project_root=~/code/gitwork
+    if [[ ! -d "${all_project_root}/app0" ]] ; then
+        mkdir -p "${all_project_root}/app0"
+    fi
+    if [[ ! -d "${all_project_root}/app0/app" ]] ; then
+        mkdir p "${all_project_root}/app0/app"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app0-custom-source-code-files" ]] ; then
+        touch "${all_project_root}/app0/app0-custom-source-code-files"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app0-custom-binary-files" ]] ; then
+        touch "${all_project_root}/app0/app0-custom-binary-files"
+    fi
+    if [[ ! -f "${all_project_root}/app0/app/logo.png" ]] ; then
+        touch "${all_project_root}/app0/app/logo.png"
+    fi
+}
+
 update_app() {
     if [[ ! -d "${path_to_picket_database}" ]] ; then
         mkdir -p "${path_to_picket_database}"
@@ -199,6 +232,7 @@ case "$test_case" in
     ("list sites, one site") list_sites__one_site;;
     ("list sites, two sites") list_sites__two_sites;;
     ("create app") create_app;;
+    ("create app valid app ID") create_app_valid_app_ID;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
     ("get app project root from ID") get_app_project_root_from_ID;;

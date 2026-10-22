@@ -31,6 +31,14 @@ actual=$(./picket-create-app.sh $input 2>&1)
 ./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
+test_case="create app valid app ID"
+./test_picket_setup_test_case.sh "$test_case"
+input="--appId app0 --debug"
+expected="[ App \"app0\" created. ]"
+actual=$(./picket-create-app.sh $input 2>&1)
+./test_picket_cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
 test_case="add app no arguments"
 ./test_picket_setup_test_case.sh "$test_case"
 input=""
