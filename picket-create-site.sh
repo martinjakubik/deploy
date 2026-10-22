@@ -57,7 +57,7 @@ fi
 does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 
 if [[ $does_site_exist_in_database -eq 0 ]] ; then
-    echo "${siteId}" >> "${file_listing_sites}"
+    echo "siteId=${siteId}" >> "${file_listing_sites}"
     echo "[ Site \"${siteId}\" created. ]"
 else
     echo "site already exists; not creating it"
