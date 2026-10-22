@@ -72,11 +72,15 @@ if [[ -f "${file_listing_apps}" ]] ; then
 
         # parses key-value pairs
         if [[ "$line" =~ ^[[:space:]]*([^=]+)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
             value="${BASH_REMATCH[2]}"
 
-            # trims whitespace from value
+            # trims whitespace from key and value
+            key=$(echo "$key" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
             value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-            existing_app_array+=("${value}")
+            if [[ "${key}" = "appId" ]] ; then
+                existing_app_array+=("${value}")
+            fi
         fi
     done < "${file_listing_apps}"
 fi
