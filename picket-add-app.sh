@@ -179,10 +179,10 @@ else
     copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-source-code-files
     copy_app_files_to_site  "${app_project_root_directory}"/"${appId}"-custom-binary-files
 
-    existing_app_in_site_array+=" appId=${appId}"
+    existing_app_in_site_array+=" ${appId}"
     echo -n > "${file_listing_apps_in_site}"
     for existingAppId in ${existing_app_in_site_array[@]} ; do
-        echo "${existingAppId}" >> "${file_listing_apps_in_site}"
+        echo "appId=${existingAppId}" >> "${file_listing_apps_in_site}"
     done
 fi
 
