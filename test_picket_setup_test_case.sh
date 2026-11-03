@@ -101,21 +101,20 @@ create_app_valid_app_ID() {
     echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
     # makes the app0 source code if it does not exist
-    all_project_root=~/code/gitwork
-    if [[ ! -d "${all_project_root}/app0" ]] ; then
-        mkdir -p "${all_project_root}/app0"
+    if [[ ! -d "${root_path_to_all_projects}/app0" ]] ; then
+        mkdir -p "${root_path_to_all_projects}/app0"
     fi
-    if [[ ! -d "${all_project_root}/app0/app" ]] ; then
-        mkdir p "${all_project_root}/app0/app"
+    if [[ ! -d "${root_path_to_all_projects}/app0/app" ]] ; then
+        mkdir p "${root_path_to_all_projects}/app0/app"
     fi
-    if [[ ! -f "${all_project_root}/app0/app0-custom-source-code-files" ]] ; then
-        touch "${all_project_root}/app0/app0-custom-source-code-files"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app0-custom-source-code-files" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app0-custom-source-code-files"
     fi
-    if [[ ! -f "${all_project_root}/app0/app0-custom-binary-files" ]] ; then
-        touch "${all_project_root}/app0/app0-custom-binary-files"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app0-custom-binary-files" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app0-custom-binary-files"
     fi
-    if [[ ! -f "${all_project_root}/app0/app/logo.png" ]] ; then
-        touch "${all_project_root}/app0/app/logo.png"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app/logo.png" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app/logo.png"
     fi
 }
 
@@ -134,21 +133,20 @@ update_app() {
     echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
     # makes the app0 source code if it does not exist
-    all_project_root=~/code/gitwork
-    if [[ ! -d "${all_project_root}/app0" ]] ; then
-        mkdir -p "${all_project_root}/app0"
+    if [[ ! -d "${root_path_to_all_projects}/app0" ]] ; then
+        mkdir -p "${root_path_to_all_projects}/app0"
     fi
-    if [[ ! -d "${all_project_root}/app0/app" ]] ; then
-        mkdir p "${all_project_root}/app0/app"
+    if [[ ! -d "${root_path_to_all_projects}/app0/app" ]] ; then
+        mkdir p "${root_path_to_all_projects}/app0/app"
     fi
-    if [[ ! -f "${all_project_root}/app0/app0-custom-source-code-files" ]] ; then
-        touch "${all_project_root}/app0/app0-custom-source-code-files"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app0-custom-source-code-files" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app0-custom-source-code-files"
     fi
-    if [[ ! -f "${all_project_root}/app0/app0-custom-binary-files" ]] ; then
-        touch "${all_project_root}/app0/app0-custom-binary-files"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app0-custom-binary-files" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app0-custom-binary-files"
     fi
-    if [[ ! -f "${all_project_root}/app0/app/logo.png" ]] ; then
-        touch "${all_project_root}/app0/app/logo.png"
+    if [[ ! -f "${root_path_to_all_projects}/app0/app/logo.png" ]] ; then
+        touch "${root_path_to_all_projects}/app0/app/logo.png"
     fi
 }
 

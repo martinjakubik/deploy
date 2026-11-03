@@ -39,13 +39,12 @@ if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
 fi
 
-all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
 SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/"${siteId}"
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
 SITE_STAGING_DIR_WITH_USER_AND_IP_ROOT=${userId}@${ipAddress}:"${SITE_STAGING_DIR_ROOT}"
 SITE_STAGING_DIR_WITH_USER_AND_IP_SITE=${userId}@${ipAddress}:"${SITE_STAGING_DIR_SITE}"
-project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
+project_root_directory="${root_path_to_all_projects}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 if [[ ! -d "$project_root_directory" ]] ; then
     echo the directory "$project_root_directory" does not exist

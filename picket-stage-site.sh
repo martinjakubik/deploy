@@ -23,6 +23,16 @@ do
 		shift
 done
 
+picket_configuration_file="/etc/picket/config.picket"
+if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
+    picket_configuration_file="$HOME/.config/picket/config.picket"
+fi
+if [[ -n "${picket_path_to_configuration_file}" && -f "${picket_path_to_configuration_file}" ]] ; then
+    picket_configuration_file="${picket_path_to_configuration_file}"
+fi
+
+source picket-function-read-configuration "${picket_configuration_file}"
+
 argument_value_incremental=""
 if [[ $incremental -eq 1 ]] ; then
     argument_value_incremental="--incremental"
@@ -38,9 +48,8 @@ if [[ $DEBUG -eq 1 ]] ; then
     argument_value_debug="--debug"
 fi
 
-all_project_root=~/code/gitwork
 siteNickname="$(picket-function-get-site-nickname-from-id $siteId)"
-project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
+project_root_directory="${root_path_to_all_projects}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 does_site_exist_in_database=$(picket-function-does-site-exist-in-database --siteId "${siteId}")
 if [[ $does_site_exist_in_database -eq 0 ]] ; then

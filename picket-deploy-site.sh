@@ -69,11 +69,10 @@ if [[ ! $isValidSiteFullName ]] ; then
 	exit 1
 fi
 
-all_project_root=~/code/gitwork
 STAGING_DIR=/var/x-www-staging
 SITE_STAGING_DIR_ROOT="${STAGING_DIR}"/"${siteId}"
 SITE_STAGING_DIR_SITE="${SITE_STAGING_DIR_ROOT}"/site
-project_root_directory="${all_project_root}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
+project_root_directory="${root_path_to_all_projects}"/"$(picket-function-get-site-project-root-from-id $siteId $argument_value_debug)"
 
 LIVE_DIR=/var/www
 sitePackageRootDirectory="${LIVE_DIR}"/"${siteName}"

@@ -35,7 +35,11 @@ for entry in "${configuration_array[@]}"; do
             export path_to_picket_database ;;
         (path_to_site_database=*)
             path_to_site_database_value="${entry#path_to_site_database=}"
-            path_to_site_database="${path_to_site_database/\$HOME/$HOME}"
+            path_to_site_database="${path_to_site_database_value/\$HOME/$HOME}"
             export path_to_site_database ;;
+        (root_path_to_all_projects=*)
+            root_path_to_all_projects_value="${entry#root_path_to_all_projects=}"
+            root_path_to_all_projects="${root_path_to_all_projects_value/\$HOME/$HOME}"
+            export root_path_to_all_projects ;;
     esac
 done

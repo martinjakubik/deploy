@@ -54,8 +54,7 @@ fi
 
 # updating app appId in site siteId
 
-all_project_root=~/code/gitwork
-site_project_root="${all_project_root}"/$(picket-function-get-site-project-root-from-id "${siteId}")
+site_project_root="${root_path_to_all_projects}"/$(picket-function-get-site-project-root-from-id "${siteId}")
 
 ensure_directory_exists_for_file() {
     short_path_to_file="$1"
@@ -157,7 +156,7 @@ if [[ $does_app_exist_in_database -eq 0 ]] ; then
     echo "App does not exist in site. Stopping."
     exit 1
 else
-    app_project_root_directory="${all_project_root}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
+    app_project_root_directory="${root_path_to_all_projects}"/"$(picket-function-get-app-project-root-from-id $appId $argument_value_debug)"
 
     ensure_directory_exists_for_file "${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/app"
     cp "${app_project_root_directory}/${appId}-custom-source-code-files" "${site_project_root}/site/apps/${appId}/"
