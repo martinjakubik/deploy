@@ -349,7 +349,7 @@ if [[ $DEBUG -eq 0 ]] ; then
         fi
         ensure_directory_exists_for_file "${appId}"-custom-source-code-files "${SITE_STAGING_DIR_ROOT}"/site/apps/"${appId}"
         scp "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
-        scp "${project_root_directory}"/site/apps/"${appId}"/"${app}"-custom-binary-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
+        scp "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-binary-files "${DESTINATION_DIR_WITH_USER_AND_IP_SITE}"/apps/"${appId}"/
         upload_listed_files "${app_canonical_source_code_file_list}" "${appId}"
         upload_listed_files "${app_canonical_binary_file_list}" "${appId}"
         upload_listed_files "${project_root_directory}"/site/apps/"${appId}"/"${appId}"-custom-source-code-files "${appId}"
