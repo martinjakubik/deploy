@@ -64,7 +64,7 @@ if [[ $does_site_exist_in_database -eq 0 ]] ; then
     exit 1
 fi
 
-echo "[ Adding app \"${appId}\" to site \"${siteId}\". ]"
+# Adding app to site
 
 site_project_root="${root_path_to_all_projects}"/$(picket-function-get-site-project-root-from-id "${siteId}")
 
@@ -183,6 +183,8 @@ else
     for existingAppId in ${existing_app_in_site_array[@]} ; do
         echo "appId=${existingAppId}" >> "${file_listing_apps_in_site}"
     done
+
+    echo "[ App \"${appId}\" added to site \"${siteId}\". ]"
 fi
 
 exit 0
