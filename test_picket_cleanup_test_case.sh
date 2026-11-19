@@ -72,6 +72,21 @@ list_sites__two_sites() {
     fi
 }
 
+add_valid_app_to_site () {
+    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
+        rm "${path_to_picket_database}"/sites.db/sites
+    fi
+    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
+        rm "${path_to_picket_database}"/sites.db/site0
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}"/apps.db/apps
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}"/apps.db/app0
+    fi
+}
+
 create_app() {
     if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
         rm "${path_to_picket_database}"/apps.db/apps
@@ -86,21 +101,6 @@ create_app_with_path() {
         rm "${path_to_picket_database}"/apps.db/apps
     fi
     if [[ -f "${path_to_picket_database}"/apps.db/app0 ]] ; then
-        rm "${path_to_picket_database}"/apps.db/app0
-    fi
-}
-
-create_app_valid_app_ID() {
-    if [[ -f "${path_to_picket_database}"/sites.db/sites ]] ; then
-        rm "${path_to_picket_database}"/sites.db/sites
-    fi
-    if [[ -f "${path_to_picket_database}"/sites.db/site0 ]] ; then
-        rm "${path_to_picket_database}"/sites.db/site0
-    fi
-    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
-        rm "${path_to_picket_database}"/apps.db/apps
-    fi
-    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
         rm "${path_to_picket_database}"/apps.db/app0
     fi
 }
@@ -190,9 +190,9 @@ case "$test_case" in
     ("create site") create_site;;
     ("list sites, one site") list_sites__one_site;;
     ("list sites, two sites") list_sites__two_sites;;
+    ("add valid app to site") add_valid_app_to_site;;
     ("create app") create_app;;
     ("create app with path") create_app_with_path;;
-    ("create app valid app ID") create_app_valid_app_ID;;
     ("create app custom path") create_app_custom_path;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;

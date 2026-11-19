@@ -82,15 +82,7 @@ list_sites__two_sites() {
     echo "path=site1" > "${path_to_picket_database}/sites.db/site1"
 }
 
-create_app() {
-    :
-}
-
-create_app_with_path() {
-    :
-}
-
-create_app_valid_app_ID() {
+add_valid_app_to_site () {
     if [[ ! -d "${path_to_picket_database}" ]] ; then
         mkdir -p "${path_to_picket_database}"
     fi
@@ -101,7 +93,7 @@ create_app_valid_app_ID() {
         mkdir -p "${path_to_picket_database}/apps.db"
     fi
     echo "siteId=site0" > "${path_to_picket_database}/sites.db/sites"
-    echo "appId=app0" > "${path_to_picket_database}/sites.db/site0"
+    echo "path=site0" > "${path_to_picket_database}/sites.db/site0"
     echo "appId=app0" > "${path_to_picket_database}/apps.db/apps"
     echo "path=app0" > "${path_to_picket_database}/apps.db/app0"
     # makes the app0 source code if it does not exist
@@ -120,6 +112,14 @@ create_app_valid_app_ID() {
     if [[ ! -f "${root_path_to_all_projects}/app0/app/logo.png" ]] ; then
         touch "${root_path_to_all_projects}/app0/app/logo.png"
     fi
+}
+
+create_app() {
+    :
+}
+
+create_app_with_path() {
+    :
 }
 
 create_app_custom_path() {
@@ -237,9 +237,9 @@ case "$test_case" in
     ("create site") create_site;;
     ("list sites, one site") list_sites__one_site;;
     ("list sites, two sites") list_sites__two_sites;;
+    ("add valid app to site") add_valid_app_to_site;;
     ("create app") create_app;;
     ("create app with path") create_app_with_path;;
-    ("create app valid app ID") create_app_valid_app_ID;;
     ("create app custom path") create_app_custom_path;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
