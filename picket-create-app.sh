@@ -29,11 +29,11 @@ if [[ ! $(picket-function-is-valid-app-id "${appId}") ]] ; then
     exit 1
 fi
 
-if [[ -n "${path}" ]] ; then
-    echo "Not implemented"
-    exit 1
+if [[ -n "${path}" && $(picket-function-is-valid-path-to-app-project "${path}") ]] ; then
+    :
+else
+    path="${appId}"
 fi
-path="${appId}"
 
 picket_configuration_file="/etc/picket/config.picket"
 if [[ -f "$HOME/.config/picket/config.picket" ]] ; then
