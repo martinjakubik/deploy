@@ -127,6 +127,14 @@ actual=$(./picket.sh $input 2>&1)
 ./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
 
+test_case="create app with path"
+./test_picket_setup_test_case.sh "$test_case"
+input="create-app --appId app0 --path app0path"
+expected="[ App \"app0\" created. ]"
+actual=$(./picket.sh $input 2>&1)
+./test_picket_cleanup_test_case.sh "$test_case"
+source ./test_picket_update_reports.sh
+
 test_case="update app"
 ./test_picket_setup_test_case.sh "$test_case"
 input="update-app --siteId site0 --appId app0"

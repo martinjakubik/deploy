@@ -86,6 +86,10 @@ create_app() {
     :
 }
 
+create_app_with_path() {
+    :
+}
+
 create_app_valid_app_ID() {
     if [[ ! -d "${path_to_picket_database}" ]] ; then
         mkdir -p "${path_to_picket_database}"
@@ -230,6 +234,7 @@ case "$test_case" in
     ("list sites, one site") list_sites__one_site;;
     ("list sites, two sites") list_sites__two_sites;;
     ("create app") create_app;;
+    ("create app with path") create_app_with_path;;
     ("create app valid app ID") create_app_valid_app_ID;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;

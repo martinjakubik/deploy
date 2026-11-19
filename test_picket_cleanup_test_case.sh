@@ -76,6 +76,18 @@ create_app() {
     if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
         rm "${path_to_picket_database}"/apps.db/apps
     fi
+    if [[ -f "${path_to_picket_database}"/apps.db/app0 ]] ; then
+        rm "${path_to_picket_database}"/apps.db/app0
+    fi
+}
+
+create_app_with_path() {
+    if [[ -f "${path_to_picket_database}"/apps.db/apps ]] ; then
+        rm "${path_to_picket_database}"/apps.db/apps
+    fi
+    if [[ -f "${path_to_picket_database}"/apps.db/app0 ]] ; then
+        rm "${path_to_picket_database}"/apps.db/app0
+    fi
 }
 
 create_app_valid_app_ID() {
@@ -175,6 +187,7 @@ case "$test_case" in
     ("list sites, one site") list_sites__one_site;;
     ("list sites, two sites") list_sites__two_sites;;
     ("create app") create_app;;
+    ("create app with path") create_app_with_path;;
     ("create app valid app ID") create_app_valid_app_ID;;
     ("update app") update_app;;
     ("delete unused app") delete_unused_app;;
