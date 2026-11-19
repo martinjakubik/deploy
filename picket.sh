@@ -1,6 +1,6 @@
 #!/bin/bash
 # sets up usage
-USAGE="usage: $0 <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
+USAGE="usage: $0 <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress --path path -c|--incremental -t|--throttle -d|--debug --help"
 
 #set up defaults
 incremental=0
@@ -43,6 +43,7 @@ do
         (-u) userId="$2"; shift;;
         (--userId) userId="$2"; shift;;
         (--ip) ipAddress="$2"; shift;;
+        (--path) path="$2"; shift;;
 		(-c) incremental=1;;
 		(--incremental) incremental=1;;
 		(-t) THROTTLE=1;;
@@ -95,7 +96,7 @@ case "${picket_command}" in
         picket-add-app --siteId "${siteId}" --appId "${appId}" $argument_value_debug
     ;;
     (create-app)
-        picket-create-app --appId "${appId}" $argument_value_debug
+        picket-create-app --appId "${appId}" $argument_value_debug --path "${path}"
     ;;
     (update-app)
         picket-update-app --siteId "${siteId}" --appId "${appId}" $argument_value_debug

@@ -10,7 +10,7 @@ fail_count=0
 test_case="no arguments"
 ./test_picket_setup_test_case.sh "$test_case"
 input=""
-expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
+expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress --path path -c|--incremental -t|--throttle -d|--debug --help"
 actual=$(./picket.sh $input 2>&1)
 ./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
@@ -106,7 +106,7 @@ source ./test_picket_update_reports.sh
 test_case="incorrect command"
 ./test_picket_setup_test_case.sh "$test_case"
 input="think"
-expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress -c|--incremental -t|--throttle -d|--debug --help"
+expected="usage: ./picket.sh <command> | help | -s|--siteId siteId | -u|--userId userId --ip ipAddress --path path -c|--incremental -t|--throttle -d|--debug --help"
 actual=$(./picket.sh $input 2>&1)
 ./test_picket_cleanup_test_case.sh "$test_case"
 source ./test_picket_update_reports.sh
